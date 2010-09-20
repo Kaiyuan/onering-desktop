@@ -1,0 +1,13 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">System Tray Icon</%def>
+
+<%def name="js()">
+$(function(){
+        var icon = new ONERING.SystemTrayIcon('onering://demo/static/systrayicon.ico');
+        icon.bind('click', function(){
+            ONERING.log('haha');
+            ONERING.createWindow('/systraymenu', 100, 200, {'popup':true});
+        });
+});
+</%def>

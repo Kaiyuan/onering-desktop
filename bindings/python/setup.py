@@ -21,7 +21,7 @@ onering_module = Extension('_onering',
                           )
 
 setup(name = "OneRing",
-      version="1.0",
+      version="0.1",
       ext_modules = [onering_module],
       py_modules = ['onering'],
      )

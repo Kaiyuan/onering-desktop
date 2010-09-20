@@ -37,5 +37,5 @@ onclick="javascript:ONERING.getCurrentWindow().createWindow('/', 100, 100);retur
         ret = ""
     return [ret]
 
-onering.register_wsgi_app('radio', app)
-onering.loop("radio")
+onering.register_wsgi_app('test', app)
+onering.loop("test")

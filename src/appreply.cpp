@@ -54,6 +54,8 @@ void AppReply::parseResponse()
 
 	// TODO speed optimization needed
 	int index;
+	bool ok;
+	int code;
 	QByteArray line, key, value;
 	QList<QByteArray> words;
 	if ((index = content.indexOf("\r\n")) < 0) {
@@ -64,8 +66,7 @@ void AppReply::parseResponse()
 	if (words.size() < 3) {
 		goto finish;
 	}
-	bool ok;
-	int code = words[1].toInt(&ok);
+	code = words[1].toInt(&ok);
 	if (!ok) {
 		goto finish;
 	}

@@ -18,6 +18,7 @@ urls = (
     '/create_window', 'create_window',
     '/systrayicon', 'systrayicon',
     '/systraymenu', 'systraymenu',
+    '/font-face', 'font_face',
     '/static/(.*)', 'static',
 )
 
@@ -54,6 +55,10 @@ class systrayicon:
 class systraymenu:
     def GET(self):
         return render.systraymenu()
+
+class font_face:
+    def GET(self):
+        return render.font_face()
 
 class static:
     def GET(self, filename):

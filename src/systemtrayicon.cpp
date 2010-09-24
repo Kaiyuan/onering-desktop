@@ -11,7 +11,7 @@ SystemTrayIcon::SystemTrayIcon(QObject *parent)
 		this, SLOT(emitActivatedEvent(QSystemTrayIcon::ActivationReason)));
 }
 
-void SystemTrayIcon::load(const QString &url)
+void SystemTrayIcon::load(const QUrl &url)
 {
 	NetworkAccessManager *manager = new NetworkAccessManager(this);
 	connect(manager, SIGNAL(finished(QNetworkReply*)),

@@ -12,7 +12,7 @@ class SystemTrayIcon : public QSystemTrayIcon
 public:
 	SystemTrayIcon(QObject *parent=0);
 
-	void load(const QString &url);
+	void load(const QUrl &url);
 
 signals:
 	void activated(const QString &event);

@@ -5,7 +5,7 @@
 <%def name="js()">
 $(function(){
         var window = ONERING.getCurrentWindow();
-        var icon = new ONERING.SystemTrayIcon('onering://demo/static/systrayicon.ico');
+        var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
         var menu = new ONERING.Menu([
             ["Mi&nimize", function(){window.hide();}],
             ["Ma&ximize", function(){window.maximize();}],

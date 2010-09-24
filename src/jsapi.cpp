@@ -112,7 +112,7 @@ void JsApi::SystemTrayIcon_load(int handler, const QString &url)
 	qDebug() << "JsApi::systemTrayIcon_load" << handler << url;
 
 	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
-	icon->load(url);
+	icon->load(frame->baseUrl().resolved(url));
 }
 
 void JsApi::SystemTrayIcon_bind(int handler, const QString &event, const QString &callback_funcname)

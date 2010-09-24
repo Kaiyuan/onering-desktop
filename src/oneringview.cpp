@@ -22,6 +22,7 @@ OneRingView::OneRingView(QWidget *parent, Qt::WindowFlags f)
 
 	JsApi *jsapi = new JsApi(this);
 	jsapi->setWebView(this);
+	jsapi->setWindow(this);
 
 	this->setAttribute(Qt::WA_DeleteOnClose, true);
 

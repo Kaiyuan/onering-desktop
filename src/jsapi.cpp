@@ -9,6 +9,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QSystemTrayIcon>
+#include <QApplication>
 #include "jsapi.h"
 #include "oneringview.h"
 #include "networkaccessmanager.h"
@@ -27,6 +28,11 @@ void JsApi::setWebView(QWebView *view)
 
 	attachObject();
 	connect(frame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(attachObject()));
+}
+
+void JsApi::setWindow(QWidget *window)
+{
+	this->window = window;
 }
 
 void JsApi::attachObject()
@@ -56,6 +62,21 @@ void JsApi::createWindow(const QString &url, int width, int height, const QStrin
 	window->show();
 }
 
+void JsApi::Window_hide()
+{
+	window->hide();
+}
+
+void JsApi::Window_maximize()
+{
+	window->showMaximized();
+}
+
+void JsApi::Window_showNormal()
+{
+	window->showNormal();
+}
+
 void JsApi::log(const QString &s)
 {
 	qDebug() << "JsApi::log" << s;
@@ -71,6 +92,11 @@ void JsApi::showInspector()
 	inspector.show();
 	inspector.activateWindow();  // put inspector at the top most
 #endif
+}
+
+void JsApi::exit()
+{
+	qApp->quit();
 }
 
 int JsApi::SystemTrayIcon_new()
@@ -160,7 +186,7 @@ void JsApi::callback()
 void JsApi::registerCallback(QObject *sender, const QString &event, const QString &callback_funcname)
 {
 	if (!callback_funcname.isEmpty()) {
-		qDebug() << "registerCallback" << event << callback_funcname;
+		qDebug() << "registerCallback" << sender << event << callback_funcname;
 		callbacks[EventSource(sender, event)] << callback_funcname;
 	}
 }

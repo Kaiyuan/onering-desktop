@@ -13,6 +13,16 @@ ONERING.Window.prototype.showInspector = function() {
     return _OneRing.showInspector();
 }
 
+ONERING.Window.prototype.hide = function() {
+    return _OneRing.Window_hide();
+}
+ONERING.Window.prototype.maximize = function() {
+    return _OneRing.Window_maximize();
+}
+ONERING.Window.prototype.showNormal = function() {
+    return _OneRing.Window_showNormal();
+}
+
 ONERING.window = new ONERING.Window();
 
 // Audio class
@@ -94,6 +104,10 @@ ONERING.callback = function(name) {
 	f();
     }
 };
+
+ONERING.exit = function() {
+    _OneRing.exit();
+}
 
 // internal utilities
 

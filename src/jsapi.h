@@ -11,6 +11,7 @@
 
 class QWebView;
 class QWebFrame;
+class OneRingView;
 
 typedef QPair<QObject*, QString> EventSource;
 
@@ -22,12 +23,18 @@ public:
 	JsApi(QObject *parent);
 
 	void setWebView(QWebView *view);
+	void setWindow(QWidget *window);
 	void invokeCallback(const QString &funcname);
 
 public slots:
 	void createWindow(const QString &url, int width, int height, const QString &props);
+	void Window_hide();
+	void Window_maximize();
+	void Window_showNormal();
+
 	void log(const QString &s);
 	void showInspector(void);
+	void exit(void);
 
 	// SystemTrayIcon
 	int SystemTrayIcon_new(void);
@@ -47,6 +54,7 @@ private slots:
 	void callback();
 
 private:
+	QWidget *window;
 	QWebFrame *frame;
 	QWebInspector inspector;
 	QHash< EventSource, QList<QString> > callbacks;

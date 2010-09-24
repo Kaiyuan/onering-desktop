@@ -11,10 +11,21 @@
 ${self.extra_head()}
 <style type="text/css">
     ${self.css()}
+    footer {
+        display: block;
+    }
+    #demo_footer {
+        font-size: small;
+    }
 </style>
 </head>
 <body>
-    ${next.body()}
+    <article>
+        ${next.body()}
+    </article>
+    <footer id="demo_footer">
+        <a href="/">&lt; Back to the demo homepage</a>
+    </footer>
 </body>
 </html>
 

@@ -25,23 +25,54 @@ ONERING.Audio.prototype.bind = function(event, callback) {
 // System Tray Icon
 
 ONERING.SystemTrayIcon = function(url) {
-    this.handler = _OneRing.systemTrayIcon_new();
+    this.handler = _OneRing.SystemTrayIcon_new();
     if (url) {
 	this.load(url);
     }
 };
 ONERING.SystemTrayIcon.prototype.load = function(url) {
-    _OneRing.systemTrayIcon_load(this.handler, url);
+    _OneRing.SystemTrayIcon_load(this.handler, url);
 };
 ONERING.SystemTrayIcon.prototype.bind = function(event, callback) {
     if (event == 'click') {
 	var callback_name = ONERING._register_function(callback);
-	_OneRing.systemTrayIcon_bind(this.handler, event, callback_name);
+	_OneRing.SystemTrayIcon_bind(this.handler, event, callback_name);
     }
 };
 ONERING.SystemTrayIcon.prototype.getGeometry = function() {
-    return _OneRing.systemTrayIcon_getGeometry(this.handler);
+    return _OneRing.SystemTrayIcon_getGeometry(this.handler);
+};
+ONERING.SystemTrayIcon.prototype.setContextMenu = function(menu) {
+    _OneRing.SystemTrayIcon_setContextMenu(this.handler, menu.handler);
 }
+
+// Menu
+
+ONERING.Menu = function(items) {
+    this.handler = _OneRing.Menu_new();
+    for (var i in items) {
+	var item = items[i];
+	if (item === ONERING.Menu.SEPARATOR) {
+	    this.addSeparator();
+	} else {
+	    this.addItem(item);
+	}
+    }
+};
+ONERING.Menu.SEPARATOR = Object();  // a const
+ONERING.Menu.prototype.addSeparator = function() {
+    _OneRing.Menu_addSeparator(this.handler);
+};
+ONERING.Menu.prototype.addItem = function(item) {
+    var title = item[0];
+    var callback = item[1];
+    if (callback instanceof Function) {
+	callback = ONERING._register_function(callback);
+    } else {
+	callback = "";
+    }
+    _OneRing.Menu_addItem(this.handler, title, callback);
+};
 
 // functions
 

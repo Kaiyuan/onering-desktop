@@ -28,14 +28,23 @@ public slots:
 	void createWindow(const QString &url, int width, int height, const QString &props);
 	void log(const QString &s);
 	void showInspector(void);
-	int systemTrayIcon_new(void);
-	void systemTrayIcon_load(int handler, const QString &url);
-	void systemTrayIcon_bind(int handler, const QString &event, const QString &callback);
-	QString systemTrayIcon_getGeometry(int handler);
+
+	// SystemTrayIcon
+	int SystemTrayIcon_new(void);
+	void SystemTrayIcon_load(int handler, const QString &url);
+	void SystemTrayIcon_bind(int handler, const QString &event, const QString &callback);
+	QString SystemTrayIcon_getGeometry(int handler);
+	void SystemTrayIcon_setContextMenu(int handler, int menu_handler);
+
+	// Menu
+	int Menu_new(void);
+	void Menu_addSeparator(int handler);
+	void Menu_addItem(int handler, const QString &title, const QString &callback);
 
 private slots:
 	void attachObject();
 	void callback(const QString &event);
+	void callback();
 
 private:
 	QWebFrame *frame;

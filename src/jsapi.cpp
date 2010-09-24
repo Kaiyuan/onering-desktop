@@ -13,6 +13,7 @@
 #include "oneringview.h"
 #include "networkaccessmanager.h"
 #include "systemtrayicon.h"
+#include "menu.h"
 
 JsApi::JsApi(QObject *parent)
 	: QObject(parent)
@@ -72,7 +73,7 @@ void JsApi::showInspector()
 #endif
 }
 
-int JsApi::systemTrayIcon_new()
+int JsApi::SystemTrayIcon_new()
 {
 	qDebug() << "JsApi::systemTrayIcon_new";
 
@@ -80,7 +81,7 @@ int JsApi::systemTrayIcon_new()
 	return (int)icon;
 }
 
-void JsApi::systemTrayIcon_load(int handler, const QString &url)
+void JsApi::SystemTrayIcon_load(int handler, const QString &url)
 {
 	qDebug() << "JsApi::systemTrayIcon_load" << handler << url;
 
@@ -88,7 +89,7 @@ void JsApi::systemTrayIcon_load(int handler, const QString &url)
 	icon->load(url);
 }
 
-void JsApi::systemTrayIcon_bind(int handler, const QString &event, const QString &callback_funcname)
+void JsApi::SystemTrayIcon_bind(int handler, const QString &event, const QString &callback_funcname)
 {
 	qDebug() << "JsApi::systemTrayIcon_bind" << handler << event << callback_funcname;
 
@@ -101,7 +102,14 @@ void JsApi::systemTrayIcon_bind(int handler, const QString &event, const QString
 	}
 }
 
-QString JsApi::systemTrayIcon_getGeometry(int handler)
+void JsApi::SystemTrayIcon_setContextMenu(int handler, int menu_handler)
+{
+	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
+	Menu *menu = (Menu *)menu_handler;
+	icon->setContextMenu(menu);
+}
+
+QString JsApi::SystemTrayIcon_getGeometry(int handler)
 {
 	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
 
@@ -110,6 +118,28 @@ QString JsApi::systemTrayIcon_getGeometry(int handler)
 		.arg(rect.top()).arg(rect.left())
 		.arg(rect.width()).arg(rect.height());
 }
+
+int JsApi::Menu_new()
+{
+	Menu *menu = new Menu();
+	return (int)menu;
+}
+
+void JsApi::Menu_addSeparator(int handler)
+{
+	Menu *menu = (Menu *)handler;
+	menu->addSeparator();
+}
+
+void JsApi::Menu_addItem(int handler, const QString &title, const QString &callback)
+{
+	Menu *menu = (Menu *)handler;
+	MenuItem *item = menu->addItem(title);
+	registerCallback(item, "", callback);
+	connect(item, SIGNAL(triggered()), this, SLOT(callback()));
+}
+
+// private methods
 
 void JsApi::callback(const QString &event)
 {
@@ -122,11 +152,17 @@ void JsApi::callback(const QString &event)
 	}
 }
 
+void JsApi::callback()
+{
+	callback("");
+}
+
 void JsApi::registerCallback(QObject *sender, const QString &event, const QString &callback_funcname)
 {
-	qDebug() << "registerCallback" << event << callback_funcname;
-
-	callbacks[EventSource(sender, event)] << callback_funcname;
+	if (!callback_funcname.isEmpty()) {
+		qDebug() << "registerCallback" << event << callback_funcname;
+		callbacks[EventSource(sender, event)] << callback_funcname;
+	}
 }
 
 QScriptValue JsApi::parseJSON(const QString &json)

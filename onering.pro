@@ -33,7 +33,8 @@ HEADERS += include/onering.h \
 	   src/appreply.h \
 	   src/jsapi.h \
 	   src/oneringapp.h \
-	   src/systemtrayicon.h
+	   src/systemtrayicon.h \
+	   src/menu.h
 SOURCES += src/onering.cpp \
 	   src/oneringview.cpp \
 	   src/networkaccessmanager.cpp \
@@ -41,7 +42,8 @@ SOURCES += src/onering.cpp \
 	   src/appreply.cpp \
 	   src/jsapi.cpp \
 	   src/oneringapp.cpp \
-	   src/systemtrayicon.cpp
+	   src/systemtrayicon.cpp \
+	   src/menu.cpp
 
 defineReplace( nc  ) { 
     return( $$escape_expand(\n\t)$$1 ) 

@@ -65,7 +65,7 @@ ONERING.Menu = function(items) {
 	if (item === ONERING.Menu.SEPARATOR) {
 	    this.addSeparator();
 	} else {
-	    this.addItem(item);
+	    this.addItem(item[0], item[1] || null);
 	}
     }
 };
@@ -73,9 +73,7 @@ ONERING.Menu.SEPARATOR = Object();  // a const
 ONERING.Menu.prototype.addSeparator = function() {
     _OneRing.Menu_addSeparator(this.handler);
 };
-ONERING.Menu.prototype.addItem = function(item) {
-    var title = item[0];
-    var callback = item[1];
+ONERING.Menu.prototype.addItem = function(title, callback) {
     if (callback instanceof Function) {
 	callback = ONERING._register_function(callback);
     } else {

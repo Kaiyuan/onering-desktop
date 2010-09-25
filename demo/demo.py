@@ -62,11 +62,14 @@ class font_face:
 
 class static:
     def GET(self, filename):
-        content = open('static/%s' % filename).read()
+        content = open('static/%s' % filename, 'rb').read()
         if filename.endswith('.js'):
             web.header('Content-Type', 'text/javascript')
         elif filename.endswith('.ico'):
             web.header('Content-Type', 'image/x-icon')
+        else:
+            web.header('Content-Type', 'application/octet-stream')
+        web.header('Content-Length', len(content))
         return content
 
 app = web.application(urls, globals(), autoreload=True)

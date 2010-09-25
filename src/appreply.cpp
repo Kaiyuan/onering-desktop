@@ -7,6 +7,7 @@
 #include "appreply.h"
 #include "app.h"
 
+
 AppReply::AppReply(const QUrl &url, QObject *parent)
 	: QNetworkReply(parent)
 {
@@ -70,24 +71,22 @@ void AppReply::parseResponse()
 	if (!ok) {
 		goto finish;
 	}
-//        qDebug() << "code:" << code;
 	setAttribute(QNetworkRequest::HttpStatusCodeAttribute, code);
 	offset = index + 2;
 
 	// iterate over lines of header
-	for(; (index = content.indexOf("\r\n", offset)) > 0; offset=index+2) {
+	for(; (index = content.indexOf("\r\n", offset)) > offset; offset=index+2) {
 		line = content.mid(offset, index-offset);
 		int pos = line.indexOf(':');
 		if (pos <= 0) {
 			continue;
 		}
 		key = line.left(pos);
-		value = line.mid(pos+1);
-//                qDebug() << key << value;
+		value = line.mid(pos+1).trimmed();
 		setRawHeader(key, value);
 	}
 
-	if (index == 0) {
+	if (index == offset) {
 		// the CRLF seperate headers and body
 		offset += 2;
 	}

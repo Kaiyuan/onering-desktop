@@ -47,6 +47,7 @@ int onering_loop(const char* appname)
 	// quick check for body
 	int index;
 	if ((index = response.indexOf("\r\n\r\n")) < 0) {
+		qDebug() << "Body not found:" << response;
 		return -2;
 	}
 	response.remove(0, index+4);

@@ -25,6 +25,6 @@ def register_wsgi_app(appname, app):
             response.append("\r\n")
         response.extend(app(environ, start_response))
         response = ''.join(response)
-        logger.debug("%s %s %r", method, path, body)
+        logger.debug("%s %s %s -> %s", method, path, body, response)
         return response
     return _onering.register_app(appname, callback)

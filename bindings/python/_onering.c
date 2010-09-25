@@ -32,8 +32,10 @@ c_appfunc(const char* method, const char* path, const char* body,
 	}
 
 	if (!code) {
-		PyString_AsStringAndSize(py_response, (char**)response, (Py_ssize_t*)response_len);
-		goto exit_args; /* TODO: Py_DECREF(response) */
+		/* don't know why PyString_AsStringAndSize not work on Snow Leopard */
+		*response = PyString_AsString(py_response);
+		*response_len = PyString_Size(py_response);
+		goto exit_args; /* TODO: Py_DECREF(py_response) */
 	}
 
 	Py_DECREF(py_response);

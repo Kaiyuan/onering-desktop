@@ -99,15 +99,15 @@ void JsApi::exit()
 	qApp->quit();
 }
 
-int JsApi::SystemTrayIcon_new()
+long JsApi::SystemTrayIcon_new()
 {
 	qDebug() << "JsApi::systemTrayIcon_new";
 
 	SystemTrayIcon *icon = new SystemTrayIcon();
-	return (int)icon;
+	return (long)icon;
 }
 
-void JsApi::SystemTrayIcon_load(int handler, const QString &url)
+void JsApi::SystemTrayIcon_load(long handler, const QString &url)
 {
 	qDebug() << "JsApi::systemTrayIcon_load" << handler << url;
 
@@ -115,7 +115,7 @@ void JsApi::SystemTrayIcon_load(int handler, const QString &url)
 	icon->load(frame->baseUrl().resolved(url));
 }
 
-void JsApi::SystemTrayIcon_bind(int handler, const QString &event, const QString &callback_funcname)
+void JsApi::SystemTrayIcon_bind(long handler, const QString &event, const QString &callback_funcname)
 {
 	qDebug() << "JsApi::systemTrayIcon_bind" << handler << event << callback_funcname;
 
@@ -128,14 +128,14 @@ void JsApi::SystemTrayIcon_bind(int handler, const QString &event, const QString
 	}
 }
 
-void JsApi::SystemTrayIcon_setContextMenu(int handler, int menu_handler)
+void JsApi::SystemTrayIcon_setContextMenu(long handler, long menu_handler)
 {
 	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
 	Menu *menu = (Menu *)menu_handler;
 	icon->setContextMenu(menu);
 }
 
-QString JsApi::SystemTrayIcon_getGeometry(int handler)
+QString JsApi::SystemTrayIcon_getGeometry(long handler)
 {
 	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
 
@@ -145,19 +145,19 @@ QString JsApi::SystemTrayIcon_getGeometry(int handler)
 		.arg(rect.width()).arg(rect.height());
 }
 
-int JsApi::Menu_new()
+long JsApi::Menu_new()
 {
 	Menu *menu = new Menu();
-	return (int)menu;
+	return (long)menu;
 }
 
-void JsApi::Menu_addSeparator(int handler)
+void JsApi::Menu_addSeparator(long handler)
 {
 	Menu *menu = (Menu *)handler;
 	menu->addSeparator();
 }
 
-void JsApi::Menu_addItem(int handler, const QString &title, const QString &callback)
+void JsApi::Menu_addItem(long handler, const QString &title, const QString &callback)
 {
 	Menu *menu = (Menu *)handler;
 	MenuItem *item = menu->addItem(title);

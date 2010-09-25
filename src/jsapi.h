@@ -1,6 +1,7 @@
 #ifndef JSAPI_H
 #define JSAPI_H
 
+#include <inttypes.h>
 #include <qobject.h>
 #ifdef DEBUG
 #include <QWebInspector>
@@ -37,16 +38,16 @@ public slots:
 	void exit(void);
 
 	// SystemTrayIcon
-	int SystemTrayIcon_new(void);
-	void SystemTrayIcon_load(int handler, const QString &url);
-	void SystemTrayIcon_bind(int handler, const QString &event, const QString &callback);
-	QString SystemTrayIcon_getGeometry(int handler);
-	void SystemTrayIcon_setContextMenu(int handler, int menu_handler);
+	long SystemTrayIcon_new(void);
+	void SystemTrayIcon_load(long handler, const QString &url);
+	void SystemTrayIcon_bind(long handler, const QString &event, const QString &callback);
+	QString SystemTrayIcon_getGeometry(long handler);
+	void SystemTrayIcon_setContextMenu(long handler, long menu_handler);
 
 	// Menu
-	int Menu_new(void);
-	void Menu_addSeparator(int handler);
-	void Menu_addItem(int handler, const QString &title, const QString &callback);
+	long Menu_new(void);
+	void Menu_addSeparator(long handler);
+	void Menu_addItem(long handler, const QString &title, const QString &callback);
 
 private slots:
 	void attachObject();

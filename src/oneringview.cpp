@@ -4,7 +4,7 @@
 #include "jsapi.h"
 
 OneRingView::OneRingView(QWidget *parent, Qt::WindowFlags f)
-	: QWebView(parent)
+	: QWebView(parent), contextMenuEnabled(false)
 {
 	setWindowFlags(f);
 
@@ -31,4 +31,21 @@ OneRingView::OneRingView(QWidget *parent, Qt::WindowFlags f)
 void OneRingView::printCurrentUrl(const QUrl &url)
 {
 	qDebug() << "nav to:" << url.toString();
+}
+
+void OneRingView::contextMenuEvent(QContextMenuEvent *ev)
+{
+	if (contextMenuEnabled) {
+		QWebView::contextMenuEvent(ev);
+	}
+}
+
+void OneRingView::enableContextMenu()
+{
+	contextMenuEnabled = true;
+}
+
+void OneRingView::disableContextMenu()
+{
+	contextMenuEnabled = false;
 }

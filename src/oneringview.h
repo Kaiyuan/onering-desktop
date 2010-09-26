@@ -10,10 +10,17 @@ class OneRingView : public QWebView
 
 public:
 	OneRingView(QWidget* parent=0, Qt::WindowFlags f=0);
+	void enableContextMenu();
+	void disableContextMenu();
 
 private slots:
 	void printCurrentUrl(const QUrl &url);
 
+protected:
+	void contextMenuEvent(QContextMenuEvent *ev);
+
+private:
+	bool contextMenuEnabled;
 };
 
 #endif

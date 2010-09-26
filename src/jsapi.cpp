@@ -77,6 +77,16 @@ void JsApi::Window_showNormal()
 	window->showNormal();
 }
 
+void JsApi::Window_enableContextMenu()
+{
+	static_cast<OneRingView*>(window)->enableContextMenu();
+}
+
+void JsApi::Window_disableContextMenu()
+{
+	static_cast<OneRingView*>(window)->disableContextMenu();
+}
+
 void JsApi::log(const QString &s)
 {
 	qDebug() << "JsApi::log" << s;

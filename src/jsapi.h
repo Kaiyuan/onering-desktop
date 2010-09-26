@@ -32,6 +32,8 @@ public slots:
 	void Window_hide();
 	void Window_maximize();
 	void Window_showNormal();
+	void Window_enableContextMenu();
+	void Window_disableContextMenu();
 
 	void log(const QString &s);
 	void showInspector(void);

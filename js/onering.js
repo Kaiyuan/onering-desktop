@@ -45,7 +45,7 @@ ONERING.SystemTrayIcon.prototype.load = function(url) {
 };
 ONERING.SystemTrayIcon.prototype.bind = function(event, callback) {
     if (event == 'click') {
-	var callback_name = ONERING._register_function(callback);
+	var callback_name = _register_function(callback);
 	_OneRing.SystemTrayIcon_bind(this.handler, event, callback_name);
     }
 };
@@ -75,7 +75,7 @@ ONERING.Menu.prototype.addSeparator = function() {
 };
 ONERING.Menu.prototype.addItem = function(title, callback) {
     if (callback instanceof Function) {
-	callback = ONERING._register_function(callback);
+	callback = _register_function(callback);
     } else {
 	callback = "";
     }
@@ -97,7 +97,7 @@ ONERING.log = function(o) {
 };
 
 ONERING.callback = function(name) {
-    var f = ONERING._get_registered_function(name);
+    var f = _get_registered_function(name);
     if (f) {
 	f();
     }
@@ -109,20 +109,20 @@ ONERING.exit = function() {
 
 // internal utilities
 
-ONERING._guid = 0;
-ONERING._get_guid = function() {
-    ONERING._guid += 1;
-    return '' + ONERING._guid;
+var _guid = 0;
+var _get_guid = function() {
+    _guid += 1;
+    return '' + _guid;
 }
 
-ONERING._registered_functions = new Object();
-ONERING._register_function = function(func) {
-    var name = 'f' + ONERING._get_guid();
-    ONERING._registered_functions[name] = func;
+var _registered_functions = new Object();
+var _register_function = function(func) {
+    var name = 'f' + _get_guid();
+    _registered_functions[name] = func;
     return name;
 }
-ONERING._get_registered_function = function(name) {
-    return ONERING._registered_functions[name];
+var _get_registered_function = function(name) {
+    return _registered_functions[name];
 }
 
 

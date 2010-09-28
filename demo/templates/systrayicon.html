@@ -1,0 +1,20 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">System Tray Icon</%def>
+
+<%def name="js()">
+$(function(){
+        var window = ONERING.getCurrentWindow();
+        var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
+        var menu = new ONERING.Menu([
+            ["Mi&nimize", function(){window.hide();}],
+            ["Ma&ximize", function(){window.maximize();}],
+            ["&Restore", function(){window.showNormal();}],
+            ONERING.Menu.SEPARATOR,
+            ["&Quit", function(){ONERING.exit();}],
+        ]);
+        icon.setContextMenu(menu);
+});
+</%def>
+
+Click the icon in the system tray to show the menu.

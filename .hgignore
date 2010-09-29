@@ -1,0 +1,5 @@
+syntax: regexp
+^Makefile$
+^OneRing.framework/
+^moc_.*.cpp$
+^qrc_onering.cpp$

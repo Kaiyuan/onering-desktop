@@ -20,6 +20,7 @@ urls = (
     '/systraymenu', 'systraymenu',
     '/font-face', 'font_face',
     '/shadow', 'shadow',
+    '/localstorage', 'localstorage',
     '/hotkey', 'hotkey',
     '/static/(.*)', 'static',
 )
@@ -40,7 +41,7 @@ def jsonize(func):
 class init:
     @jsonize
     def GET(self):
-        return dict(width=500, height=250, title="OneRing演示")
+        return dict(width=640, height=480, title="OneRing演示")
 
 class index:
     def GET(self):
@@ -65,6 +66,10 @@ class font_face:
 class shadow:
     def GET(self):
         return render.shadow()
+
+class localstorage:
+    def GET(self):
+        return render.localstorage()
 
 class hotkey:
     def GET(self):

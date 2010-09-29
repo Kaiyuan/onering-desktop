@@ -1,0 +1,58 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Local Storage</%def>
+
+<style>
+    #ta {
+        width: 300px;
+        height: 150px;
+        display: block;
+    }
+    #localstorage-message {
+        padding-top: 50px;
+    }
+</style>
+
+<pre>
+// use localStorage for persistent storage
+textarea.addEventListener('keyup', function() {
+  window.<b>localStorage</b>['value'] = area.value;
+  window.<b>localStorage</b>['timestamp'] = (new Date()).getTime();
+}, false);
+textarea.value = window.<b>localStorage</b>['value'];
+</pre>
+<p id="localstorage-message">Save text value</p>
+<textarea id="ta" placeholder="Type your text here..."></textarea>
+<button id="save-ta">Save</button>
+<p id="ta-log"></p>
+
+<script>
+    var area = document.querySelector('#ta');
+    if (!area.value) {
+        area.value = window.localStorage.getItem('value');
+    }
+    updateLog(false);
+
+    document.querySelector('#save-ta').addEventListener('click', function() {
+        window.localStorage.setItem('value', area.value);
+        window.localStorage.setItem('timestamp', (new Date()).getTime());
+        updateLog(true);
+    }, false);
+
+    function updateLog(new_save) {
+        var log = document.querySelector("#ta-log");
+        var delta = 0;
+        if (window.localStorage.getItem('value')) {
+            delta = ((new Date()).getTime() - (new Date()).setTime(window.localStorage.getItem('timestamp'))) / 100;
+            if (new_save) {
+                log.textContent = 'Saved.  Content will be available after re-run this demo.';
+                setTimeout(function() {
+                    log.textContent = '';
+                }, 3000);
+            } else {
+                log.textContent = 'last saved: ' + delta + 's ago';
+            }
+        }
+    }
+</script>
+

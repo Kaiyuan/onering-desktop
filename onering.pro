@@ -9,7 +9,8 @@ INCLUDEPATH += . include
 QT += script webkit network
 RESOURCES = onering.qrc
 CONFIG += shared
-CONFIG += x86 x86_64
+CONFIG += qxt
+QXT += gui
 DEFINES += ONERING_LIBRARY
 VERSION = 1
 macx {

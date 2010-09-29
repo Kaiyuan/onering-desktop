@@ -15,6 +15,7 @@
 #include "networkaccessmanager.h"
 #include "systemtrayicon.h"
 #include "menu.h"
+#include "hotkey.h"
 
 JsApi::JsApi(QObject *parent)
 	: QObject(parent)
@@ -173,6 +174,21 @@ void JsApi::Menu_addItem(long handler, const QString &title, const QString &call
 	MenuItem *item = menu->addItem(title);
 	registerCallback(item, "", callback);
 	connect(item, SIGNAL(triggered()), this, SLOT(callback()));
+}
+
+long JsApi::HotKey_new(const QString &keyseq, const QString &callback)
+{
+	HotKey *hotkey = new HotKey(QKeySequence(keyseq), this);
+	registerCallback(hotkey, "", callback);
+	connect(hotkey, SIGNAL(activated()), this, SLOT(callback()));
+	return (long)hotkey;
+}
+
+void JsApi::HotKey_delete(long handler)
+{
+	HotKey *hotkey = (HotKey *)handler;
+	hotkey->setDisabled();
+	delete hotkey;
 }
 
 // private methods

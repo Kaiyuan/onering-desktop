@@ -96,6 +96,16 @@ ONERING.log = function(o) {
     return _OneRing.log(o);
 };
 
+var hotkeys = {};
+ONERING.setHotKey = function(shortcut, func) {
+    var hotkey = ONERING._setHotKey(shortcut, _register_function(func));
+    hotkeys[shortcut] = hotkey;
+}
+ONERING.clearHotKey = function(shortcut) {
+    var hotkey = hotkeys[shortcut];
+    ONERING._clearHotKey(hotkey);
+}
+
 ONERING.callback = function(name) {
     var f = _get_registered_function(name);
     if (f) {

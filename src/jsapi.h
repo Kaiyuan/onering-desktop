@@ -51,6 +51,9 @@ public slots:
 	void Menu_addSeparator(long handler);
 	void Menu_addItem(long handler, const QString &title, const QString &callback);
 
+	long HotKey_new(const QString &keyseq, const QString &callback);
+	void HotKey_delete(long handler);
+
 private slots:
 	void attachObject();
 	void callback(const QString &event);

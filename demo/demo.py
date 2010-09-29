@@ -20,6 +20,7 @@ urls = (
     '/systraymenu', 'systraymenu',
     '/font-face', 'font_face',
     '/shadow', 'shadow',
+    '/hotkey', 'hotkey',
     '/static/(.*)', 'static',
 )
 
@@ -64,6 +65,10 @@ class font_face:
 class shadow:
     def GET(self):
         return render.shadow()
+
+class hotkey:
+    def GET(self):
+        return render.hotkey()
 
 class static:
     def GET(self, filename):

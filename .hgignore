@@ -3,3 +3,4 @@ syntax: regexp
 ^OneRing.framework/
 ^moc_.*.cpp$
 ^qrc_onering.cpp$
+.*\.so$

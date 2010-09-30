@@ -1,0 +1,23 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Hot Key</%def>
+
+<input type="checkbox" id="sethotkey" /><label for="sethotkey">Check to set Ctrl+Alt+R as system wide hot key</label>
+<div id="output">0</div>
+
+<script>
+    $("#sethotkey").change(function(){
+        if (this.checked) {
+            ONERING.setHotKey("Ctrl+Alt+R", increment);
+        } else {
+            ONERING.clearHotKey("Ctrl+Alt+R");
+        }
+    });
+
+    var n = 0;
+
+    function increment() {
+        n = n + 1;
+        $('#output').text(n);
+    }
+</script>

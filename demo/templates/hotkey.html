@@ -2,7 +2,20 @@
 
 <%def name="demo_name()">Hot Key</%def>
 
-<input type="checkbox" id="sethotkey" /><label for="sethotkey">Check to set Ctrl+Alt+R as system wide hot key</label>
+<%!
+import sys
+
+CTRL = "Ctrl"
+ALT = "Alt"
+META = "Meta"
+
+if sys.platform == 'darwin':
+    CTRL = u"⌘"
+    ALT = u"⌥"
+    META = u"⌃"
+%>
+
+<input type="checkbox" id="sethotkey" /><label for="sethotkey">Check to set ${CTRL}+${ALT}+R as system wide hot key</label>
 <div id="output">0</div>
 
 <script>

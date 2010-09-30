@@ -178,6 +178,7 @@ void JsApi::Menu_addItem(long handler, const QString &title, const QString &call
 
 long JsApi::HotKey_new(const QString &keyseq, const QString &callback)
 {
+	qDebug() << "JsApi::HotKey_new" << keyseq << callback;
 	HotKey *hotkey = new HotKey(QKeySequence(keyseq), this);
 	registerCallback(hotkey, "", callback);
 	connect(hotkey, SIGNAL(activated()), this, SLOT(callback()));
@@ -186,6 +187,7 @@ long JsApi::HotKey_new(const QString &keyseq, const QString &callback)
 
 void JsApi::HotKey_delete(long handler)
 {
+	qDebug() << "JsApi::HotKey_delete" << handler;
 	HotKey *hotkey = (HotKey *)handler;
 	hotkey->setDisabled();
 	delete hotkey;

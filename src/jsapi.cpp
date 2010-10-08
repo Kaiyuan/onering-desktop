@@ -1,3 +1,4 @@
+// includes {{{
 #include <QDebug>
 #include <qwebview.h>
 #include <qwebframe.h>
@@ -16,6 +17,9 @@
 #include "systemtrayicon.h"
 #include "menu.h"
 #include "hotkey.h"
+// }}}
+
+// public methods {{{
 
 JsApi::JsApi(QObject *parent)
 	: QObject(parent)
@@ -63,6 +67,36 @@ void JsApi::createWindow(const QString &url, int width, int height, const QStrin
 	window->show();
 }
 
+// }}}
+
+// javascript api {{{
+
+// module level {{{
+void JsApi::log(const QString &s)
+{
+	qDebug() << "JsApi::log" << s;
+}
+
+void JsApi::showInspector()
+{
+	qDebug() << "JsApi::showInspector";
+#ifdef DEBUG
+	if (!inspector.page()) {
+		inspector.setPage(frame->page());
+	}
+	inspector.show();
+	inspector.activateWindow();  // put inspector at the top most
+#endif
+}
+
+void JsApi::exit()
+{
+	qApp->quit();
+}
+
+// }}}
+
+// Window {{{
 void JsApi::Window_hide()
 {
 	window->hide();
@@ -87,29 +121,9 @@ void JsApi::Window_disableContextMenu()
 {
 	static_cast<OneRingView*>(window)->disableContextMenu();
 }
+// }}}
 
-void JsApi::log(const QString &s)
-{
-	qDebug() << "JsApi::log" << s;
-}
-
-void JsApi::showInspector()
-{
-	qDebug() << "JsApi::showInspector";
-#ifdef DEBUG
-	if (!inspector.page()) {
-		inspector.setPage(frame->page());
-	}
-	inspector.show();
-	inspector.activateWindow();  // put inspector at the top most
-#endif
-}
-
-void JsApi::exit()
-{
-	qApp->quit();
-}
-
+// SystemTrayIcon {{{
 long JsApi::SystemTrayIcon_new()
 {
 	qDebug() << "JsApi::systemTrayIcon_new";
@@ -155,7 +169,9 @@ QString JsApi::SystemTrayIcon_getGeometry(long handler)
 		.arg(rect.top()).arg(rect.left())
 		.arg(rect.width()).arg(rect.height());
 }
+//}}}
 
+// Menu {{{
 long JsApi::Menu_new()
 {
 	Menu *menu = new Menu();
@@ -175,7 +191,9 @@ void JsApi::Menu_addItem(long handler, const QString &title, const QString &call
 	registerCallback(item, "", callback);
 	connect(item, SIGNAL(triggered()), this, SLOT(callback()));
 }
+// }}}
 
+// HotKey {{{
 long JsApi::HotKey_new(const QString &keyseq, const QString &callback)
 {
 	qDebug() << "JsApi::HotKey_new" << keyseq << callback;
@@ -192,8 +210,11 @@ void JsApi::HotKey_delete(long handler)
 	hotkey->setDisabled();
 	delete hotkey;
 }
+//}}}
 
-// private methods
+// }}}
+
+// private methods {{{
 
 void JsApi::callback(const QString &event)
 {
@@ -223,3 +244,7 @@ QScriptValue JsApi::parseJSON(const QString &json)
 {
 	return engine.evaluate("("+json+")");
 }
+
+// }}}
+
+// vim:set foldmethod=marker:

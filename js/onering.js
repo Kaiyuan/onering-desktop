@@ -1,6 +1,6 @@
 ONERING = new Object();
 
-// Window class
+// Window class {{{
 
 ONERING.Window = function() {
 };
@@ -33,14 +33,18 @@ ONERING.Window.prototype.showNormal = function() {
 
 ONERING.window = new ONERING.Window();
 
-// Audio class
+// }}}
+
+// Audio class {{{
 
 ONERING.Audio = Audio;
 ONERING.Audio.prototype.bind = function(event, callback) {
     return this.addEventListener(event, callback);
 };
 
-// System Tray Icon
+// }}}
+
+// System Tray Icon {{{
 
 ONERING.SystemTrayIcon = function(url) {
     this.handler = _OneRing.SystemTrayIcon_new();
@@ -64,7 +68,9 @@ ONERING.SystemTrayIcon.prototype.setContextMenu = function(menu) {
     _OneRing.SystemTrayIcon_setContextMenu(this.handler, menu.handler);
 }
 
-// Menu
+// }}}
+
+// Menu {{{
 
 ONERING.Menu = function(items) {
     this.handler = _OneRing.Menu_new();
@@ -90,7 +96,9 @@ ONERING.Menu.prototype.addItem = function(title, callback) {
     _OneRing.Menu_addItem(this.handler, title, callback);
 };
 
-// functions
+// }}}
+
+// functions {{{
 
 ONERING.getCurrentWindow = function() {
     return ONERING.window;
@@ -127,7 +135,9 @@ ONERING.exit = function() {
     _OneRing.exit();
 }
 
-// internal utilities
+// }}}
+
+// internal utilities {{{
 
 var _guid = 0;
 var _get_guid = function() {
@@ -145,4 +155,6 @@ var _get_registered_function = function(name) {
     return _registered_functions[name];
 }
 
+// }}}
 
+// vim:set foldmethod=marker:

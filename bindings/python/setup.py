@@ -1,13 +1,13 @@
 import os, sys
 from setuptools import setup, Extension
 
-include_dirs = [os.path.join('..', '..', 'include')]
-
 if sys.platform == 'darwin':
+    include_dirs = ['/Library/Frameworks/OneRing.framework/Headers/']
     library_dirs = []
     libraries = []
-    extra_link_args = ['-F../..', '-framework OneRing']
+    extra_link_args = ['-framework', 'OneRing']
 else:
+    include_dirs = [os.path.join('..', '..', 'include')]
     library_dirs = [os.path.join('..', '..', 'release')]
     libraries = ['OneRing1']
     extra_link_args = []

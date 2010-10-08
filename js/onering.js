@@ -11,7 +11,15 @@ ONERING.Window.prototype.createWindow = function(url, width, height, props) {
 
 ONERING.Window.prototype.showInspector = function() {
     return _OneRing.showInspector();
-}
+};
+
+ONERING.Window.prototype.enableContextMenu = function() {
+    _OneRing.enableContextMenu();
+};
+
+ONERING.Window.prototype.disableContextMenu = function() {
+    _OneRing.disableContextMenu();
+};
 
 ONERING.Window.prototype.hide = function() {
     return _OneRing.Window_hide();

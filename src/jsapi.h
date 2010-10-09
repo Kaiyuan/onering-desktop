@@ -42,6 +42,7 @@ public slots:
 
 	// SystemTrayIcon
 	long SystemTrayIcon_new(void);
+	void SystemTrayIcon_delete(long handler);
 	void SystemTrayIcon_load(long handler, const QString &url);
 	void SystemTrayIcon_bind(long handler, const QString &event, const QString &callback);
 	QString SystemTrayIcon_getGeometry(long handler);
@@ -49,6 +50,7 @@ public slots:
 
 	// Menu
 	long Menu_new(void);
+	void Menu_delete(long handler);
 	void Menu_addSeparator(long handler);
 	void Menu_addItem(long handler, const QString &title, const QString &callback);
 

@@ -142,6 +142,13 @@ long JsApi::SystemTrayIcon_new()
 	return (long)icon;
 }
 
+void JsApi::SystemTrayIcon_delete(long handler)
+{
+	qDebug() << "JsApi::SystemTrayIcon_delete";
+	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
+	delete icon;
+}
+
 void JsApi::SystemTrayIcon_load(long handler, const QString &url)
 {
 	qDebug() << "JsApi::systemTrayIcon_load" << handler << url;
@@ -186,6 +193,13 @@ long JsApi::Menu_new()
 {
 	Menu *menu = new Menu();
 	return (long)menu;
+}
+
+void JsApi::Menu_delete(long handler)
+{
+	qDebug() << "JsApi::Menu_delete";
+	Menu *menu = (Menu *)handler;
+	delete menu;
 }
 
 void JsApi::Menu_addSeparator(long handler)

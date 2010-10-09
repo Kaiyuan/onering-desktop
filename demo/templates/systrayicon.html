@@ -4,16 +4,20 @@
 
 <%def name="js()">
 $(function(){
-        var window = ONERING.getCurrentWindow();
+        var w = ONERING.getCurrentWindow();
         var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
         var menu = new ONERING.Menu([
-            ["Mi&nimize", function(){window.hide();}],
-            ["Ma&ximize", function(){window.maximize();}],
-            ["&Restore", function(){window.showNormal();}],
+            ["Mi&nimize", function(){w.hide();}],
+            ["Ma&ximize", function(){w.maximize();}],
+            ["&Restore", function(){w.showNormal();}],
             ONERING.Menu.SEPARATOR,
             ["&Quit", function(){ONERING.exit();}],
         ]);
         icon.setContextMenu(menu);
+        $(window).unload(function(){
+                menu.destroy();
+                icon.destroy();
+        });
 });
 </%def>
 

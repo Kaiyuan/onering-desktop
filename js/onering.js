@@ -52,19 +52,28 @@ ONERING.SystemTrayIcon = function(url) {
 	this.load(url);
     }
 };
+ONERING.SystemTrayIcon.prototype.destroy = function() {
+    if (!this.handler) return;
+    _OneRing.SystemTrayIcon_delete(this.handler);
+    this.handler = null;
+};
 ONERING.SystemTrayIcon.prototype.load = function(url) {
+    if (!this.handler) return;
     _OneRing.SystemTrayIcon_load(this.handler, url);
 };
 ONERING.SystemTrayIcon.prototype.bind = function(event, callback) {
+    if (!this.handler) return;
     if (event == 'click') {
 	var callback_name = _register_function(callback);
 	_OneRing.SystemTrayIcon_bind(this.handler, event, callback_name);
     }
 };
 ONERING.SystemTrayIcon.prototype.getGeometry = function() {
+    if (!this.handler) return;
     return _OneRing.SystemTrayIcon_getGeometry(this.handler);
 };
 ONERING.SystemTrayIcon.prototype.setContextMenu = function(menu) {
+    if (!this.handler) return;
     _OneRing.SystemTrayIcon_setContextMenu(this.handler, menu.handler);
 }
 
@@ -84,10 +93,17 @@ ONERING.Menu = function(items) {
     }
 };
 ONERING.Menu.SEPARATOR = Object();  // a const
+ONERING.Menu.prototype.destroy = function() {
+    if (!this.handler) return;
+    _OneRing.Menu_delete(this.handler);
+    this.handler = null;
+}
 ONERING.Menu.prototype.addSeparator = function() {
+    if (!this.handler) return;
     _OneRing.Menu_addSeparator(this.handler);
 };
 ONERING.Menu.prototype.addItem = function(title, callback) {
+    if (!this.handler) return;
     if (callback instanceof Function) {
 	callback = _register_function(callback);
     } else {

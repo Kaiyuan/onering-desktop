@@ -13,6 +13,7 @@
 #include <QApplication>
 #include "jsapi.h"
 #include "oneringview.h"
+#include "app.h"
 #include "networkaccessmanager.h"
 #include "systemtrayicon.h"
 #include "menu.h"
@@ -92,6 +93,15 @@ void JsApi::showInspector()
 void JsApi::exit()
 {
 	qApp->quit();
+}
+
+void JsApi::post(const QString &url, const QString &body, const QString &callback)
+{
+	qDebug() << "JsApi::post" << url << body << callback;
+	QUrl absurl = frame->baseUrl().resolved(url);
+	QByteArray response = call_app(qPrintable(absurl.host()), "POST",
+			qPrintable(absurl.path()), qPrintable(body));
+	invokeCallback(callback);
 }
 
 // }}}

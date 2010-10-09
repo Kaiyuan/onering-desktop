@@ -22,6 +22,8 @@ urls = (
     '/shadow', 'shadow',
     '/localstorage', 'localstorage',
     '/hotkey', 'hotkey',
+    '/browser', 'browser',
+    '/browser/launcher', 'browser_launcher',
     '/static/(.*)', 'static',
 )
 
@@ -74,6 +76,17 @@ class localstorage:
 class hotkey:
     def GET(self):
         return render.hotkey()
+
+class browser:
+    def GET(self):
+        return render.browser()
+
+class browser_launcher:
+    def POST(self):
+        i = web.input()
+        url = i.url
+        import webbrowser
+        webbrowser.open(url)
 
 class static:
     def GET(self, filename):

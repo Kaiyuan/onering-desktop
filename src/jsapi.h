@@ -38,6 +38,7 @@ public slots:
 	void log(const QString &s);
 	void showInspector(void);
 	void exit(void);
+	void post(const QString &url, const QString &body, const QString &callback);
 
 	// SystemTrayIcon
 	long SystemTrayIcon_new(void);

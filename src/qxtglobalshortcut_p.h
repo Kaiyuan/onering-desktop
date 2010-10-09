@@ -54,7 +54,7 @@ public:
     static void activateShortcut(quint32 nativeKey, quint32 nativeMods);
 
 private:
-    static quint32 nativeKeycode(Qt::Key keycode);
+    static quint32 nativeKeycode(Qt::Key keycode, Qt::KeyboardModifiers modifiers=Qt::NoModifier);
     static quint32 nativeModifiers(Qt::KeyboardModifiers modifiers);
 
     static bool registerShortcut(quint32 nativeKey, quint32 nativeMods);

@@ -1,12 +1,20 @@
 #ifndef HOTKEY_H
 #define HOTKEY_H
 
-#include <QxtGlobalShortcut>
+#include <QObject>
+#include <QKeySequence>
 
-class HotKey : public QxtGlobalShortcut
+class HotKey : public QObject
 {
-	public:
-		HotKey(const QKeySequence & shortcut, QObject *parent);
+Q_OBJECT
+
+public:
+	HotKey(const QKeySequence & shortcut, QObject *parent);
+
+	void setDisabled(void) {};
+
+signals:
+	void activated(void);
 };
 
 #endif

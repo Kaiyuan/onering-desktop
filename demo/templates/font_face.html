@@ -1,0 +1,49 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Font Face</%def>
+
+<style type="text/css">
+@font-face {
+    font-family: Tagesschrift;
+    src:url('http://www.opentype.info/demo/fonts/YanoneTagesschrift.ttf') format("truetype");
+}
+.tagesschrift {
+    font-family: Tagesschrift;
+    font-size: 40px;
+    line-height: 50px;
+    text-shadow: #FFF 3px 3px 0px;
+    -webkit-transition-property: opacity, text-shadow, color;
+    -webkit-transition-duration: 2s, 2s, 2s;
+    color: #999;
+    margin: 0;
+    padding: 10px;
+}
+.tagesschrift:hover {
+    text-shadow: #ccc 2px 2px 5px;
+    color: #00B7EB;
+}
+
+@font-face {
+    font-family: Tagesschrift-local;
+    src:url('/static/YanoneTagesschrift.ttf') format("truetype");
+}
+.tagesschrift-local {
+    font-family: Tagesschrift-local;
+    font-size: 40px;
+    line-height: 50px;
+    text-shadow: #FFF 3px 3px 0px;
+    -webkit-transition-property: opacity, text-shadow, color;
+    -webkit-transition-duration: 2s, 2s, 2s;
+    color: #999;
+    margin: 0;
+    padding: 10px;
+}
+.tagesschrift-local:hover {
+    text-shadow: #ccc 2px 2px 5px;
+    color: #00B7EB;
+}
+
+</style>
+
+<p class="tagesschrift">Hello, Remote Font!</p>
+<p class="tagesschrift-local">Hello, Local Font!!</p>

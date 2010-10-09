@@ -1,0 +1,97 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Shadow</%def>
+
+<!-- copied from http://slides.html5rocks.com/#slide39 -->
+
+<style type="text/css">
+pre {
+    background: left;
+    font-family: 'Droid Sans Mono', Courier;        
+    padding: 10px 20px;
+    background: rgba(255, 0, 0, 0.05);
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+}
+pre b {
+    font-weight: normal;
+    color: #c61800;
+    text-shadow: #c61800 0 0 1px;
+    /*letter-spacing: -1px;*/
+}
+
+pre input[type="range"] {
+    height: 6px;
+    cursor: pointer;
+    width: auto;
+}
+
+.two-column {
+    -webkit-column-count: 2;
+}
+
+div.example {
+    display: block;
+    padding: 10px 20px;
+    color: black;
+    background: rgba(255, 255, 255, 0.4);
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#shadow-example {
+    font-size: 75px;
+    margin: 10px 10px 30px 10px;
+    padding: 20px;
+    text-align: center;
+}
+</style>
+
+<pre class="two-column">
+<b>text-shadow</b>:
+rgba(64, 64, 64, 0.5)
+<span id="shadows-text-x-value">0</span>px <input id="shadows-text-x" type="range" min="-9" max="9" value="0" onchange="changeShadow(event)"> 
+<span id="shadows-text-y-value">0</span>px <input id="shadows-text-y" type="range" min="-9" max="9" value="0" onchange="changeShadow(event)"> 
+<span id="shadows-text-size-value">0</span>px <input id="shadows-text-size" type="range" min="0" max="9" value="0" onchange="changeShadow(event)"> 
+<b>box-shadow</b>: 
+rgba(0, 0, 128, 0.25) 
+<span id="shadows-box-x-value">0</span>px <input id="shadows-box-x" type="range" min="-9" max="9" value="0" onchange="changeShadow(event)"> 
+<span id="shadows-box-y-value">0</span>px <input id="shadows-box-y" type="range" min="-9" max="9" value="0" onchange="changeShadow(event)"> 
+<span id="shadows-box-size-value">0</span>px <input id="shadows-box-size" type="range" min="0" max="9" value="0" onchange="changeShadow(event)"> 
+</pre> 
+
+<div id="shadow-example" class="example"> 
+  Shadows example
+</div> 
+
+<script> 
+  function changeShadow() {
+    var el = document.getElementById('shadow-example');
+
+    var textXVal = document.getElementById('shadows-text-x').value;
+    var textYVal = document.getElementById('shadows-text-y').value;
+    var textSizeVal = document.getElementById('shadows-text-size').value;
+
+    document.getElementById('shadows-text-x-value').innerHTML = textXVal;
+    document.getElementById('shadows-text-y-value').innerHTML = textYVal;
+    document.getElementById('shadows-text-size-value').innerHTML = textSizeVal;
+
+    var boxXVal = document.getElementById('shadows-box-x').value;
+    var boxYVal = document.getElementById('shadows-box-y').value;
+    var boxSizeVal = document.getElementById('shadows-box-size').value;
+
+    document.getElementById('shadows-box-x-value').innerHTML = boxXVal;
+    document.getElementById('shadows-box-y-value').innerHTML = boxYVal;
+    document.getElementById('shadows-box-size-value').innerHTML = boxSizeVal;
+
+    el.style.textShadow = 'rgba(64, 64, 64, 0.5) ' + textXVal + 'px ' + textYVal + 'px ' + textSizeVal + 'px';
+    el.style.webkitBoxShadow = 'rgba(0, 0, 128, 0.25) ' + boxXVal + 'px ' + boxYVal + 'px ' + boxSizeVal + 'px';
+  }
+</script> 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Demo - ${self.demo_name()}</title>
+<script type="text/javascript" src="onering://onering/onering.js"></script>
+<script type="text/javascript" src="onering://demo/static/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+    ${self.js()}
+</script>
+${self.extra_head()}
+<style type="text/css">
+    ${self.css()}
+    footer {
+        margin-top: 15px;
+        padding-top: 5px;
+        border-top: 1px dotted #999;
+        display: block;
+    }
+    #demo_footer {
+        font-size: small;
+    }
+</style>
+</head>
+<body>
+    <article>
+        ${next.body()}
+    </article>
+    <footer id="demo_footer">
+        <a href="/">&lt; Back to the demo homepage</a>
+        | <a href="javascript:ONERING.getCurrentWindow().showInspector()">Show Web Inspector</a>
+    </footer>
+</body>
+</html>
+
+<%def name="demo_name()"></%def>
+
+<%def name="js()"></%def>
+<%def name="extra_head()"></%def>
+<%def name="css()"></%def>

@@ -14,11 +14,11 @@ ONERING.Window.prototype.showInspector = function() {
 };
 
 ONERING.Window.prototype.enableContextMenu = function() {
-    _OneRing.enableContextMenu();
+    _OneRing.Window_enableContextMenu();
 };
 
 ONERING.Window.prototype.disableContextMenu = function() {
-    _OneRing.disableContextMenu();
+    _OneRing.Window_disableContextMenu();
 };
 
 ONERING.Window.prototype.hide = function() {
@@ -133,7 +133,17 @@ ONERING.callback = function(name) {
 
 ONERING.exit = function() {
     _OneRing.exit();
-}
+};
+
+ONERING.post = function(url, data, callback) {
+    if (data instanceof Function) {
+	callback = data;
+	data = {};
+    }
+
+    data = param(data);
+    _OneRing.post(url, data, _register_function(callback));
+};
 
 // }}}
 
@@ -143,17 +153,26 @@ var _guid = 0;
 var _get_guid = function() {
     _guid += 1;
     return '' + _guid;
-}
+};
 
 var _registered_functions = new Object();
 var _register_function = function(func) {
     var name = 'f' + _get_guid();
     _registered_functions[name] = func;
     return name;
-}
+};
 var _get_registered_function = function(name) {
     return _registered_functions[name];
-}
+};
+
+var param = function(a) {
+    var s = [];
+    for (var key in a) {
+	var value = a[key];
+	s.push( encodeURIComponent(key) + "=" + encodeURIComponent(value) );
+    }
+    return s.join("&").replace(/%20/g, "+");
+};
 
 // }}}
 

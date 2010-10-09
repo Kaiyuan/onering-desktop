@@ -19,6 +19,7 @@ def register_wsgi_app(appname, app):
         }
         if body is not None:
             environ['wsgi.input'] = StringIO(body)
+            environ['CONTENT_LENGTH'] = len(body)
         def start_response(status, response_headers, exc_info=None):
             response.append("HTTP/1.1 %s\r\n" % status)
             response.extend("%s: %s\r\n" % h for h in response_headers)

@@ -1,0 +1,16 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Browser Launcher</%def>
+
+<button id="launch">Click to launch your default browser</button>
+<p id="result"></p>
+
+<script>
+    $('#launch').click(function(){
+        $('#result').text("Launching...");
+        ONERING.post('/browser/launcher', {url: 'http://www.douban.com'},
+        function() {
+            $('#result').text("Your browser should now visiting www.douban.com.");
+        });
+    });
+</script>

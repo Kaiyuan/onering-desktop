@@ -16,6 +16,7 @@ urls = (
     '/init', 'init',
     '/', 'index',
     '/create_window', 'create_window',
+    '/create_window/new', 'create_window_new',
     '/systrayicon', 'systrayicon',
     '/systraymenu', 'systraymenu',
     '/font-face', 'font_face',
@@ -52,6 +53,10 @@ class index:
 class create_window:
     def GET(self):
         return render.create_window()
+
+class create_window_new:
+    def GET(self):
+        return render.create_window_new()
 
 class systrayicon:
     def GET(self):

@@ -2,7 +2,17 @@
 
 <%def name="demo_name()">Create Window</%def>
 
-<a href="#" id="button">Click me to create a new window</a>
+<input type="checkbox" name="fixed_size" id="fixed_size" />
+<label for="fixed_size">Fixed Size</label><br/>
 
-<%def name="js()">
-</%def>
+<button id="button">Click me to create a new window</button>
+
+<script>
+    $("#button").click(function(){
+        props = {};
+        if ($('#fixed_size').is(':checked')) {
+            props.fixedSize = true;
+        }
+        ONERING.createWindow('/create_window/new', 400, 300, props)
+    });
+</script>

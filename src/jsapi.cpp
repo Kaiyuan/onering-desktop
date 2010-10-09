@@ -56,15 +56,9 @@ void JsApi::invokeCallback(const QString &funcname)
 void JsApi::createWindow(const QString &url, int width, int height, const QString &props_json)
 {
 	qDebug() << "JsApi::createWindow" << url << width << height << props_json;
-
-	Qt::WindowFlags flags = 0;
-	QScriptValue props = parseJSON(props_json);
-	if (props.isObject() && props.property("popup").toBool()) {
-		flags |= Qt::Popup;
-	}
-	OneRingView *window = new OneRingView(0, flags);
-	window->load(frame->baseUrl().resolved(url));
-	window->resize(width, height);
+	QVariantMap props = parseJSON(props_json).toVariant().toMap();
+	OneRingView *window = new OneRingView(frame->baseUrl().resolved(url),
+			width, height, props);
 	window->show();
 }
 

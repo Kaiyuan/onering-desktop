@@ -52,25 +52,20 @@ int onering_loop(const char* appname)
 	}
 	response.remove(0, index+4);
 
-	QScriptValue sc;
 	QScriptEngine engine;
-	sc = engine.evaluate("("+response+")");
+	QVariantMap props = engine.evaluate("("+response+")").toVariant().toMap();
 
-	int width=0, height=0;
-	QString title, url;
-	width = sc.property("width").toInt32();
-	height = sc.property("height").toInt32();
-	title = sc.property("title").toString();
-	url = sc.property("url").isValid() ? sc.property("url").toString() : "/";
+	int width = props["width"].toInt();
+	int height = props["height"].toInt();
+	QString url = props["url"].toString();
+	if (url.isEmpty()) {
+		url = "/";
+	}
 	if (url[0] == '/') {
 		url = QString("onering://") + appname + url;
 	}
 
-	OneRingView *window = new OneRingView();
-	window->load(url);
-
-	window->resize(width, height);
-	window->setWindowTitle(title);
+	OneRingView *window = new OneRingView(url, width, height, props);
 	window->show();
 	return app.exec();
 }

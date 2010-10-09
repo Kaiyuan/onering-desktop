@@ -3,18 +3,12 @@
 
 #include <QObject>
 #include <QKeySequence>
+#include "qxtglobalshortcut.h"
 
-class HotKey : public QObject
+class HotKey : public QxtGlobalShortcut
 {
-Q_OBJECT
-
 public:
 	HotKey(const QKeySequence & shortcut, QObject *parent);
-
-	void setDisabled(void) {};
-
-signals:
-	void activated(void);
 };
 
 #endif

@@ -19,6 +19,7 @@ macx {
 	QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS
 	QMAKE_FRAMEWORK_BUNDLE_NAME = OneRing
 	QMAKE_FRAMEWORK_VERSION = $$VERSION
+	LIBS += -framework Carbon
 }
 
 debug {
@@ -35,7 +36,10 @@ HEADERS += include/onering.h \
 	   src/oneringapp.h \
 	   src/systemtrayicon.h \
 	   src/menu.h \
-	   src/hotkey.h
+	   src/hotkey.h \
+	   src/qxtglobalshortcut.h \
+	   src/qxtglobal.h \
+	   src/qxtglobalshortcut_p.h
 SOURCES += src/onering.cpp \
 	   src/oneringview.cpp \
 	   src/networkaccessmanager.cpp \
@@ -45,5 +49,10 @@ SOURCES += src/onering.cpp \
 	   src/oneringapp.cpp \
 	   src/systemtrayicon.cpp \
 	   src/menu.cpp \
-	   src/hotkey.cpp
+	   src/hotkey.cpp \
+	   src/qxtglobalshortcut.cpp
+
+macx:SOURCES += src/qxtglobalshortcut_mac.cpp
+win32:SOURCES += src/qxtglobalshortcut_win.cpp
+unix:!macx:SOURCES += src/qxtglobalshortcut_x11.cpp
 

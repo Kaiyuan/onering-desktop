@@ -9,7 +9,6 @@ class OneRingView : public QWebView
 	Q_OBJECT
 
 public:
-	OneRingView(QWidget* parent=0, Qt::WindowFlags f=0);
 	OneRingView(const QUrl &url, int width, int height, QVariantMap &props);
 	void enableContextMenu();
 	void disableContextMenu();

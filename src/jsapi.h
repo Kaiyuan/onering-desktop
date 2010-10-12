@@ -1,7 +1,6 @@
 #ifndef JSAPI_H
 #define JSAPI_H
 
-#include <inttypes.h>
 #include <qobject.h>
 #ifdef DEBUG
 #include <QWebInspector>

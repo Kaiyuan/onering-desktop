@@ -155,6 +155,8 @@ quint32 QxtGlobalShortcutPrivate::nativeKeycode(Qt::Key key, Qt::KeyboardModifie
         return VK_SUBTRACT;
     case Qt::Key_Slash:
         return VK_DIVIDE;
+
+#ifdef VK_MEDIA_NEXT_TRACK
     case Qt::Key_MediaNext:
         return VK_MEDIA_NEXT_TRACK;
     case Qt::Key_MediaPrevious:
@@ -172,7 +174,7 @@ quint32 QxtGlobalShortcutPrivate::nativeKeycode(Qt::Key key, Qt::KeyboardModifie
         return VK_VOLUME_UP;
     case Qt::Key_VolumeMute:
         return VK_VOLUME_MUTE;
-
+#endif
         // numbers
     case Qt::Key_0:
     case Qt::Key_1:

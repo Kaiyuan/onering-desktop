@@ -30,12 +30,25 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &pr
 	if (props["fixedSize"].toBool()) {
 		setFixedSize(width, height);
 	}
-	if (props["popup"].toBool()) {
-		setWindowFlags(Qt::Popup);
-	}
 	if (!props["title"].toString().isEmpty()) {
 		setWindowTitle(props["title"].toString());
 	}
+
+	Qt::WindowFlags flags = Qt::Widget;
+	if (props.contains("minimizeButton") ||
+		       	props.contains("maximizeButton")) {
+		flags |= Qt::CustomizeWindowHint
+		       	| Qt::WindowTitleHint
+		       	| Qt::WindowSystemMenuHint
+		       	| Qt::WindowMinimizeButtonHint
+		       	| Qt::WindowMaximizeButtonHint
+		       	| Qt::WindowCloseButtonHint;
+		if (!(props.value("minimizeButton", QVariant(true)).toBool()))
+			flags ^= Qt::WindowMinimizeButtonHint;
+		if (!(props.value("maximizeButton", QVariant(true)).toBool()))
+			flags ^= Qt::WindowMaximizeButtonHint;
+	}
+	setWindowFlags(flags);
 }
 
 void OneRingView::printCurrentUrl(const QUrl &url)

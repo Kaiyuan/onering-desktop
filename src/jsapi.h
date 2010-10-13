@@ -51,7 +51,7 @@ public slots:
 	long Menu_new(void);
 	void Menu_delete(long handler);
 	void Menu_addSeparator(long handler);
-	void Menu_addItem(long handler, const QString &title, const QString &callback);
+	void Menu_addItem(long handler, const QString &title, const QString &callback, const QVariant &props);
 
 	long HotKey_new(const QString &keyseq, const QString &callback);
 	void HotKey_delete(long handler);

@@ -7,11 +7,11 @@ $(function(){
         var w = ONERING.getCurrentWindow();
         var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
         var menu = new ONERING.Menu([
-            ["Mi&nimize", function(){w.hide();}],
-            ["Ma&ximize", function(){w.maximize();}],
-            ["&Restore", function(){w.showNormal();}],
+            ["Mi&nimize", w.hide, {shortcut: "Ctrl+N"}],
+            ["Ma&ximize", w.maximize, {shortcut: "Ctrl+X"}],
+            ["&Restore", w.showNormal, {shortcut: "Ctrl+R"}],
             ONERING.Menu.SEPARATOR,
-            ["&Quit", function(){ONERING.exit();}],
+            ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
         ]);
         icon.setContextMenu(menu);
         $(window).unload(function(){

@@ -202,11 +202,17 @@ void JsApi::Menu_addSeparator(long handler)
 	menu->addSeparator();
 }
 
-void JsApi::Menu_addItem(long handler, const QString &title, const QString &callback)
+void JsApi::Menu_addItem(long handler, const QString &title, const QString &callback, const QVariant &props)
 {
 	Menu *menu = (Menu *)handler;
 	MenuItem *item = menu->addItem(title);
 	registerCallback(item, "", callback);
+	QVariantMap vpm = props.toMap();
+	QVariant vshortcut;
+	if ((vshortcut = vpm["shortcut"]).isValid()) {
+		item->setShortcut(vshortcut.toString());
+		item->setShortcutContext(Qt::ApplicationShortcut);
+	}
 	connect(item, SIGNAL(triggered()), this, SLOT(callback()));
 }
 // }}}

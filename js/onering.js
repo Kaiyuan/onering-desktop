@@ -88,7 +88,7 @@ ONERING.Menu = function(items) {
 	if (item === ONERING.Menu.SEPARATOR) {
 	    this.addSeparator();
 	} else {
-	    this.addItem(item[0], item[1] || null);
+	    this.addItem(item[0], item[1], item[2]);
 	}
     }
 };
@@ -102,14 +102,14 @@ ONERING.Menu.prototype.addSeparator = function() {
     if (!this.handler) return;
     _OneRing.Menu_addSeparator(this.handler);
 };
-ONERING.Menu.prototype.addItem = function(title, callback) {
+ONERING.Menu.prototype.addItem = function(title, callback, props) {
     if (!this.handler) return;
     if (callback instanceof Function) {
 	callback = _register_function(callback);
     } else {
 	callback = "";
     }
-    _OneRing.Menu_addItem(this.handler, title, callback);
+    _OneRing.Menu_addItem(this.handler, title, callback, props);
 };
 
 // }}}

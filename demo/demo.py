@@ -6,6 +6,7 @@ try:
     import json
 except ImportError:
     import simplejson as json
+import logging
 
 import web
 from web.contrib.template import render_mako
@@ -44,7 +45,8 @@ def jsonize(func):
 class init:
     @jsonize
     def GET(self):
-        return dict(width=640, height=480, title="OneRing演示")
+        url = ('/' + options.demo) if options.demo else '/'
+        return dict(width=640, height=480, title="OneRing演示", url=url)
 
 class index:
     def GET(self):
@@ -105,13 +107,19 @@ class static:
         web.header('Content-Length', len(content))
         return content
 
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option('-v', '--verbose', action='store_true')
+parser.add_option('--demo')
+options, args = parser.parse_args()
+
+if options.verbose:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig()
+
 app = web.application(urls, globals(), autoreload=True)
 
 if __name__ == '__main__':
-    import logging
-    if '-v' in sys.argv[1:]:
-        logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig()
     onering.register_wsgi_app("demo", app.wsgifunc())
     onering.loop("demo")

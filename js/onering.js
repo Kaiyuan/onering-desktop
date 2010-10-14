@@ -2,11 +2,20 @@ ONERING = new Object();
 
 // Window class {{{
 
-ONERING.Window = function() {
+ONERING.Window = function(q) {
+    this.q = q;
 };
 
 ONERING.Window.prototype.createWindow = function(url, width, height, props) {
-    return _OneRing.createWindow(url, width, height, JSON.stringify(props));
+    return new ONERING.Window(_OneRing.createWindow(url, width, height, JSON.stringify(props)));
+};
+
+ONERING.Window.prototype.isAlive = function() {
+    if (!this.q) {
+	// current window
+	return true;
+    }
+    return _OneRing.checkAlive(this.q);
 };
 
 ONERING.Window.prototype.showInspector = function() {
@@ -131,7 +140,7 @@ ONERING.getCurrentWindow = function() {
 };
 
 ONERING.createWindow = function(url, width, height, props) {
-    ONERING.getCurrentWindow().createWindow(url, width, height, props);
+    return ONERING.getCurrentWindow().createWindow(url, width, height, props);
 };
 
 ONERING.log = function(o) {

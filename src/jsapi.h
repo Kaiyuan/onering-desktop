@@ -27,7 +27,7 @@ public:
 	void invokeCallback(const QString &funcname);
 
 public slots:
-	void createWindow(const QString &url, int width, int height, const QString &props);
+	QObject* createWindow(const QString &url, int width, int height, const QString &props);
 	void Window_hide();
 	void Window_maximize();
 	void Window_showNormal();
@@ -38,6 +38,7 @@ public slots:
 	void showInspector(void);
 	void exit(void);
 	void post(const QString &url, const QString &body, const QString &callback);
+	bool checkAlive(QObject* o=0);
 
 	// SystemTrayIcon
 	long SystemTrayIcon_new(void);

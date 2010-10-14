@@ -53,13 +53,14 @@ void JsApi::invokeCallback(const QString &funcname)
 	frame->evaluateJavaScript(QString("ONERING.callback('%1'); null;").arg(funcname));
 }
 
-void JsApi::createWindow(const QString &url, int width, int height, const QString &props_json)
+QObject* JsApi::createWindow(const QString &url, int width, int height, const QString &props_json)
 {
 	qDebug() << "JsApi::createWindow" << url << width << height << props_json;
 	QVariantMap props = parseJSON(props_json).toVariant().toMap();
 	OneRingView *window = new OneRingView(frame->baseUrl().resolved(url),
 			width, height, props);
 	window->show();
+	return window;
 }
 
 // }}}
@@ -96,6 +97,11 @@ void JsApi::post(const QString &url, const QString &body, const QString &callbac
 	QByteArray response = call_app(qPrintable(absurl.host()), "POST",
 			qPrintable(absurl.path()), qPrintable(body));
 	invokeCallback(callback);
+}
+
+bool JsApi::checkAlive(QObject* o)
+{
+	return o != 0;
 }
 
 // }}}

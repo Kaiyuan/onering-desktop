@@ -215,6 +215,14 @@ void JsApi::Menu_addItem(long handler, const QString &title, const QString &call
 	}
 	connect(item, SIGNAL(triggered()), this, SLOT(callback()));
 }
+
+QObject* JsApi::Menu_get(long handler, QVariant index)
+{
+	qDebug() << "JsApi::Menu_get" << handler << index;
+	Menu *menu = (Menu *)handler;
+	return menu->actions()[index.toInt()];
+}
+
 // }}}
 
 // HotKey {{{
@@ -234,6 +242,7 @@ void JsApi::HotKey_delete(long handler)
 	hotkey->setDisabled();
 	delete hotkey;
 }
+
 //}}}
 
 // }}}

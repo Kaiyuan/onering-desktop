@@ -2,23 +2,35 @@
 
 <%def name="demo_name()">System Tray Icon</%def>
 
-<%def name="js()">
-$(function(){
-        var w = ONERING.getCurrentWindow();
-        var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
-        var menu = new ONERING.Menu([
-            ["Mi&nimize", w.hide, {shortcut: "Ctrl+N"}],
-            ["Ma&ximize", w.maximize, {shortcut: "Ctrl+X"}],
-            ["&Restore", w.showNormal, {shortcut: "Ctrl+R"}],
-            ONERING.Menu.SEPARATOR,
-            ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
-        ]);
-        icon.setContextMenu(menu);
-        $(window).unload(function(){
-                menu.destroy();
-                icon.destroy();
-        });
-});
-</%def>
-
+<p>
 Click the icon in the system tray to show the menu.
+</p>
+
+<input type="text" value="world" id="who" /><br/>
+<button onclick="show_greeting()">Click me to change the greeting text in system tray context menu</button>
+
+<script>
+    var w = ONERING.getCurrentWindow();
+    var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
+    var menu = new ONERING.Menu([
+        ["Hello...", {name: "greeting"}],
+        ["Mi&nimize", w.hide, {shortcut: "Ctrl+N"}],
+        ["Ma&ximize", w.maximize, {shortcut: "Ctrl+X"}],
+        ["&Restore", w.showNormal, {shortcut: "Ctrl+R"}],
+        ONERING.Menu.SEPARATOR,
+        ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
+    ]);
+    icon.setContextMenu(menu);
+
+    $(window).unload(function(){
+        menu.destroy();
+        icon.destroy();
+    });
+
+    function show_greeting() {
+        var action = menu.get(0);
+        action.text = "Hello, " + $("#who").val() + "!";
+    }
+</script>
+
+##vim: set ft=mako:

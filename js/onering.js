@@ -112,7 +112,14 @@ ONERING.Menu.prototype.addItem = function(title, callback, props) {
     _OneRing.Menu_addItem(this.handler, title, callback, props);
 };
 ONERING.Menu.prototype.get = function(index) {
-    return _OneRing.Menu_get(this.handler, index);
+    return new ONERING.MenuItem(_OneRing.Menu_get(this.handler, index));
+};
+
+ONERING.MenuItem = function(qaction) {
+    this.qaction = qaction;
+};
+ONERING.MenuItem.prototype.setText = function(text) {
+    this.qaction.text = text;
 };
 
 // }}}

@@ -18,6 +18,8 @@ Click the icon in the system tray to show the menu.
         ["Ma&ximize", w.maximize, {shortcut: "Ctrl+X"}],
         ["&Restore", w.showNormal, {shortcut: "Ctrl+R"}],
         ONERING.Menu.SEPARATOR,
+        ["&About", show_about],
+        ONERING.Menu.SEPARATOR,
         ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
     ]);
     icon.setContextMenu(menu);
@@ -30,6 +32,13 @@ Click the icon in the system tray to show the menu.
     function show_greeting() {
         var action = menu.get(0);
         action.setText("Hello, " + $("#who").val() + "!");
+    }
+
+    var about_window = null;
+    function show_about() {
+        if (!about_window || !about_window.isAlive()) {
+            about_window = ONERING.createWindow('/about', 200, 200, {minimizeButton: false, maximizeButton: false, fixedSize: true});
+        }
     }
 </script>
 

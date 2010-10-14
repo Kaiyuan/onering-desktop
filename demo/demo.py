@@ -26,6 +26,7 @@ urls = (
     '/hotkey', 'hotkey',
     '/browser', 'browser',
     '/browser/launcher', 'browser_launcher',
+    '/about', 'about',
     '/static/(.*)', 'static',
 )
 
@@ -94,6 +95,10 @@ class browser_launcher:
         url = i.url
         import webbrowser
         webbrowser.open(url)
+
+class about:
+    def GET(self):
+        return render.about()
 
 class static:
     def GET(self, filename):

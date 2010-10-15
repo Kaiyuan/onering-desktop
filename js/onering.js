@@ -116,6 +116,9 @@ ONERING.Menu.prototype.addItem = function(title, callback, props) {
     if (callback instanceof Function) {
 	callback = _register_function(callback);
     } else {
+	if (callback instanceof Object) {
+	    props = callback;
+	}
 	callback = "";
     }
     _OneRing.Menu_addItem(this.handler, title, callback, props);
@@ -125,10 +128,13 @@ ONERING.Menu.prototype.get = function(index) {
 };
 
 ONERING.MenuItem = function(qaction) {
-    this.qaction = qaction;
+    this.q = qaction;
 };
 ONERING.MenuItem.prototype.setText = function(text) {
-    this.qaction.text = text;
+    this.q.text = text;
+};
+ONERING.MenuItem.prototype.setEnabled = function(enabled) {
+    this.q.setEnabled(enabled);
 };
 
 // }}}

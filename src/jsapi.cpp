@@ -212,14 +212,22 @@ void JsApi::Menu_addItem(long handler, const QString &title, const QString &call
 {
 	Menu *menu = (Menu *)handler;
 	MenuItem *item = menu->addItem(title);
-	registerCallback(item, "", callback);
 	QVariantMap vpm = props.toMap();
-	QVariant vshortcut;
-	if ((vshortcut = vpm["shortcut"]).isValid()) {
-		item->setShortcut(vshortcut.toString());
+	QVariant v;
+	if ((v = vpm["shortcut"]).isValid()) {
+		item->setShortcut(v.toString());
 		item->setShortcutContext(Qt::ApplicationShortcut);
 	}
-	connect(item, SIGNAL(triggered()), this, SLOT(callback()));
+	if ((v = vpm["enabled"]).isValid()) {
+		item->setEnabled(v.toBool());
+	}
+	if ((v = vpm["disabled"]).isValid()) {
+		item->setDisabled(v.toBool());
+	}
+	if (!callback.isEmpty()) {
+		registerCallback(item, "", callback);
+		connect(item, SIGNAL(triggered()), this, SLOT(callback()));
+	}
 }
 
 QObject* JsApi::Menu_get(long handler, QVariant index)

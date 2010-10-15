@@ -9,11 +9,16 @@ Click the icon in the system tray to show the menu.
 <input type="text" value="world" id="who" /><br/>
 <button onclick="show_greeting()">Click me to change the greeting text in system tray context menu</button>
 
+<p>
+<input type="checkbox" id="greenting-enabler" onchange="enable_greeting_menu(this.checked)" />
+<label for="greeting-enabler">Enable the greeting menu item</label>
+</p>
+
 <script>
     var w = ONERING.getCurrentWindow();
     var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
     var menu = new ONERING.Menu([
-        ["Hello...", {name: "greeting"}],
+        ["Hello...", {enabled: false}],
         ["Mi&nimize", w.hide, {shortcut: "Ctrl+N"}],
         ["Ma&ximize", w.maximize, {shortcut: "Ctrl+X"}],
         ["&Restore", w.showNormal, {shortcut: "Ctrl+R"}],
@@ -39,6 +44,11 @@ Click the icon in the system tray to show the menu.
         if (!about_window || !about_window.isAlive()) {
             about_window = ONERING.createWindow('/about', 200, 200, {minimizeButton: false, maximizeButton: false, fixedSize: true});
         }
+    }
+
+    function enable_greeting_menu(enabled) {
+        var action = menu.get(0);
+        action.setEnabled(enabled);
     }
 </script>
 

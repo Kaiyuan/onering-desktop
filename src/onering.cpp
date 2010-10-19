@@ -18,10 +18,12 @@ int onering_loop(const char* appname)
 	QApplication app(argc, argv);
 	QCoreApplication::setApplicationName(appname);
 
+#ifdef Q_OS_MAC
 	QDir plugins_dir = QCoreApplication::applicationDirPath();
-	plugins_dir.cd("plugins");
-	qDebug() << "plugins dir:" << plugins_dir;
-	QCoreApplication::setLibraryPaths(QStringList(plugins_dir.path()));
+	plugins_dir.cd("../PlugIns");
+	QCoreApplication::addLibraryPath(plugins_dir.path());
+#endif
+	qDebug() << "plugins dir:" << QCoreApplication::libraryPaths();
 
 	QWebSettings *settings = QWebSettings::globalSettings();
 	settings->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
@@ -69,3 +71,4 @@ int onering_loop(const char* appname)
 	window->show();
 	return app.exec();
 }
+

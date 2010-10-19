@@ -1,0 +1,16 @@
+diff -rc dist/demo.app.orig/Contents/Resources/__boot__.py dist/demo.app/Contents/Resources/__boot__.py
+*** dist/demo.app.orig/Contents/Resources/__boot__.py	2010-10-19 14:58:13.000000000 +0800
+--- dist/demo.app/Contents/Resources/__boot__.py	2010-10-19 15:03:28.000000000 +0800
+***************
+*** 20,25 ****
+--- 20,28 ----
+      base = os.environ['RESOURCEPATH']
+      site.addsitedir(base)
+      site.addsitedir(os.path.join(base, 'Python', 'site-packages'))
++     sys.path.insert(0, os.path.join(base, 'lib',
++                                     'python%d.%d' % (sys.version_info[:2]),
++                                     'lib-dynload'))
+      if not scripts:
+          import __main__
+      for script in scripts:
+Only in demo.app/Contents/Resources: demo.pyc

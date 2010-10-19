@@ -2,26 +2,10 @@ from distutils.core import setup
 from glob import glob
 import sys, os
 
-if sys.platform == 'win32':
-    QT_PLUGINS_DIR = os.path.normcase('C:/Qt/4.6.3/plugins')
-elif sys.platform == 'darwin':
-    QT_PLUGINS_DIR = '/Developer/Applications/Qt/plugins'
-
 data_files = [
     ('templates', glob('templates/*')),
     ('static', glob('static/*')),
 ]
-
-QT_PLUGINS = {
-    'phonon_backend': ['*'],
-    'imageformats': ['*jpeg*'],
-}
-for cata, files in QT_PLUGINS.items():
-    data_files.append(('plugins/'+cata,
-                       sum((glob(os.path.join(QT_PLUGINS_DIR, cata, f))
-                            for f in files),
-                           [])
-                      ))
 
 setup_kwargs = dict(
     data_files = data_files,

@@ -1,5 +1,5 @@
 build: clean
-	python setup.py build_ext -i
+	python setup.py develop
 
 clean:
 	rm -rf *.so build

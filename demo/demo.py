@@ -46,7 +46,7 @@ def jsonize(func):
 class init:
     @jsonize
     def GET(self):
-        url = ('/' + options.demo) if options.demo else '/'
+        url = ('/' + startup_demo) if startup_demo else '/'
         return dict(width=640, height=480, title="OneRing演示", url=url)
 
 class index:
@@ -112,16 +112,15 @@ class static:
         web.header('Content-Length', len(content))
         return content
 
-from optparse import OptionParser
-parser = OptionParser()
-parser.add_option('-v', '--verbose', action='store_true')
-parser.add_option('--demo')
-options, args = parser.parse_args()
-
-if options.verbose:
+if '-v' in sys.argv:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig()
+
+if '--demo' in sys.argv:
+    startup_demo = sys.argv[sys.argv.index('--demo')+1]
+else:
+    startup_demo = None
 
 app = web.application(urls, globals(), autoreload=True)
 

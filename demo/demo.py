@@ -26,6 +26,7 @@ urls = (
     '/hotkey', 'hotkey',
     '/browser', 'browser',
     '/browser/launcher', 'browser_launcher',
+    '/audio', 'audio',
     '/about', 'about',
     '/static/(.*)', 'static',
 )
@@ -95,6 +96,10 @@ class browser_launcher:
         url = i.url
         import webbrowser
         webbrowser.open(url)
+
+class audio:
+    def GET(self):
+        return render.audio()
 
 class about:
     def GET(self):

@@ -6,3 +6,7 @@ deploy:
 	cp -f ../OneRing.framework/OneRing dist/demo.app/Contents/MacOS/demo
 	macdeployqt dist/demo.app
 	mv -f dist/demo.app/Contents/MacOS/demo{.bak,}
+
+
+dmg:
+	macdeployqt dist/demo.app -dmg

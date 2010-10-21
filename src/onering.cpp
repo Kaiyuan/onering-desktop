@@ -20,8 +20,10 @@ int onering_loop(const char* appname)
 
 #ifdef Q_OS_MAC
 	QDir plugins_dir = QCoreApplication::applicationDirPath();
-	plugins_dir.cd("../PlugIns");
-	QCoreApplication::addLibraryPath(plugins_dir.path());
+	if (!plugins_dir.path().startsWith("/System/")) {
+		plugins_dir.cd("../plugins");
+		QCoreApplication::setLibraryPaths(QStringList(plugins_dir.path()));
+	}
 #endif
 	qDebug() << "plugins dir:" << QCoreApplication::libraryPaths();
 

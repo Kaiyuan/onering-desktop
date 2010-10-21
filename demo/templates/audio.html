@@ -6,7 +6,8 @@
 
 <script>
     $('#start').click(function() {
-        var player = new ONERING.Audio("http://www.douban.com/static/test.mp3");
+        var player = new ONERING.Audio();
+        player.src = "http://www.douban.com/static/test.mp3";
         player.play();
     });
 </script>

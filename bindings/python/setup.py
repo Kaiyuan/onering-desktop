@@ -24,4 +24,5 @@ setup(name = "OneRing",
       version="0.1",
       ext_modules = [onering_module],
       py_modules = ['onering'],
+      zip_safe = False,
      )

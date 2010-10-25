@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: UTF-8
 
+__version__ = '0.1'
+
 import sys
 try:
     import json

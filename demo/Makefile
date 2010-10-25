@@ -1,12 +1,11 @@
+APPNAME=demo
+VERSION=`python -c "import ${APPNAME}; print ${APPNAME}.__version__"`
+
 deploy:
 	rm -rf dist
 	python setup.py py2app
-	patch -p0 < syspath.patch
-	mv dist/demo.app/Contents/MacOS/demo{,.bak}
-	cp -f ../OneRing.framework/OneRing dist/demo.app/Contents/MacOS/demo
-	macdeployqt dist/demo.app
-	mv -f dist/demo.app/Contents/MacOS/demo{.bak,}
-
+	patch -d dist/${APPNAME}.app/Contents/Resources/ < syspath.patch
+	./deploy_plugins dist/${APPNAME}.app imageformats/libq{gif,ico,jpeg}.dylib phonon_backend/libphonon_qt7.dylib
 
 dmg:
-	macdeployqt dist/demo.app -dmg
+	hdiutil create dist/${APPNAME}-${VERSION}.dmg -srcfolder dist/${APPNAME}.app -format UDBZ -volname ${APPNAME}

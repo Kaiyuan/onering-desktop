@@ -1,11 +1,22 @@
 from distutils.core import setup
 from glob import glob
 import sys, os
+from demo import __version__ as version
 
-data_files = [
-    ('templates', glob('templates/*')),
-    ('static', glob('static/*')),
-]
+def gen_data_files(topdir):
+    for dirpath, dirnames, filenames in os.walk(topdir):
+        filenames = [x for x in filenames if not x.startswith('.')]
+        yield dirpath, [os.path.join(dirpath, fn) for fn in filenames]
+        dotdirs = [d for d in dirnames if d.startswith('.')]
+        for d in dotdirs:
+            dirnames.remove(d)
+
+data_files = list(gen_data_files('templates')) + list(gen_data_files('static'))
+data_files.append(('', ['qt.conf']))
+
+if sys.platform != 'darwin':
+    # Mac OS X should use ./deploy_plugins to change plugins install name
+    data_files += list(gen_data_files('plugins'))
 
 setup_kwargs = dict(
     data_files = data_files,
@@ -17,7 +28,7 @@ if sys.platform == 'win32':
     py2exe_options = dict(
             compressed = True,
             includes = ['mako.cache'],
-            dist_dir = 'radio',
+            dist_dir = 'demo-' + version,
             )
     py2exe_kwargs = dict(
             windows = ['demo.py'],

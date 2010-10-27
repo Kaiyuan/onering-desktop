@@ -32,13 +32,16 @@ ONERING.Window.prototype.disableContextMenu = function() {
 
 ONERING.Window.prototype.hide = function() {
     return _OneRing.Window_hide();
-}
+};
+ONERING.Window.prototype.show = function() {
+    return _OneRing.Window_show();
+};
 ONERING.Window.prototype.maximize = function() {
     return _OneRing.Window_maximize();
-}
+};
 ONERING.Window.prototype.showNormal = function() {
     return _OneRing.Window_showNormal();
-}
+};
 
 ONERING.window = new ONERING.Window();
 

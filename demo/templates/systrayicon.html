@@ -28,6 +28,7 @@ Click the icon in the system tray to show the menu.
         ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
     ]);
     icon.setContextMenu(menu);
+    icon.bind('click', w.show);
 
     $(window).unload(function(){
         menu.destroy();

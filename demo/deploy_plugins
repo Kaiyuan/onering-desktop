@@ -31,30 +31,32 @@ def get_qt_dir():
     logger.info("Qt dir: %s", qt_dir)
     return qt_dir  # binary package
 
-def fix_plugin_install_name(dylib, qtdir, appbundle):
+def fix_plugin_install_name(dylib, qtlibdir, appbundle):
+    print qtlibdir
     for line in commands.getoutput("otool -L %s" % dylib).splitlines()[2:]:
         line = line.strip()
-        m = re.match(re.escape(qtdir+'lib/')+r"((Qt\w+|phonon)\.framework/Versions/4/\w+)", line)
+        m = re.match(re.escape(qtlibdir)+r"((Qt\w+|phonon)\.framework/Versions/4/\w+)", line)
         if m:
             framework = m.group(2)
             if not os.path.exists(os.path.join(
                     appbundle, 'Contents', 'Frameworks',
                     framework+'.framework')):
-                deploy_framework(framework, qtdir, appbundle)
+                deploy_framework(framework, qtlibdir, appbundle)
             old_id = m.group(0)
             new_id = "@executable_path/../Frameworks/" + m.group(1)
             logger.info("change id: %s -> %s", old_id, new_id)
             check_call(['install_name_tool', '-change', old_id, new_id, dylib])
 
-def fix_framework_install_name(binpath, framework, qtdir, appbundle):
+def fix_framework_install_name(binpath, framework, qtlibdir, appbundle):
     new_id = '@executable_path/../Frameworks/%s.framework/Versions/4/%s' \
                 % (framework, framework)
     logger.info("change id: %s", new_id)
     check_call(['install_name_tool', '-id', new_id, binpath])
-    fix_plugin_install_name(binpath, qtdir, appbundle)
+    fix_plugin_install_name(binpath, qtlibdir, appbundle)
 
-def deploy_framework(framework, qtdir, appbundle):
-    src = os.path.join(qtdir, 'lib', framework+'.framework')
+def deploy_framework(framework, qtlibdir, appbundle):
+    src = os.path.join(qtlibdir or '/Library/Frameworks',
+                       framework+'.framework')
     dst = os.path.join(appbundle, 'Contents', 'Frameworks',
                        framework+'.framework')
     os.makedirs(os.path.join(dst, 'Versions', '4'))
@@ -65,29 +67,30 @@ def deploy_framework(framework, qtdir, appbundle):
                os.path.join(dst, framework))
     os.symlink('4', os.path.join(dst, 'Versions', 'Current'))
     fix_framework_install_name(os.path.join(dst, 'Versions', '4', framework),
-                               framework, qtdir, appbundle)
+                               framework, qtlibdir, appbundle)
     strip(os.path.join(dst, 'Versions', '4', framework))
 
 def strip(path):
     logger.info("strip %s", path)
     check_call(['strip', '-x', path])
 
-def deploy_plugin(plugin, srcdir, dstdir, qtdir, appbundle):
+def deploy_plugin(plugin, srcdir, dstdir, qtlibdir, appbundle):
     pdir, pfile = plugin.split('/')
     if not os.path.exists(os.path.join(dstdir, pdir)):
         os.makedirs(os.path.join(dstdir, pdir))
     logger.info("copy %s", plugin)
     shutil.copy(os.path.join(srcdir, plugin), os.path.join(dstdir, plugin))
     strip(os.path.join(dstdir, plugin))
-    fix_plugin_install_name(os.path.join(dstdir, plugin), qtdir, appbundle)
+    fix_plugin_install_name(os.path.join(dstdir, plugin), qtlibdir, appbundle)
 
 def main(appbundle, plugins):
     qtdir = get_qt_dir()
     psrcdir = os.path.join(qtdir, 'plugins') if qtdir \
                         else '/Developer/Applications/Qt/plugins'
     pdstdir = os.path.join(appbundle, 'Contents', 'plugins')
+    qtlibdir = qtdir and os.path.join(qtdir, 'lib/')
     for plugin in plugins:
-        deploy_plugin(plugin, psrcdir, pdstdir, qtdir, appbundle)
+        deploy_plugin(plugin, psrcdir, pdstdir, qtlibdir, appbundle)
 
 if __name__ == '__main__':
     from optparse import OptionParser

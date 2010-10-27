@@ -112,6 +112,11 @@ void JsApi::Window_hide()
 	window->hide();
 }
 
+void JsApi::Window_show()
+{
+	window->show();
+}
+
 void JsApi::Window_maximize()
 {
 	window->showMaximized();

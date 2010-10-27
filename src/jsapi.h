@@ -29,6 +29,7 @@ public:
 public slots:
 	QObject* createWindow(const QString &url, int width, int height, const QString &props);
 	void Window_hide();
+	void Window_show();
 	void Window_maximize();
 	void Window_showNormal();
 	void Window_enableContextMenu();

@@ -42,6 +42,7 @@ if sys.platform == 'darwin':
 
     py2app_options = dict(
         includes = ['mako.cache'],
+        iconfile = 'onering.icns',
     )
     py2app_kwargs = dict(
         app = ['demo.py'],

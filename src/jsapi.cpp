@@ -130,7 +130,7 @@ long JsApi::SystemTrayIcon_new()
 {
 	qDebug() << "JsApi::systemTrayIcon_new";
 
-	SystemTrayIcon *icon = new SystemTrayIcon();
+	SystemTrayIcon *icon = new SystemTrayIcon(qApp);
 	return (long)icon;
 }
 

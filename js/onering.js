@@ -43,7 +43,7 @@ ONERING.Window.prototype.showNormal = function() {
     return _OneRing.Window_showNormal();
 };
 
-ONERING.window = new ONERING.Window();
+ONERING.window = new ONERING.Window(_OneRing.getCurrentWindow());
 
 // }}}
 

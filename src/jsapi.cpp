@@ -80,6 +80,7 @@ void JsApi::showInspector()
 	if (!inspector.page()) {
 		inspector.setPage(frame->page());
 	}
+	inspector.resize(800, 600);
 	inspector.show();
 	inspector.activateWindow();  // put inspector at the top most
 #endif
@@ -102,6 +103,11 @@ void JsApi::post(const QString &url, const QString &body, const QString &callbac
 bool JsApi::checkAlive(QObject* o)
 {
 	return o != 0;
+}
+
+QObject* JsApi::getCurrentWindow()
+{
+	return window;
 }
 
 // }}}
@@ -136,6 +142,7 @@ void JsApi::Window_disableContextMenu()
 {
 	static_cast<OneRingView*>(window)->disableContextMenu();
 }
+
 // }}}
 
 // SystemTrayIcon {{{

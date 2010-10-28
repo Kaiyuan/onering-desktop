@@ -30,6 +30,13 @@ Click the icon in the system tray to show the menu.
     icon.setContextMenu(menu);
     icon.bind('click', function(){w.show()});
 
+    w.bind('windowStateChange', function(){
+        if (w.isMinimized()) {
+            ONERING.log("hide");
+            w.hide();
+        }
+    });
+
     $(window).unload(function(){
         menu.destroy();
         icon.destroy();

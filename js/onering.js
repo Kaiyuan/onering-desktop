@@ -4,6 +4,21 @@ ONERING = new Object();
 
 ONERING.Window = function(q) {
     this.q = q;
+    this.boundEvents = new ONERING.Dict();
+    this.q.eventOccurred.connect(this, function(name){
+	    console.log(name);
+	    var callbacks = this.boundEvents[name];
+	    if (callbacks) {
+		for (var i=0; i<callbacks.length; i++) {
+		    callbacks[i]();
+		}
+	    }
+	});
+};
+
+ONERING.Window.prototype.bind = function(event, callback) {
+    this.boundEvents.setDefault(event, []).push(callback);
+    this.q.bind(event);
 };
 
 ONERING.Window.prototype.createWindow = function(url, width, height, props) {
@@ -38,8 +53,9 @@ ONERING.Window.prototype.maximize = function() {
 ONERING.Window.prototype.showNormal = function() {
     this.q.showNormal();
 };
-
-ONERING.window = new ONERING.Window(_OneRing.getCurrentWindow());
+ONERING.Window.prototype.isMinimized = function() {
+    return this.q.minimized;
+};
 
 // }}}
 
@@ -165,10 +181,10 @@ ONERING.clearHotKey = function(shortcut) {
     }
 }
 
-ONERING.callback = function(name) {
+ONERING.callback = function(name, para) {
     var f = _get_registered_function(name);
     if (f) {
-	f();
+	f(para);
     }
 };
 
@@ -215,6 +231,18 @@ var param = function(a) {
     return s.join("&").replace(/%20/g, "+");
 };
 
+ONERING.Dict = function() {
+};
+ONERING.Dict.prototype.setDefault = function(key, defaultValue) {
+    if (this[key] === undefined) {
+	this[key] = defaultValue;
+    }
+    return this[key];
+};
+
+
 // }}}
+
+ONERING.window = new ONERING.Window(_OneRing.getCurrentWindow());
 
 // vim:set foldmethod=marker:

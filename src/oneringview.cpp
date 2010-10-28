@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QEvent>
 #include "oneringview.h"
 #include "networkaccessmanager.h"
 #include "jsapi.h"
@@ -49,6 +50,13 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &pr
 			flags ^= Qt::WindowMaximizeButtonHint;
 	}
 	setWindowFlags(flags);
+
+	initializEventMap();
+}
+
+void OneRingView::initializEventMap()
+{
+	eventMap["windowStateChange"] = QEvent::WindowStateChange;
 }
 
 void OneRingView::printCurrentUrl(const QUrl &url)
@@ -71,4 +79,22 @@ void OneRingView::enableContextMenu()
 void OneRingView::disableContextMenu()
 {
 	contextMenuEnabled = false;
+}
+
+void OneRingView::bind(const QString &eventTypeName)
+{
+	if (!eventMap.contains(eventTypeName)) {
+		return;
+	}
+
+	boundEvents[eventMap[eventTypeName]] = eventTypeName;
+}
+
+void OneRingView::changeEvent(QEvent * event)
+{
+	QEvent::Type type = event->type();
+	if (boundEvents.contains(type)) {
+		emit eventOccurred(boundEvents[type]);
+	}
+	QWebView::changeEvent(event);
 }

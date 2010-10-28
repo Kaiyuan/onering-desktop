@@ -31,7 +31,11 @@ if sys.platform == 'win32':
             dist_dir = 'demo-' + version,
             )
     py2exe_kwargs = dict(
-            windows = ['demo.py'],
+            windows = [
+                {'script': 'demo.py',
+                 'icon_resources': [(1, 'onering.ico')],
+                },
+            ],
             zipfile = os.path.normcase('lib/site-packages.zip'),
             options = {'py2exe': py2exe_options},
             )

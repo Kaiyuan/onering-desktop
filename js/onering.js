@@ -11,10 +11,6 @@ ONERING.Window.prototype.createWindow = function(url, width, height, props) {
 };
 
 ONERING.Window.prototype.isAlive = function() {
-    if (!this.q) {
-	// current window
-	return true;
-    }
     return _OneRing.checkAlive(this.q);
 };
 

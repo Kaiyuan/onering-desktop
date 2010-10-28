@@ -16,7 +16,6 @@ int onering_loop(const char* appname)
 	int argc = 1;
 	char *argv[] = {(char*)appname};
 	QApplication app(argc, argv);
-	QCoreApplication::setApplicationName(appname);
 
 #ifdef Q_OS_MAC
 	QDir plugins_dir = QCoreApplication::applicationDirPath();
@@ -37,9 +36,6 @@ int onering_loop(const char* appname)
 	settings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 #endif
 
-	QString appdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-	settings->setLocalStoragePath(appdir);
-
 	QWebSecurityOrigin::addLocalScheme("onering");
 
 	if (onering_app_init())
@@ -58,6 +54,14 @@ int onering_loop(const char* appname)
 
 	QScriptEngine engine;
 	QVariantMap props = engine.evaluate("("+response+")").toVariant().toMap();
+
+	QString real_appname = props.value("appname", appname).toString();
+	qDebug() << "appname:" << real_appname;
+	QCoreApplication::setApplicationName(real_appname);
+	QString appdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+	qDebug() << "data location:" << appdir;
+	settings->setLocalStoragePath(appdir);
+
 
 	int width = props["width"].toInt();
 	int height = props["height"].toInt();

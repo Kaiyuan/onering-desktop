@@ -161,6 +161,7 @@ ONERING.clearHotKey = function(shortcut) {
     var handler = hotkey_handlers[shortcut];
     if (handler) {
 	_OneRing.HotKey_delete(handler);
+	delete hotkey_handlers[shortcut];
     }
 }
 

@@ -19,16 +19,16 @@ Click the icon in the system tray to show the menu.
     var icon = new ONERING.SystemTrayIcon('/static/systrayicon.ico');
     var menu = new ONERING.Menu([
         ["Hello...", {enabled: false}],
-        ["Mi&nimize", w.hide, {shortcut: "Ctrl+N"}],
-        ["Ma&ximize", w.maximize, {shortcut: "Ctrl+X"}],
-        ["&Restore", w.showNormal, {shortcut: "Ctrl+R"}],
+        ["Mi&nimize", function(){w.hide()}, {shortcut: "Ctrl+N"}],
+        ["Ma&ximize", function(){w.maximize()}, {shortcut: "Ctrl+X"}],
+        ["&Restore", function(){w.showNormal()}, {shortcut: "Ctrl+R"}],
         ONERING.Menu.SEPARATOR,
         ["&About", show_about],
         ONERING.Menu.SEPARATOR,
         ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
     ]);
     icon.setContextMenu(menu);
-    icon.bind('click', w.show);
+    icon.bind('click', function(){w.show()});
 
     $(window).unload(function(){
         menu.destroy();

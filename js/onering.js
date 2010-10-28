@@ -27,16 +27,16 @@ ONERING.Window.prototype.disableContextMenu = function() {
 };
 
 ONERING.Window.prototype.hide = function() {
-    return _OneRing.Window_hide();
+    this.q.hide();
 };
 ONERING.Window.prototype.show = function() {
-    return _OneRing.Window_show();
+    this.q.show();
 };
 ONERING.Window.prototype.maximize = function() {
-    return _OneRing.Window_maximize();
+    this.q.showMaximized();
 };
 ONERING.Window.prototype.showNormal = function() {
-    return _OneRing.Window_showNormal();
+    this.q.showNormal();
 };
 
 ONERING.window = new ONERING.Window(_OneRing.getCurrentWindow());

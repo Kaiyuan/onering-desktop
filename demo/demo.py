@@ -50,7 +50,9 @@ class init:
     @jsonize
     def GET(self):
         url = ('/' + startup_demo) if startup_demo else '/'
-        return dict(width=640, height=480, title="OneRing演示", url=url)
+        return dict(width=640, height=480, title="OneRing演示", url=url,
+                    appname="OneRing Demo",
+                   )
 
 class index:
     def GET(self):

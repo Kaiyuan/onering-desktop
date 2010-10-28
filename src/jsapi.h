@@ -40,6 +40,7 @@ public slots:
 	void exit(void);
 	void post(const QString &url, const QString &body, const QString &callback);
 	bool checkAlive(QObject* o=0);
+	QObject* getCurrentWindow();
 
 	// SystemTrayIcon
 	long SystemTrayIcon_new(void);

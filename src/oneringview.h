@@ -34,6 +34,7 @@ private:
 	bool contextMenuEnabled;
 	QHash<QEvent::Type, QString> boundEvents;
 	QHash<QString, QEvent::Type> eventMap;
+	JsApi *jsapi;
 };
 
 #endif

@@ -19,7 +19,7 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &pr
 	connect(this, SIGNAL(titleChanged(const QString &)),
 		this, SLOT(setWindowTitle(const QString &)));
 
-	JsApi *jsapi = new JsApi(this);
+	jsapi = new JsApi(this);
 	jsapi->setWebView(this);
 	jsapi->setWindow(this);
 
@@ -95,6 +95,11 @@ void OneRingView::changeEvent(QEvent * event)
 	QEvent::Type type = event->type();
 	if (boundEvents.contains(type)) {
 		emit eventOccurred(boundEvents[type]);
+		bool accepted = jsapi->call("getLastEventAccepted").toBool();
+		if (!accepted) {
+			qDebug() << "event ignored";
+			event->ignore();
+		}
 	}
 	QWebView::changeEvent(event);
 }

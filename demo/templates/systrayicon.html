@@ -34,7 +34,9 @@ Click the icon in the system tray to show the menu.
         if (w.isMinimized()) {
             ONERING.log("hide");
             w.hide();
+            return false;
         }
+        return true;
     });
 
     $(window).unload(function(){

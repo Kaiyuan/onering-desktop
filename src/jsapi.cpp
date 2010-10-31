@@ -53,6 +53,13 @@ void JsApi::invokeCallback(const QString &funcname)
 	frame->evaluateJavaScript(QString("ONERING.callback('%1'); null;").arg(funcname));
 }
 
+QVariant JsApi::call(const QString &funcname)
+{
+	qDebug() << "call" << funcname;
+
+	return frame->evaluateJavaScript(QString("ONERING.%1()").arg(funcname));
+}
+
 QObject* JsApi::createWindow(const QString &url, int width, int height, const QString &props_json)
 {
 	qDebug() << "JsApi::createWindow" << url << width << height << props_json;
@@ -68,6 +75,13 @@ QObject* JsApi::createWindow(const QString &url, int width, int height, const QS
 // javascript api {{{
 
 // module level {{{
+
+QVariant JsApi::test(QVariant param)
+{
+	qDebug() << param;
+	return QVariant();
+}
+
 void JsApi::log(const QString &s)
 {
 	qDebug() << "JsApi::log" << s;

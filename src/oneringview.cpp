@@ -95,11 +95,11 @@ void OneRingView::changeEvent(QEvent * event)
 	QEvent::Type type = event->type();
 	if (boundEvents.contains(type)) {
 		emit eventOccurred(boundEvents[type]);
-		bool accepted = jsapi->call("getLastEventAccepted").toBool();
-		if (!accepted) {
-			qDebug() << "event ignored";
-			event->ignore();
-		}
 	}
 	QWebView::changeEvent(event);
+}
+
+void OneRingView::activateWindow()
+{
+	QWebView::activateWindow();
 }

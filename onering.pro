@@ -56,5 +56,8 @@ macx:SOURCES += src/qxtglobalshortcut_mac.cpp
 win32:SOURCES += src/qxtglobalshortcut_win.cpp
 unix:!macx:SOURCES += src/qxtglobalshortcut_x11.cpp
 macx:LIBS += -framework Carbon
-win32:LIBS += user32.lib
+win32 {
+	win32-g++:LIBS += -l user32
+	!win32-g++:LIBS += user32.lib
+}
 

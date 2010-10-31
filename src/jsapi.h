@@ -25,8 +25,10 @@ public:
 	void setWebView(QWebView *view);
 	void setWindow(QWidget *window);
 	void invokeCallback(const QString &funcname);
+	QVariant call(const QString &funcname);
 
 public slots:
+	QVariant test(QVariant param);
 	QObject* createWindow(const QString &url, int width, int height, const QString &props);
 	void Window_enableContextMenu();
 	void Window_disableContextMenu();

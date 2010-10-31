@@ -18,6 +18,7 @@ public:
 
 public slots:
 	void bind(const QString &eventType);
+	void activateWindow(void);
 
 private slots:
 	void printCurrentUrl(const QUrl &url);

@@ -1,10 +1,5 @@
 ONERING = new Object();
 
-ONERING.lastEventAccepted = true;
-ONERING.getLastEventAccepted = function() {
-    return ONERING.lastEventAccepted;
-}
-
 // Window class {{{
 
 ONERING.Window = function(q) {
@@ -13,16 +8,11 @@ ONERING.Window = function(q) {
     this.q.eventOccurred.connect(this, function(name){
 	    console.log(name);
 	    var callbacks = this.boundEvents[name];
-	    var accepted = true;
 	    if (callbacks) {
 		for (var i=0; i<callbacks.length; i++) {
-		    var r = callbacks[i]();
-		    if (r === false) {
-			accepted = false;
-		    }
+		    callbacks[i]();
 		}
 	    }
-	    ONERING.lastEventAccepted = accepted;
 	});
 };
 
@@ -65,6 +55,9 @@ ONERING.Window.prototype.showNormal = function() {
 };
 ONERING.Window.prototype.isMinimized = function() {
     return this.q.minimized;
+};
+ONERING.Window.prototype.activateWindow = function() {
+    return this.q.activateWindow();
 };
 
 // }}}

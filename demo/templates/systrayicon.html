@@ -28,15 +28,18 @@ Click the icon in the system tray to show the menu.
         ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
     ]);
     icon.setContextMenu(menu);
-    icon.bind('click', function(){w.show()});
+    icon.bind('click', function(){
+	    w.show();
+	    if (w.isMinimized()) {
+		    w.showNormal();
+	    }
+	    w.activateWindow();
+    });
 
     w.bind('windowStateChange', function(){
         if (w.isMinimized()) {
-            ONERING.log("hide");
-            w.hide();
-            return false;
+            setTimeout(function(){w.hide()}, 0);
         }
-        return true;
     });
 
     $(window).unload(function(){

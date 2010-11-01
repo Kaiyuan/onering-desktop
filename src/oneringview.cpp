@@ -23,8 +23,6 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &pr
 	jsapi->setWebView(this);
 	jsapi->setWindow(this);
 
-	this->setAttribute(Qt::WA_DeleteOnClose, true);
-
 	load(url);
 	resize(width, height);
 

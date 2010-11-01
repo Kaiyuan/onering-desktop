@@ -83,6 +83,8 @@ int Application::load(const char* appname)
 		DataLoader *dataloader = new DataLoader();
 		connect(dataloader, SIGNAL(got(QByteArray&)),
 				this, SLOT(setWindowIconByData(QByteArray&)));
+		connect(dataloader, SIGNAL(got(QByteArray&)),
+				dataloader, SLOT(deleteLater()));
 		dataloader->load(url);
 	}
 

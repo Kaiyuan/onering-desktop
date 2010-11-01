@@ -29,10 +29,10 @@ Click the icon in the system tray to show the menu.
     ]);
     icon.setContextMenu(menu);
     icon.bind('click', function(){
-	    w.show();
 	    if (w.isMinimized()) {
 		    w.showNormal();
 	    }
+	    w.show();
 	    w.activateWindow();
     });
 

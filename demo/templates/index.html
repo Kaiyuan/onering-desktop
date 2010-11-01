@@ -21,5 +21,8 @@
     <footer id="demo_footer">
         <a href="javascript:ONERING.getCurrentWindow().showInspector()">Show Inspector</a>
     </footer>
+    <script>
+        ONERING.bind('aboutToQuit', function() { ONERING.log("Demo quit.") });
+    </script>
 </body>
 </html>

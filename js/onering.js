@@ -163,6 +163,7 @@ ONERING.getCurrentWindow = function() {
     return ONERING.window;
 };
 
+
 ONERING.createWindow = function(url, width, height, props) {
     return ONERING.getCurrentWindow().createWindow(url, width, height, props);
 };
@@ -203,6 +204,13 @@ ONERING.post = function(url, data, callback) {
 
     data = param(data);
     _OneRing.post(url, data, _register_function(callback));
+};
+
+ONERING.bind = function(event, callback) {
+    var signal = _OneRing.getApplication()[event];
+    if (signal) {
+	signal.connect(callback);
+    }
 };
 
 // }}}

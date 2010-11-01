@@ -1,5 +1,6 @@
 // includes {{{
 #include <QDebug>
+#include <QApplication>
 #include <qwebview.h>
 #include <qwebframe.h>
 #ifdef DEBUG
@@ -122,6 +123,11 @@ bool JsApi::checkAlive(QObject* o)
 QObject* JsApi::getCurrentWindow()
 {
 	return window;
+}
+
+QObject* JsApi::getApplication()
+{
+	return qApp;
 }
 
 // }}}

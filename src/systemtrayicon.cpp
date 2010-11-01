@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QApplication>
 #include "networkaccessmanager.h"
 #include "systemtrayicon.h"
 #include "jsapi.h"
@@ -9,6 +10,8 @@ SystemTrayIcon::SystemTrayIcon(QObject *parent)
 	setContextMenu(0);
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
 		this, SLOT(emitActivatedEvent(QSystemTrayIcon::ActivationReason)));
+	connect(qApp, SIGNAL(aboutToQuit()),
+		this, SLOT(deleteLater()));
 }
 
 void SystemTrayIcon::load(const QUrl &url)

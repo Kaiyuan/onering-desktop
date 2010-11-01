@@ -1,8 +1,8 @@
 #include <QDebug>
 #include <QApplication>
-#include "networkaccessmanager.h"
 #include "systemtrayicon.h"
 #include "jsapi.h"
+#include "dataloader.h"
 
 SystemTrayIcon::SystemTrayIcon(QObject *parent)
 	: QSystemTrayIcon(parent)
@@ -16,22 +16,21 @@ SystemTrayIcon::SystemTrayIcon(QObject *parent)
 
 void SystemTrayIcon::load(const QUrl &url)
 {
-	NetworkAccessManager *manager = new NetworkAccessManager(this);
-	connect(manager, SIGNAL(finished(QNetworkReply*)),
-			this, SLOT(iconFetched(QNetworkReply*)));
-	manager->get(QNetworkRequest(url));
+	DataLoader *loader = new DataLoader(this);
+	connect(loader, SIGNAL(got(QByteArray&)),
+		this, SLOT(iconFetched(QByteArray&)));
+	connect(loader, SIGNAL(got(QByteArray&)),
+		loader, SLOT(deleteLater()));
+	loader->load(url);
 }
 
-void SystemTrayIcon::iconFetched(QNetworkReply *reply)
+void SystemTrayIcon::iconFetched(QByteArray &data)
 {
 	QPixmap pixmap;
-	QByteArray data = reply->readAll();
-	qDebug() << "icon data size:" << data.size();
 	pixmap.loadFromData(data);
-	reply->manager()->deleteLater();
 
-	this->setIcon(QIcon(pixmap));
-	this->show();
+	setIcon(QIcon(pixmap));
+	show();
 }
 
 void SystemTrayIcon::emitActivatedEvent(QSystemTrayIcon::ActivationReason reason)

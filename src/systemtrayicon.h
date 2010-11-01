@@ -2,7 +2,7 @@
 #define SYSTEMTRAYICON_H
 
 #include <QSystemTrayIcon>
-#include <QNetworkReply>
+#include <QByteArray>
 #include "jsapi.h"
 
 class SystemTrayIcon : public QSystemTrayIcon
@@ -18,7 +18,7 @@ signals:
 	void activated(const QString &event);
 
 private slots:
-	void iconFetched(QNetworkReply *reply);
+	void iconFetched(QByteArray &data);
 	void emitActivatedEvent(QSystemTrayIcon::ActivationReason reason);
 };
 

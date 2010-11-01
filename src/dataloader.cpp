@@ -3,8 +3,12 @@
 #include "networkaccessmanager.h"
 #include "dataloader.h"
 
-DataLoader::DataLoader(QUrl &url, QObject *parent)
+DataLoader::DataLoader(QObject *parent)
 	: QObject(parent)
+{
+}
+
+void DataLoader::load(const QUrl &url)
 {
 	NetworkAccessManager *manager = new NetworkAccessManager(this);
 	connect(manager, SIGNAL(finished(QNetworkReply*)),

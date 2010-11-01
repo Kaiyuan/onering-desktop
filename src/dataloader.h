@@ -10,7 +10,8 @@ class DataLoader : public QObject
 	Q_OBJECT
 
 public:
-	DataLoader(QUrl &url, QObject *parent=0);
+	DataLoader(QObject *parent=0);
+	void load(const QUrl &url);
 
 signals:
 	void got(QByteArray &data);

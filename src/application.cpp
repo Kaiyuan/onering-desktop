@@ -10,6 +10,7 @@
 #include "oneringapp.h"
 #include "app.h"
 #include "oneringview.h"
+#include "dataloader.h"
 
 static QUrl getAbsUrl(const QString &url, const QString &appname)
 {
@@ -79,6 +80,10 @@ int Application::load(const char* appname)
 	s = props.value("icon").toString();
 	if (!s.isEmpty()) {
 		url = getAbsUrl(s, appname);
+		DataLoader *dataloader = new DataLoader();
+		connect(dataloader, SIGNAL(got(QByteArray&)),
+				this, SLOT(setWindowIconByData(QByteArray&)));
+		dataloader->load(url);
 	}
 
 	int width = props["width"].toInt();
@@ -92,4 +97,12 @@ int Application::load(const char* appname)
 	OneRingView *window = new OneRingView(url, width, height, props);
 	window->show();
 	return 0;
+}
+
+void Application::setWindowIconByData(QByteArray &data)
+{
+	qDebug() << "setWindowIconByData";
+	QPixmap pixmap;
+	pixmap.loadFromData(data);
+	qApp->setWindowIcon(QIcon(pixmap));
 }

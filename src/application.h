@@ -11,6 +11,10 @@ class Application : public QObject
 public:
 	Application();
 	int load(const char* appname);
+
+public slots:
+	void setWindowIconByData(QByteArray &data);
+
 };
 
 #endif

@@ -69,13 +69,17 @@ int Application::load(const char* appname)
 
 	QString s;
 	QUrl url;
+	QDir dir;
 
 	QString real_appname = props.value("appname", appname).toString();
 	qDebug() << "appname:" << real_appname;
 	QCoreApplication::setApplicationName(real_appname);
-	QString appdir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-	qDebug() << "data location:" << appdir;
-	settings->setLocalStoragePath(appdir);
+
+	s = props.value("storageDir").toString();
+	dir = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+	s = QDir::cleanPath(dir.filePath(s));
+	qDebug() << "data location:" << s;
+	settings->setLocalStoragePath(s);
 
 	s = props.value("icon").toString();
 	if (!s.isEmpty()) {

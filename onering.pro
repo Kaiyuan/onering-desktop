@@ -34,7 +34,9 @@ HEADERS += include/onering.h \
 	   src/jsapi.h \
 	   src/oneringapp.h \
 	   src/systemtrayicon.h \
-	   src/menu.h
+	   src/menu.h \
+	   src/dataloader.h \
+	   src/application.h
 SOURCES += src/onering.cpp \
 	   src/oneringview.cpp \
 	   src/networkaccessmanager.cpp \
@@ -43,7 +45,9 @@ SOURCES += src/onering.cpp \
 	   src/jsapi.cpp \
 	   src/oneringapp.cpp \
 	   src/systemtrayicon.cpp \
-	   src/menu.cpp
+	   src/menu.cpp \
+	   src/dataloader.cpp \
+           src/application.cpp
 
 # global shourtcut
 HEADERS += src/hotkey.h \

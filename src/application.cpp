@@ -52,7 +52,7 @@ int Application::load(const char* appname)
 
 	if (onering_app_init())
 		return -1;
-	onering_register_app("onering", &onering_app);
+	onering_register_app("onering", &onering_app, &onering_app_free_response);
 
 	QByteArray response = call_app(appname, "GET", "/init");
 

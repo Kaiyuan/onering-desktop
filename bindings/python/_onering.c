@@ -4,12 +4,12 @@
 static PyObject *OneRingError;
 static PyObject *g_appfunc = NULL;
 
-static void
+static onering_response_handle_t
 c_appfunc(const char* method, const char* path, const char* body,
 		const char **response, int *response_len)
 {
 	int code = 0;
-	PyObject *args, *py_response;
+	PyObject *args, *py_response=NULL;
 
 	*response = "";
 	*response_len = 0;
@@ -31,18 +31,24 @@ c_appfunc(const char* method, const char* path, const char* body,
 		goto exit_args;
 	}
 
-	if (!code) {
-		/* don't know why PyString_AsStringAndSize not work on Snow Leopard */
-		*response = PyString_AsString(py_response);
-		*response_len = PyString_Size(py_response);
-		goto exit_args; /* TODO: Py_DECREF(py_response) */
-	}
+	/* don't know why PyString_AsStringAndSize not work on Snow Leopard */
+	*response = PyString_AsString(py_response);
+	*response_len = PyString_Size(py_response);
 
-	Py_DECREF(py_response);
 exit_args:
 	Py_DECREF(args);
 exit:
-	;
+	return (onering_response_handle_t)py_response;
+}
+
+static void
+free_response(onering_response_handle_t response_handle)
+{
+	PyObject *py_response = (PyObject*)response_handle;
+
+	if (py_response) {
+		Py_DECREF(py_response);
+	}
 }
 
 static PyObject *
@@ -61,7 +67,7 @@ register_app(PyObject *self, PyObject *args)
 	g_appfunc = appfunc;
 	Py_INCREF(g_appfunc);
 
-	err = onering_register_app(appname, &c_appfunc);
+	err = onering_register_app(appname, &c_appfunc, &free_response);
 	if (err) {
 		g_appfunc = NULL;
 		Py_DECREF(g_appfunc);

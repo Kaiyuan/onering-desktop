@@ -2,7 +2,7 @@
 #include <QFile>
 #include "oneringapp.h"
 
-QByteArray *onering_js = 0;  // global to hold char * reference
+static QByteArray *onering_js = 0;  // global to hold char * reference
 
 int onering_app_init()
 {
@@ -15,7 +15,7 @@ int onering_app_init()
 	return 0;
 }
 
-void onering_app(const char* method, const char* path, const char* body, const char **response, int *response_len)
+onering_response_handle_t onering_app(const char* method, const char* path, const char* body, const char **response, int *response_len)
 {
 	if (strcmp(method, "GET") == 0 && strcmp(path, "/onering.js") == 0 && onering_js) {
 		*response = onering_js->constData();
@@ -25,4 +25,10 @@ void onering_app(const char* method, const char* path, const char* body, const c
 		*response = "";
 		*response_len = 0;
 	}
+
+	return 0;
+}
+
+void onering_app_free_response(onering_response_handle_t response_handle)
+{
 }

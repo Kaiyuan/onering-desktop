@@ -32,7 +32,7 @@ QNetworkReply *NetworkAccessManager::createRequest(
 	const QUrl& url = request.url();
 	if (is_appname_registered(url.host())) {
 		qDebug() << "delegate to app" << url.toString();
-		AppReply *reply = new AppReply(methods[operation], url, device);
+		AppReply *reply = new AppReply(methods[operation], url, device, this);
 		Debugger::traceObj(reply);
 		return reply;
 	}

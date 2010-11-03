@@ -3,12 +3,14 @@
 #include "oneringview.h"
 #include "networkaccessmanager.h"
 #include "jsapi.h"
+#include "debugger.h"
 
 OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &props)
 	: QWebView(), contextMenuEnabled(false)
 {
 	QNetworkAccessManager *oldManager = page()->networkAccessManager();
 	NetworkAccessManager *newManager = new NetworkAccessManager(this, oldManager);
+	Debugger::traceObj(newManager);
 	page()->setNetworkAccessManager(newManager);
 
 #ifdef DEBUG
@@ -20,6 +22,7 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &pr
 		this, SLOT(setWindowTitle(const QString &)));
 
 	jsapi = new JsApi(this);
+	Debugger::traceObj(jsapi);
 	jsapi->setWebView(this);
 	jsapi->setWindow(this);
 

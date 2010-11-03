@@ -2,6 +2,7 @@
 #include <QNetworkRequest>
 #include "networkaccessmanager.h"
 #include "dataloader.h"
+#include "debugger.h"
 
 DataLoader::DataLoader(QObject *parent)
 	: QObject(parent)
@@ -11,6 +12,7 @@ DataLoader::DataLoader(QObject *parent)
 void DataLoader::load(const QUrl &url)
 {
 	NetworkAccessManager *manager = new NetworkAccessManager(this);
+	Debugger::traceObj(manager);
 	connect(manager, SIGNAL(finished(QNetworkReply*)),
 			this, SLOT(fetched(QNetworkReply*)));
 	manager->get(QNetworkRequest(url));

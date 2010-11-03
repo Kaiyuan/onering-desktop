@@ -19,6 +19,7 @@
 #include "systemtrayicon.h"
 #include "menu.h"
 #include "hotkey.h"
+#include "debugger.h"
 // }}}
 
 // public methods {{{
@@ -67,6 +68,7 @@ QObject* JsApi::createWindow(const QString &url, int width, int height, const QS
 	QVariantMap props = parseJSON(props_json).toVariant().toMap();
 	OneRingView *window = new OneRingView(frame->baseUrl().resolved(url),
 			width, height, props);
+	Debugger::traceObj(window);
 	window->show();
 	return window;
 }
@@ -151,6 +153,7 @@ long JsApi::SystemTrayIcon_new()
 	qDebug() << "JsApi::systemTrayIcon_new";
 
 	SystemTrayIcon *icon = new SystemTrayIcon(qApp);
+	Debugger::traceObj(icon);
 	return (long)icon;
 }
 
@@ -204,6 +207,7 @@ QString JsApi::SystemTrayIcon_getGeometry(long handler)
 long JsApi::Menu_new()
 {
 	Menu *menu = new Menu();
+	Debugger::traceObj(menu);
 	return (long)menu;
 }
 
@@ -256,6 +260,7 @@ long JsApi::HotKey_new(const QString &keyseq, const QString &callback)
 {
 	qDebug() << "JsApi::HotKey_new" << keyseq << callback;
 	HotKey *hotkey = new HotKey(QKeySequence(keyseq), this);
+	Debugger::traceObj(hotkey);
 	registerCallback(hotkey, "", callback);
 	connect(hotkey, SIGNAL(activated()), this, SLOT(callback()));
 	return (long)hotkey;

@@ -14,7 +14,6 @@ public:
 
 public slots:
 	void setWindowIconByData(QByteArray &data);
-
 };
 
 #endif

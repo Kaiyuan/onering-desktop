@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QFile>
 #include "oneringapp.h"
+#include "debugger.h"
 
 static QByteArray *onering_js = 0;  // global to hold char * reference
 
@@ -11,6 +12,7 @@ int onering_app_init()
 		return -1;
 	}
 	onering_js = new QByteArray(file.readAll());
+	qDebug() << "=== NEW" << onering_js;
 	onering_js->prepend("HTTP/1.0 200 OK\r\nContent-Type: text/javascript\r\n\r\n");
 	return 0;
 }

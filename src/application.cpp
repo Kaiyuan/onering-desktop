@@ -11,6 +11,7 @@
 #include "app.h"
 #include "oneringview.h"
 #include "dataloader.h"
+#include "debugger.h"
 
 static QUrl getAbsUrl(const QString &url, const QString &appname)
 {
@@ -85,6 +86,7 @@ int Application::load(const char* appname)
 	if (!s.isEmpty()) {
 		url = getAbsUrl(s, appname);
 		DataLoader *dataloader = new DataLoader();
+		Debugger::traceObj(dataloader);
 		connect(dataloader, SIGNAL(got(QByteArray&)),
 				this, SLOT(setWindowIconByData(QByteArray&)));
 		connect(dataloader, SIGNAL(got(QByteArray&)),
@@ -101,6 +103,7 @@ int Application::load(const char* appname)
 	url = getAbsUrl(s, appname);
 
 	OneRingView *window = new OneRingView(url, width, height, props);
+	Debugger::traceObj(window);
 	window->show();
 	return 0;
 }
@@ -112,3 +115,4 @@ void Application::setWindowIconByData(QByteArray &data)
 	pixmap.loadFromData(data);
 	qApp->setWindowIcon(QIcon(pixmap));
 }
+

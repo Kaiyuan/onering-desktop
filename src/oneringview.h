@@ -17,14 +17,11 @@ public:
 	void disableContextMenu();
 
 public slots:
-	void bind(const QString &eventType);
+	void bind(const QString &eventType, const QString &callback);
 	void activateWindow(void);
 
 private slots:
 	void printCurrentUrl(const QUrl &url);
-
-signals:
-	void eventOccurred(const QString& eventName);
 
 protected:
 	void contextMenuEvent(QContextMenuEvent *ev);
@@ -33,7 +30,7 @@ protected:
 
 private:
 	bool contextMenuEnabled;
-	QHash<QEvent::Type, QString> boundEvents;
+	QHash<QEvent::Type, QList<QString> > boundEvents;
 	QHash<QString, QEvent::Type> eventMap;
 	JsApi *jsapi;
 };

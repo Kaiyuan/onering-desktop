@@ -82,20 +82,19 @@ void OneRingView::disableContextMenu()
 	contextMenuEnabled = false;
 }
 
-void OneRingView::bind(const QString &eventTypeName)
+void OneRingView::bind(const QString &eventTypeName, const QString &callback)
 {
-	if (!eventMap.contains(eventTypeName)) {
-		return;
-	}
-
-	boundEvents[eventMap[eventTypeName]] = eventTypeName;
+	boundEvents[eventMap[eventTypeName]] << callback;
 }
 
 void OneRingView::changeEvent(QEvent * event)
 {
 	QEvent::Type type = event->type();
 	if (boundEvents.contains(type)) {
-		emit eventOccurred(boundEvents[type]);
+		QString callback;
+		foreach (callback, boundEvents[type]) {
+			jsapi->invokeCallback(callback);
+		}
 	}
 	QWebView::changeEvent(event);
 }

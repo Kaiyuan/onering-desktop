@@ -4,21 +4,10 @@ ONERING = new Object();
 
 ONERING.Window = function(q) {
     this.q = q;
-    this.boundEvents = new ONERING.Dict();
-    this.q.eventOccurred.connect(this, function(name){
-	    console.log(name);
-	    var callbacks = this.boundEvents[name];
-	    if (callbacks) {
-		for (var i=0; i<callbacks.length; i++) {
-		    callbacks[i]();
-		}
-	    }
-	});
 };
 
 ONERING.Window.prototype.bind = function(event, callback) {
-    this.boundEvents.setDefault(event, []).push(callback);
-    this.q.bind(event);
+    this.q.bind(event, _registered_functions(callback));
 };
 
 ONERING.Window.prototype.createWindow = function(url, width, height, props) {

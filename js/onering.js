@@ -7,7 +7,7 @@ ONERING.Window = function(q) {
 };
 
 ONERING.Window.prototype.bind = function(event, callback) {
-    this.q.bind(event, _registered_functions(callback));
+    this.q.bind(event, _register_function(callback));
 };
 
 ONERING.Window.prototype.createWindow = function(url, width, height, props) {

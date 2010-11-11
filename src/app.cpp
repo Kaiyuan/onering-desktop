@@ -29,19 +29,28 @@ QByteArray call_app(const char* appname, const char* method, const char* path, c
 	const char * response;
 	int response_len;
 	onering_response_handle_t response_handle;
-	bool called = false;
+	QByteArray retval;
 
-	if (!is_appname_registered(appname)) {
-		response = ""; /* TODO: 404 response */
-		response_len = 0;
-	} else {
+	if (is_appname_registered(appname)) {
 		response_handle = g_apps[appname].first(method, path, body, &response, &response_len);
-		called = true;
-	}
-
-	QByteArray retval(response, response_len);
-	if (called) {
+		retval.append(response, response_len);
+		// free response
 		g_apps[appname].second(response_handle);
 	}
+
 	return retval;
 }
+
+QByteArray call_app_body(const char* appname, const char* method, const char* path, const char* body=NULL)
+{
+	QByteArray response = call_app(appname, method, path, body);
+	
+	int index;
+	if ((index = response.indexOf("\r\n\r\n")) < 0) {
+		qDebug() << "Body not found:" << response;
+		return "";
+	}
+	response.remove(0, index+4);
+	return response;
+}
+

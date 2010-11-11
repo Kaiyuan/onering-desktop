@@ -25,6 +25,7 @@ public:
 	void setWebView(QWebView *view);
 	void setWindow(QWidget *window);
 	void invokeCallback(const QString &funcname);
+	void invokeCallback(const QString &funcname, const QString &param);
 	QVariant call(const QString &funcname);
 
 public slots:
@@ -36,7 +37,7 @@ public slots:
 	void log(const QString &s);
 	void showInspector(void);
 	void exit(void);
-	void post(const QString &url, const QString &body, const QString &callback);
+	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback);
 	bool checkAlive(QObject* o=0);
 	QObject* getCurrentWindow();
 	QObject* getApplication();

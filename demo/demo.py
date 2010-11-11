@@ -27,6 +27,7 @@ urls = (
     '/localstorage', 'localstorage',
     '/hotkey', 'hotkey',
     '/browser', 'browser',
+    '/browser/url', 'browser_url',
     '/browser/launcher', 'browser_launcher',
     '/audio', 'audio',
     '/about', 'about',
@@ -93,6 +94,11 @@ class hotkey:
 class browser:
     def GET(self):
         return render.browser()
+
+class browser_url:
+    @jsonize
+    def GET(self):
+        return dict(url="http://www.douban.com");
 
 class browser_launcher:
     def POST(self):

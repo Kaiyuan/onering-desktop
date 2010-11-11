@@ -55,6 +55,19 @@ void JsApi::invokeCallback(const QString &funcname)
 	frame->evaluateJavaScript(QString("ONERING.callback('%1'); null;").arg(funcname));
 }
 
+void JsApi::invokeCallback(const QString &funcname, const QString &param)
+{
+	qDebug() << "invokeCallback" << funcname << param;
+
+	QString jsparam = param;
+	// escape javascript string
+	jsparam.replace('\\', "\\\\").replace('\'', "\\'");
+	frame->evaluateJavaScript(
+			QString("ONERING.callback('%1', '%2'); null;")
+			.arg(funcname, jsparam));
+}
+
+
 QVariant JsApi::call(const QString &funcname)
 {
 	qDebug() << "call" << funcname;
@@ -108,13 +121,14 @@ void JsApi::exit()
 	qApp->quit();
 }
 
-void JsApi::post(const QString &url, const QString &body, const QString &callback)
+void JsApi::ajax(const QString &type, const QString &url, const QString &body, const QString &callback)
 {
-	qDebug() << "JsApi::post" << url << body << callback;
+	qDebug() << "JsApi::ajax" << type << url << body << callback;
 	QUrl absurl = frame->baseUrl().resolved(url);
-	QByteArray response = call_app(qPrintable(absurl.host()), "POST",
-			qPrintable(absurl.path()), qPrintable(body));
-	invokeCallback(callback);
+	QByteArray response = call_app_body(qPrintable(absurl.host()),
+			qPrintable(type), qPrintable(absurl.path()),
+			qPrintable(body));
+	invokeCallback(callback, response);
 }
 
 bool JsApi::checkAlive(QObject* o)

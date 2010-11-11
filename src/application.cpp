@@ -55,15 +55,7 @@ int Application::load(const char* appname)
 		return -1;
 	onering_register_app("onering", &onering_app, &onering_app_free_response);
 
-	QByteArray response = call_app(appname, "GET", "/init");
-
-	// quick check for body
-	int index;
-	if ((index = response.indexOf("\r\n\r\n")) < 0) {
-		qDebug() << "Body not found:" << response;
-		return -2;
-	}
-	response.remove(0, index+4);
+	QByteArray response = call_app_body(appname, "GET", "/init");
 
 	QScriptEngine engine;
 	QVariantMap props = engine.evaluate("("+response+")").toVariant().toMap();

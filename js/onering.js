@@ -185,14 +185,59 @@ ONERING.exit = function() {
     _OneRing.exit();
 };
 
-ONERING.post = function(url, data, callback) {
-    if (data instanceof Function) {
-	callback = data;
-	data = {};
+ONERING.ajax = function(settings) {
+    var url = settings.url;
+    var data = ONERING.param(settings.data || {});
+    var type = settings.type || "GET";
+    var dataType = settings.dataType;
+
+    if (data && type == "GET") {
+	url += ((url.indexOf('?') < 0) ? '?' : '&') + data;
+	data = "";
     }
 
-    data = param(data);
-    _OneRing.post(url, data, _register_function(callback));
+    _OneRing.ajax(type, url, data, _register_function(function(s) {
+	    if (dataType == "json") {
+		s = eval('('+s+')');
+	    }
+	    settings.success(s);
+	}));
+};
+
+ONERING.get = function(url, data, callback, dataType) {
+    if (data instanceof Function) {
+	dataType = dataType || callback;
+	callback = data;
+	data = null;
+    }
+
+    return ONERING.ajax({
+	    type: "GET",
+	    url: url,
+	    data: data,
+	    success: callback,
+	    dataType: dataType
+	});
+};
+
+ONERING.getJSON = function(url, data, callback) {
+    return ONERING.get(url, data, callback, "json");
+};
+
+ONERING.post = function(url, data, callback, dataType) {
+    if (data instanceof Function) {
+	dataType = dataType || callback;
+	callback = data;
+	data = null;
+    }
+
+    return ONERING.ajax({
+	    type: "POST",
+	    url: url,
+	    data: data,
+	    success: callback,
+	    dataType: dataType
+	});
 };
 
 ONERING.bind = function(event, callback) {
@@ -222,7 +267,7 @@ var _get_registered_function = function(name) {
     return _registered_functions[name];
 };
 
-var param = function(a) {
+ONERING.param = function(a) {
     var s = [];
     for (var key in a) {
 	var value = a[key];

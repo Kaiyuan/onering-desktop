@@ -7,10 +7,13 @@
 
 <script>
     $('#launch').click(function(){
-        $('#result').text("Launching...");
-        ONERING.post('/browser/launcher', {url: 'http://www.douban.com'},
-        function() {
-            $('#result').text("Your browser should now visiting www.douban.com.");
+        $('#result').text("Getting url...");
+        ONERING.getJSON('/browser/url', function(json) {
+            var url = json.url;
+            $('#result').text("Launching " + url);
+            ONERING.post('/browser/launcher', {url: url}, function() {
+                $('#result').text("Your browser should now visiting " + url);
+            });
         });
     });
 </script>

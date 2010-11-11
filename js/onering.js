@@ -190,6 +190,7 @@ ONERING.ajax = function(settings) {
     var data = ONERING.param(settings.data || {});
     var type = settings.type || "GET";
     var dataType = settings.dataType;
+    var success = settings.success;
 
     if (data && type == "GET") {
 	url += ((url.indexOf('?') < 0) ? '?' : '&') + data;
@@ -200,7 +201,7 @@ ONERING.ajax = function(settings) {
 	    if (dataType == "json") {
 		s = eval('('+s+')');
 	    }
-	    settings.success(s);
+	    success && success(s);
 	}));
 };
 

@@ -1,0 +1,36 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Hot Key</%def>
+
+<%!
+import sys
+
+CTRL = "Ctrl"
+ALT = "Alt"
+META = "Meta"
+
+if sys.platform == 'darwin':
+    CTRL = u"⌘"
+    ALT = u"⌥"
+    META = u"⌃"
+%>
+
+<input type="checkbox" id="sethotkey" /><label for="sethotkey">Check to set ${CTRL}+${ALT}+R as system wide hot key</label>
+<div id="output">0</div>
+
+<script>
+    $("#sethotkey").change(function(){
+        if (this.checked) {
+            ONERING.setHotKey("Ctrl+Alt+R", increment);
+        } else {
+            ONERING.clearHotKey("Ctrl+Alt+R");
+        }
+    });
+
+    var n = 0;
+
+    function increment() {
+        n = n + 1;
+        $('#output').text(n);
+    }
+</script>

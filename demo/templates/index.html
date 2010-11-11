@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>OneRing 演示</title>
+<script type="text/javascript" src="onering://onering/onering.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/demo.css"></style>
+</head>
+<body>
+    <article>
+        <ul>
+            <li><a href="/create_window">Create Window</a></li>
+            <li><a href="/systrayicon">System Tray Icon</a></li>
+            <li><a href="/font-face">Font Face</a></li>
+            <li><a href="/shadow">Shadow</a></li>
+            <li><a href="/localstorage">Local Storage</a></li>
+            <li><a href="/hotkey">Hot Key</a></li>
+            <li><a href="/browser">Browser Launcher</a></li>
+        </ul>
+    </article>
+    <footer id="demo_footer">
+        <a href="javascript:ONERING.getCurrentWindow().showInspector()">Show Inspector</a>
+    </footer>
+    <script>
+        ONERING.bind('aboutToQuit', function() { ONERING.log("Demo quit.") });
+    </script>
+</body>
+</html>

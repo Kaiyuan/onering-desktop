@@ -1,0 +1,47 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Create Window</%def>
+
+<%!
+hints = [
+  ('fixedSize', "Fixed Size", False),
+  ('minimizeButton', "Has Minimize Button", True),
+  ('maximizeButton', "Has Maximize Button", True),
+]
+%>
+
+<style>
+  fieldset .controls {
+    -webkit-column-count: 2;
+  }
+</style>
+
+<fieldset>
+  <div class="controls">
+    %for id, text, default in hints:
+    <input type="checkbox" name="${id}" id="${id}"
+    ${"checked" if default else ''} />
+    <label for="${id}">${text}</label><br/>
+    %endfor
+  </div>
+</fieldset>
+
+<button id="button">Click me to create a new window</button>
+
+<script>
+  $("#button").click(function(){
+    props = {};
+    if ($('#fixedSize').is(':checked')) {
+      props.fixedSize = true;
+    }
+    if (!$('#minimizeButton').is(':checked')) {
+      props.minimizeButton = false;
+    }
+    if (!$('#maximizeButton').is(':checked')) {
+      props.maximizeButton = false;
+    }
+    ONERING.createWindow('/create_window/new', 400, 300, props)
+  });
+</script>
+
+## vim:set ft=mako:

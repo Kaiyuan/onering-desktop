@@ -1,0 +1,19 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Browser Launcher</%def>
+
+<button id="launch">Click to launch your default browser</button>
+<p id="result"></p>
+
+<script>
+    $('#launch').click(function(){
+        $('#result').text("Getting url...");
+        ONERING.getJSON('/browser/url', function(json) {
+            var url = json.url;
+            $('#result').text("Launching " + url);
+            ONERING.post('/browser/launcher', {url: url}, function() {
+                $('#result').text("Your browser should now visiting " + url);
+            });
+        });
+    });
+</script>

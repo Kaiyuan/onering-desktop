@@ -129,6 +129,7 @@ void JsApi::ajax(const QString &type, const QString &url, const QString &body, c
 
 bool JsApi::checkAlive(QObject* o)
 {
+	qDebug() << "JsApi::checkAlive" << o;
 	return o != 0;
 }
 

@@ -17,5 +17,7 @@ void Debugger::traceObj(QObject *obj)
 
 void Debugger::printDestroyed(QObject *obj)
 {
+#ifdef DEBUG
 	qDebug() << "=== DEL" << obj;
+#endif
 }

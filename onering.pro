@@ -21,7 +21,7 @@ macx {
 	QMAKE_FRAMEWORK_VERSION = $$VERSION
 }
 
-debug {
+!release {
 	DEFINES += DEBUG
 }
 

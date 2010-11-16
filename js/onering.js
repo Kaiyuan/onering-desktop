@@ -175,6 +175,10 @@ ONERING.clearHotKey = function(shortcut) {
 }
 
 ONERING.callback = function(name, para) {
+    var window_id = name.split('_')[1];
+    if (window_id != ONERING._window_id) {
+	return;
+    }
     var f = _get_registered_function(name);
     if (f) {
 	f(para);
@@ -258,9 +262,11 @@ var _get_guid = function() {
     return '' + _guid;
 };
 
+ONERING._window_id = Math.floor(Math.random()*1000000);
+
 var _registered_functions = new Object();
 var _register_function = function(func) {
-    var name = 'f' + _get_guid();
+    var name = 'f_' + ONERING._window_id + '_' + _get_guid();
     _registered_functions[name] = func;
     return name;
 };

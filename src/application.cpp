@@ -45,9 +45,7 @@ int Application::load(const char* appname)
 	settings->setAttribute(QWebSettings::LocalStorageEnabled, true);
 	settings->setAttribute(QWebSettings::LocalStorageDatabaseEnabled, true);
 	settings->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
-#ifdef DEBUG
 	settings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-#endif
 
 	QWebSecurityOrigin::addLocalScheme("onering");
 

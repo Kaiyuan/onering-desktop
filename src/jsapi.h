@@ -2,9 +2,7 @@
 #define JSAPI_H
 
 #include <qobject.h>
-#ifdef DEBUG
 #include <QWebInspector>
-#endif
 #include <QHash>
 #include <QList>
 #include <QScriptEngine>

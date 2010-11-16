@@ -3,9 +3,7 @@
 #include <QApplication>
 #include <qwebview.h>
 #include <qwebframe.h>
-#ifdef DEBUG
 #include <QWebInspector>
-#endif
 #include <QIcon>
 #include <QUrl>
 #include <QNetworkRequest>
@@ -106,14 +104,12 @@ void JsApi::log(const QString &s)
 void JsApi::showInspector()
 {
 	qDebug() << "JsApi::showInspector";
-#ifdef DEBUG
 	if (!inspector.page()) {
 		inspector.setPage(frame->page());
 	}
 	inspector.resize(800, 600);
 	inspector.show();
 	inspector.activateWindow();  // put inspector at the top most
-#endif
 }
 
 void JsApi::exit()

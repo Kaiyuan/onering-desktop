@@ -1,6 +1,15 @@
 syntax: regexp
-^Makefile$
+.*~$
+.*\.orig$
+.*\.o$
+.*\.swp$
+.*\.py[co]$
+.*\.egg-info$
+build
+dist
+^Makefile(\.(Debug|Release))?$
 ^OneRing.framework/
-^moc_.*.cpp$
-^qrc_onering.cpp$
-.*\.so$
+^((release|debug)/)?moc_.*.cpp$
+^((release|debug)/)?qrc_onering.cpp$
+.*\.(so|a|dll|rc)$
+object_script\.OneRing\.

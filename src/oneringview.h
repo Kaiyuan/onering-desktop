@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QEvent>
 #include <QList>
+#include <QPair>
 #include "jsapi.h"
 
 class OneRingView : public QWebView
@@ -16,8 +17,12 @@ public:
 	void enableContextMenu();
 	void disableContextMenu();
 
+signals:
+	void eventOccurred(QObject *event);
+
 public slots:
-	void bind(const QString &eventType, const QString &callback);
+	void bind(const QString &eventTypeName);
+	void unbind(const QString &eventTypeName, int times=1);
 	void activateWindow(void);
 
 private slots:
@@ -26,11 +31,12 @@ private slots:
 protected:
 	void contextMenuEvent(QContextMenuEvent *ev);
 	void changeEvent(QEvent* event);
+	void closeEvent(QCloseEvent* event);
 	void initializEventMap(void);
 
 private:
 	bool contextMenuEnabled;
-	QHash<QEvent::Type, QList<QString> > boundEvents;
+	QHash<QEvent::Type, QPair<QString, int> > boundEvents;
 	QHash<QString, QEvent::Type> eventMap;
 	JsApi *jsapi;
 };

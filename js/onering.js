@@ -303,6 +303,19 @@ ONERING.bind = function(event, callback) {
     }
 };
 
+ONERING.Application = function(q) {
+    this.q = q;
+};
+ONERING.Application.prototype = {
+    setQuitOnLastWindowClosed: function(quit) {
+	this.q.quitOnLastWindowClosed = quit;
+    }
+}
+
+ONERING.getApplication = function() {
+    return new ONERING.Application(_OneRing.getApplication());
+};
+
 // }}}
 
 // internal utilities {{{

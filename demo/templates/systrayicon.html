@@ -47,6 +47,7 @@ Click the icon in the system tray to show the menu.
     $(window).unload(function(){
         menu.destroy();
         icon.destroy();
+        ONERING.getApplication().setQuitOnLastWindowClosed(true);
     });
 
     function show_greeting() {
@@ -70,6 +71,8 @@ Click the icon in the system tray to show the menu.
         w.hide();
         e.preventDefault();
     });
+
+    ONERING.getApplication().setQuitOnLastWindowClosed(false);
 </script>
 
 ##vim: set ft=mako:

@@ -23,8 +23,16 @@
 // public methods {{{
 
 JsApi::JsApi(QObject *parent)
-	: QObject(parent)
+	: QObject(parent),
+	  inspector(0)
 {
+}
+
+JsApi::~JsApi()
+{
+	if (inspector) {
+		delete inspector;
+	}
 }
 
 void JsApi::setWebView(QWebView *view)
@@ -104,12 +112,15 @@ void JsApi::log(const QString &s)
 void JsApi::showInspector()
 {
 	qDebug() << "JsApi::showInspector";
-	if (!inspector.page()) {
-		inspector.setPage(frame->page());
+	if (!inspector) {
+		inspector = new QWebInspector();
 	}
-	inspector.resize(800, 600);
-	inspector.show();
-	inspector.activateWindow();  // put inspector at the top most
+	if (!inspector->page()) {
+		inspector->setPage(frame->page());
+	}
+	inspector->resize(800, 600);
+	inspector->show();
+	inspector->activateWindow();  // put inspector at the top most
 }
 
 void JsApi::exit()

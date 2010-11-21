@@ -19,6 +19,7 @@ class JsApi : public QObject
 
 public:
 	JsApi(QObject *parent);
+	~JsApi();
 
 	void setWebView(QWebView *view);
 	void setWindow(QWidget *window);
@@ -66,7 +67,7 @@ private slots:
 private:
 	QWidget *window;
 	QWebFrame *frame;
-	QWebInspector inspector;
+	QWebInspector *inspector;
 	QHash< EventSource, QList<QString> > callbacks;
 	QScriptEngine engine;
 

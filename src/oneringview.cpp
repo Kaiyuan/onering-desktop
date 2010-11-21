@@ -1,9 +1,12 @@
 #include <QDebug>
+#include <QPair>
 #include <QEvent>
+#include <QCloseEvent>
 #include "oneringview.h"
 #include "networkaccessmanager.h"
 #include "jsapi.h"
 #include "debugger.h"
+#include "event.h"
 
 OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &props)
 	: QWebView(), contextMenuEnabled(false)
@@ -60,6 +63,7 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &pr
 void OneRingView::initializEventMap()
 {
 	eventMap["windowStateChange"] = QEvent::WindowStateChange;
+	eventMap["close"] = QEvent::Close;
 }
 
 void OneRingView::printCurrentUrl(const QUrl &url)
@@ -84,21 +88,48 @@ void OneRingView::disableContextMenu()
 	contextMenuEnabled = false;
 }
 
-void OneRingView::bind(const QString &eventTypeName, const QString &callback)
+void OneRingView::bind(const QString &eventTypeName)
 {
-	boundEvents[eventMap[eventTypeName]] << callback;
+	if (eventMap.contains(eventTypeName)) {
+		QEvent::Type type = eventMap.value(eventTypeName);
+		if (!boundEvents.contains(type)) {
+			boundEvents[type].first = eventTypeName;
+		}
+		boundEvents[type].second += 1;
+	}
+}
+
+void OneRingView::unbind(const QString &eventTypeName, int times)
+{
+	if (eventMap.contains(eventTypeName)) {
+		QEvent::Type type = eventMap.value(eventTypeName);
+		if (boundEvents.contains(type)) {
+			boundEvents[type].second -= times;
+			if (boundEvents.value(type).second <= 0) {
+				boundEvents.remove(type);
+			}
+		}
+	}
 }
 
 void OneRingView::changeEvent(QEvent * event)
 {
 	QEvent::Type type = event->type();
 	if (boundEvents.contains(type)) {
-		QString callback;
-		foreach (callback, boundEvents[type]) {
-			jsapi->invokeCallback(callback);
-		}
+		Event e(event, boundEvents.value(type).first);
+		emit eventOccurred(&e);
 	}
 	QWebView::changeEvent(event);
+}
+
+void OneRingView::closeEvent(QCloseEvent *event)
+{
+	QEvent::Type type(event->type());
+	if (boundEvents.contains(type)) {
+		Event e(reinterpret_cast<QEvent *>(event),
+		      boundEvents.value(type).first);
+		emit eventOccurred(&e);
+	}
 }
 
 void OneRingView::activateWindow()

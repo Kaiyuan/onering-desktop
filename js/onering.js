@@ -4,10 +4,61 @@ ONERING = new Object();
 
 ONERING.Window = function(q) {
     this.q = q;
+    this.boundEvents = {};
+    this.q.eventOccurred.connect(this, "_eventOccurred");
+    var w = this;
+    window.addEventListener('unload', function(){
+	    ONERING.log("unload");
+	    w.q.eventOccurred.disconnect(w, "_eventOccurred");
+	    w.unbind();
+	}, false);
+};
+
+ONERING.Window.prototype._eventOccurred = function(event) {
+    var callbacks = this.boundEvents[event.type()];
+    if (callbacks) {
+	callbacks.forEach(function(callback) {
+		callback(event);
+	    });
+    }
 };
 
 ONERING.Window.prototype.bind = function(event, callback) {
-    this.q.bind(event, _register_function(callback));
+    this.q.bind(event);
+    if (!this.boundEvents[event]) {
+	this.boundEvents[event] = [];
+    }
+    this.boundEvents[event].push(callback);
+};
+
+ONERING.Window.prototype.unbind = function(event, callback) {
+    if (event) {
+	var callbacks = this.boundEvents[event];
+	if (callbacks) {
+	    var new_callbacks;
+	    if (callback) {
+		new_callbacks = callbacks.filter(function(c) {
+			return c !== callback;
+		    });
+	    } else {
+		new_callbacks = [];
+	    }
+	    var unbind_count = callbacks.length - new_callbacks.length;
+	    if (unbind_count) {
+		this.q.unbind(event, unbind_count);
+		if (new_callbacks.length) {
+		    this.boundEvents[event] = new_callbacks;
+		} else {
+		    delete this.boundEvents[event];
+		}
+	    }
+	}
+    } else {
+	for (var e in this.boundEvents) {
+	    this.q.unbind(e, this.boundEvents[e].length);
+	}
+	this.boundEvents = {};
+    }
 };
 
 ONERING.Window.prototype.createWindow = function(url, width, height, props) {

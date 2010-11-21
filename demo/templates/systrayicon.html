@@ -29,16 +29,18 @@ Click the icon in the system tray to show the menu.
     ]);
     icon.setContextMenu(menu);
     icon.bind('click', function(){
-	    if (w.isMinimized()) {
-		    w.showNormal();
-	    }
-	    w.show();
-	    w.activateWindow();
+        if (w.isMinimized()) {
+            w.showNormal();
+        }
+        w.activateWindow();
+        w.show();
     });
 
-    w.bind('windowStateChange', function(){
+    w.bind('windowStateChange', function(e){
         if (w.isMinimized()) {
             setTimeout(function(){w.hide()}, 0);
+        } else {
+            w.show();
         }
     });
 
@@ -63,6 +65,11 @@ Click the icon in the system tray to show the menu.
         var action = menu.get(0);
         action.setEnabled(enabled);
     }
+
+    w.bind('close', function(e) {
+        w.hide();
+        e.preventDefault();
+    });
 </script>
 
 ##vim: set ft=mako:

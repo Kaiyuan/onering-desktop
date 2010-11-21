@@ -1,0 +1,75 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">System Tray Icon</%def>
+
+<p>
+Click the icon in the system tray to show the menu.
+</p>
+
+<input type="text" value="world" id="who" /><br/>
+<button onclick="show_greeting()">Click me to change the greeting text in system tray context menu</button>
+
+<p>
+<input type="checkbox" id="greenting-enabler" onchange="enable_greeting_menu(this.checked)" />
+<label for="greeting-enabler">Enable the greeting menu item</label>
+</p>
+
+<script>
+    var w = ONERING.getCurrentWindow();
+    var icon = new ONERING.SystemTrayIcon('/static/onering.ico');
+    var menu = new ONERING.Menu([
+        ["Hello...", {enabled: false}],
+        ["Mi&nimize", function(){w.hide()}, {shortcut: "Ctrl+N"}],
+        ["Ma&ximize", function(){w.maximize()}, {shortcut: "Ctrl+X"}],
+        ["&Restore", function(){w.showNormal()}, {shortcut: "Ctrl+R"}],
+        ONERING.Menu.SEPARATOR,
+        ["&About", show_about],
+        ONERING.Menu.SEPARATOR,
+        ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
+    ]);
+    icon.setContextMenu(menu);
+    icon.bind('click', function(){
+        if (w.isMinimized()) {
+            w.showNormal();
+        }
+        w.activateWindow();
+        w.show();
+    });
+
+    w.bind('windowStateChange', function(e){
+        if (w.isMinimized()) {
+            setTimeout(function(){w.hide()}, 0);
+        } else {
+            w.show();
+        }
+    });
+
+    $(window).unload(function(){
+        menu.destroy();
+        icon.destroy();
+    });
+
+    function show_greeting() {
+        var action = menu.get(0);
+        action.setText("Hello, " + $("#who").val() + "!");
+    }
+
+    var about_window = null;
+    function show_about() {
+        if (!about_window || !about_window.isAlive()) {
+            about_window = ONERING.createWindow('/about', 200, 200, {minimizeButton: false, maximizeButton: false, fixedSize: true});
+        }
+    }
+
+    function enable_greeting_menu(enabled) {
+        var action = menu.get(0);
+        action.setEnabled(enabled);
+    }
+
+    w.bind('close', function(e) {
+        w.hide();
+        e.preventDefault();
+    });
+</script>
+
+##vim: set ft=mako:

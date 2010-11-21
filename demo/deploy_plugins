@@ -1,0 +1,109 @@
+#!/usr/bin/env python
+# encoding: UTF-8
+
+__author__ = "Qiangning Hong <hongqn@gmail.com>"
+__version__ = "$Revision$"
+__date__ = "$Date$"
+
+import sys, os
+import logging
+import commands
+import re
+import shutil
+from subprocess import check_call
+
+logger = logging.getLogger()
+
+def get_qt_dir():
+    onering = '/Library/Frameworks/OneRing.framework/OneRing'
+    cmd = "otool -L %s" % onering
+    outtext = commands.getoutput(cmd).splitlines()
+    for line in outtext:
+        m = re.match(r'\s+(.*)Qt\w+\.framework/Versions/', line)
+        if m:
+            qt_dir = m.group(1)
+            break
+    else:
+        raise Exception("wrong OneRing")
+
+    if qt_dir.endswith('/lib/'):
+        qt_dir = qt_dir[:-4]
+    logger.info("Qt dir: %s", qt_dir)
+    return qt_dir  # binary package
+
+def fix_plugin_install_name(dylib, qtlibdir, appbundle):
+    print qtlibdir
+    for line in commands.getoutput("otool -L %s" % dylib).splitlines()[2:]:
+        line = line.strip()
+        m = re.match(re.escape(qtlibdir)+r"((Qt\w+|phonon)\.framework/Versions/4/\w+)", line)
+        if m:
+            framework = m.group(2)
+            if not os.path.exists(os.path.join(
+                    appbundle, 'Contents', 'Frameworks',
+                    framework+'.framework')):
+                deploy_framework(framework, qtlibdir, appbundle)
+            old_id = m.group(0)
+            new_id = "@executable_path/../Frameworks/" + m.group(1)
+            logger.info("change id: %s -> %s", old_id, new_id)
+            check_call(['install_name_tool', '-change', old_id, new_id, dylib])
+
+def fix_framework_install_name(binpath, framework, qtlibdir, appbundle):
+    new_id = '@executable_path/../Frameworks/%s.framework/Versions/4/%s' \
+                % (framework, framework)
+    logger.info("change id: %s", new_id)
+    check_call(['install_name_tool', '-id', new_id, binpath])
+    fix_plugin_install_name(binpath, qtlibdir, appbundle)
+
+def deploy_framework(framework, qtlibdir, appbundle):
+    src = os.path.join(qtlibdir or '/Library/Frameworks',
+                       framework+'.framework')
+    dst = os.path.join(appbundle, 'Contents', 'Frameworks',
+                       framework+'.framework')
+    os.makedirs(os.path.join(dst, 'Versions', '4'))
+    logger.info("copy %s", framework+'.framework')
+    shutil.copy(os.path.join(src, 'Versions', '4', framework),
+                os.path.join(dst, 'Versions', '4', framework))
+    os.symlink(os.path.join('Versions', '4', framework),
+               os.path.join(dst, framework))
+    os.symlink('4', os.path.join(dst, 'Versions', 'Current'))
+    fix_framework_install_name(os.path.join(dst, 'Versions', '4', framework),
+                               framework, qtlibdir, appbundle)
+    strip(os.path.join(dst, 'Versions', '4', framework))
+
+def strip(path):
+    logger.info("strip %s", path)
+    check_call(['strip', '-x', path])
+
+def deploy_plugin(plugin, srcdir, dstdir, qtlibdir, appbundle):
+    pdir, pfile = plugin.split('/')
+    if not os.path.exists(os.path.join(dstdir, pdir)):
+        os.makedirs(os.path.join(dstdir, pdir))
+    logger.info("copy %s", plugin)
+    shutil.copy(os.path.join(srcdir, plugin), os.path.join(dstdir, plugin))
+    strip(os.path.join(dstdir, plugin))
+    fix_plugin_install_name(os.path.join(dstdir, plugin), qtlibdir, appbundle)
+
+def main(appbundle, plugins):
+    qtdir = get_qt_dir()
+    psrcdir = os.path.join(qtdir, 'plugins') if qtdir \
+                        else '/Developer/Applications/Qt/plugins'
+    pdstdir = os.path.join(appbundle, 'Contents', 'plugins')
+    qtlibdir = qtdir and os.path.join(qtdir, 'lib/')
+    for plugin in plugins:
+        deploy_plugin(plugin, psrcdir, pdstdir, qtlibdir, appbundle)
+
+if __name__ == '__main__':
+    from optparse import OptionParser
+    parser = OptionParser(usage="%prog [options] appbundle plugin1...")
+    parser.add_option('-v', '--verbose', action='store_true')
+    parser.add_option('-q', '--quiet', action='store_true')
+    options, args = parser.parse_args()
+
+    logging.basicConfig(
+            level = options.quiet and logging.WARNING
+                    or options.verbose and logging.DEBUG
+                    or logging.INFO,
+            format='%(asctime)s %(levelname)s %(message)s')
+
+    appbundle, plugins = args[0], args[1:]
+    main(appbundle, plugins)

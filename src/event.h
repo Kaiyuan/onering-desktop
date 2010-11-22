@@ -9,7 +9,7 @@ class Event : public QObject
 	Q_OBJECT
 
 public:
-	Event::Event(QEvent *event, const QString &type, QObject *parent=0);
+	Event(QEvent *event, const QString &type, QObject *parent=0);
 
 	Q_INVOKABLE QString type(void);
 	Q_INVOKABLE void preventDefault(void);

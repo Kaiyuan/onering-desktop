@@ -38,7 +38,8 @@ HEADERS += include/onering.h \
 	   src/dataloader.h \
 	   src/application.h \
 	   src/debugger.h \
-	   src/event.h
+	   src/event.h \
+	   src/pubsub.h
 SOURCES += src/onering.cpp \
 	   src/oneringview.cpp \
 	   src/networkaccessmanager.cpp \
@@ -51,7 +52,8 @@ SOURCES += src/onering.cpp \
 	   src/dataloader.cpp \
            src/application.cpp \
 	   src/debugger.cpp \
-  	   src/event.cpp
+  	   src/event.cpp \
+	   src/pubsub.cpp
 
 # global shourtcut
 HEADERS += src/hotkey.h \

@@ -1,10 +1,13 @@
 import logging
 from cStringIO import StringIO
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 import _onering
-from _onering import loop
 
-__all__ = ['register_wsgi_app', 'loop']
+__all__ = ['register_wsgi_app', 'loop', 'publish']
 
 logger = logging.getLogger('onering')
 
@@ -30,3 +33,10 @@ def register_wsgi_app(appname, app):
                      len(response))
         return response
     return _onering.register_app(appname, callback)
+
+def loop(appname):
+    return _onering.loop(appname)
+
+def publish(channel, data=None):
+    msg = json.dumps(data)
+    return _onering.publish(channel, msg)

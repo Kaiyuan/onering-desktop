@@ -24,6 +24,8 @@ ONERING_EXPORT int onering_register_app(const char* appname, onering_app_func_t 
 
 ONERING_EXPORT int onering_loop(const char* appname);
 
+ONERING_EXPORT void onering_publish(const char* channel, const char* msg);
+
 #ifdef __cplusplus
 }
 #endif

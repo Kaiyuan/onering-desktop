@@ -20,9 +20,14 @@ onering_module = Extension('_onering',
                            extra_link_args=extra_link_args,
                           )
 
+install_requires = []
+if sys.version_info < (2, 6):
+    install_requires.append("simplejson")
+
 setup(name = "OneRing",
       version="0.1",
       ext_modules = [onering_module],
       py_modules = ['onering'],
       zip_safe = False,
+      install_requires=install_requires,
      )

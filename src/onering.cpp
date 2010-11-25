@@ -6,6 +6,7 @@
 #include <QScriptEngine>
 #include <QWebSettings>
 #include <QWebSecurityOrigin>
+#include <string.h>
 #include <onering.h>
 #include "oneringview.h"
 #include "app.h"
@@ -16,13 +17,19 @@
 int onering_loop(const char* appname)
 {
 	int argc = 1;
-	char *argv[] = {(char*)appname};
-	QApplication qapp(argc, argv);
+	char name[ONERING_MAX_APPNAME_LEN+1];
+	char *argv[] = {name};
 
-	Application app;
+	strncpy(name, appname, ONERING_MAX_APPNAME_LEN);
+	name[ONERING_MAX_APPNAME_LEN] = '\0';
+
+	Application app(argc, argv);
 	int retval = app.load(appname);
 	if (retval)
 		return retval;
-	return qapp.exec();
+	return app.exec();
 }
 
+void onering_publish(const char* channel, const char* msg)
+{
+}

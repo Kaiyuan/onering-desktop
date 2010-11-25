@@ -10,6 +10,9 @@ c_appfunc(const char* method, const char* path, const char* body,
 {
 	int code = 0;
 	PyObject *args, *py_response=NULL;
+	PyGILState_STATE gstate;
+
+	gstate = PyGILState_Ensure();
 
 	*response = "";
 	*response_len = 0;
@@ -38,6 +41,7 @@ c_appfunc(const char* method, const char* path, const char* body,
 exit_args:
 	Py_DECREF(args);
 exit:
+	PyGILState_Release(gstate);
 	return (onering_response_handle_t)py_response;
 }
 
@@ -45,10 +49,15 @@ static void
 free_response(onering_response_handle_t response_handle)
 {
 	PyObject *py_response = (PyObject*)response_handle;
+	PyGILState_STATE gstate;
+
+	gstate = PyGILState_Ensure();
 
 	if (py_response) {
 		Py_DECREF(py_response);
 	}
+
+	PyGILState_Release(gstate);
 }
 
 static PyObject *
@@ -58,19 +67,22 @@ register_app(PyObject *self, PyObject *args)
 	PyObject *appfunc;
 	int err;
 
-	if (!PyArg_ParseTuple(args, "sO", &appname, &appfunc))
+	if (!PyArg_ParseTuple(args, "sO:register_app", &appname, &appfunc))
 		return NULL;
 
-	if (g_appfunc) {
-		Py_DECREF(g_appfunc);
+	if (!PyCallable_Check(appfunc)) {
+		PyErr_SetString(PyExc_TypeError, "app must be callable");
+		return NULL;
 	}
+
+	Py_XDECREF(g_appfunc);
 	g_appfunc = appfunc;
 	Py_INCREF(g_appfunc);
 
 	err = onering_register_app(appname, &c_appfunc, &free_response);
 	if (err) {
-		g_appfunc = NULL;
 		Py_DECREF(g_appfunc);
+		g_appfunc = NULL;
 		return PyErr_Format(OneRingError,
 				"onering_register_app() returns %d", err);
 	}
@@ -84,10 +96,12 @@ loop(PyObject *self, PyObject *args)
 	const char *appname;
 	int err;
 
-	if (!PyArg_ParseTuple(args, "s", &appname))
+	if (!PyArg_ParseTuple(args, "s:loop", &appname))
 		return NULL;
 
+	Py_BEGIN_ALLOW_THREADS
 	err = onering_loop(appname);
+	Py_END_ALLOW_THREADS
 	if (err) {
 		return PyErr_Format(OneRingError,
 			       	"onering_loop() returns %d", err);
@@ -95,10 +109,28 @@ loop(PyObject *self, PyObject *args)
 	Py_RETURN_NONE;
 }
 
+static PyObject *
+publish(PyObject *self, PyObject *args)
+{
+	const char *channel;
+	const char *msg;
+
+	if (!PyArg_ParseTuple(args, "ss", &channel, &msg))
+		return NULL;
+
+	Py_BEGIN_ALLOW_THREADS
+	onering_publish(channel, msg);
+	Py_END_ALLOW_THREADS
+
+	Py_RETURN_NONE;
+}
+
 static PyMethodDef OneRingMethods[] = {
 	{"register_app", register_app, METH_VARARGS,
 	       	"register a app callback to onering framework"}, 
 	{"loop", loop, METH_VARARGS, "loop"},
+	{"publish", publish, METH_VARARGS,
+	       	"publish a message to onering pages"},
 	{NULL, NULL, 0, NULL}
 };
 

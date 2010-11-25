@@ -32,4 +32,7 @@ int onering_loop(const char* appname)
 
 void onering_publish(const char* channel, const char* msg)
 {
+	Application *app = static_cast<Application *>(qApp);
+	QEvent *event = new PublishEvent(channel, msg);
+	QCoreApplication::postEvent(&(app->pubsubhub), event);
 }

@@ -18,6 +18,7 @@
 #include "menu.h"
 #include "hotkey.h"
 #include "debugger.h"
+#include "application.h"
 // }}}
 
 // public methods {{{
@@ -152,6 +153,11 @@ QObject* JsApi::getCurrentWindow()
 QObject* JsApi::getApplication()
 {
 	return qApp;
+}
+
+QObject* JsApi::getPubSubHub()
+{
+	return &(static_cast<Application *>(qApp)->pubsubhub);
 }
 
 // }}}

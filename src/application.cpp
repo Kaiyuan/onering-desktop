@@ -5,6 +5,7 @@
 #include <QScriptEngine>
 #include <QVariantMap>
 #include <QDesktopServices>
+#include <QApplication>
 #include <onering.h>
 #include "application.h"
 #include "oneringapp.h"
@@ -24,7 +25,8 @@ static QUrl getAbsUrl(const QString &url, const QString &appname)
 	return u;
 }
 
-Application::Application()
+Application::Application(int &argc, char **argv)
+	: QApplication(argc, argv)
 {
 }
 
@@ -103,6 +105,6 @@ void Application::setWindowIconByData(QByteArray &data)
 	qDebug() << "setWindowIconByData";
 	QPixmap pixmap;
 	pixmap.loadFromData(data);
-	qApp->setWindowIcon(QIcon(pixmap));
+	setWindowIcon(QIcon(pixmap));
 }
 

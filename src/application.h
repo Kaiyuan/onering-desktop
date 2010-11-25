@@ -4,12 +4,12 @@
 #include <QApplication>
 #include <QObject>
 
-class Application : public QObject
+class Application : public QApplication
 {
 	Q_OBJECT
 
 public:
-	Application();
+	Application(int &argc, char **argv);
 	int load(const char* appname);
 
 public slots:

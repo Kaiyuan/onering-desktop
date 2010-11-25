@@ -3,7 +3,7 @@
 
 #include <QApplication>
 #include <QObject>
-#include "pubsub.h"
+#include "pubsubhub.h"
 
 class Application : public QApplication
 {

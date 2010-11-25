@@ -13,6 +13,7 @@
 #include "oneringapp.h"
 #include "dataloader.h"
 #include "application.h"
+#include "publishevent.h"
 
 int onering_loop(const char* appname)
 {

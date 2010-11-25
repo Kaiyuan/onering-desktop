@@ -3,6 +3,7 @@
 
 #include <QApplication>
 #include <QObject>
+#include "pubsub.h"
 
 class Application : public QApplication
 {
@@ -11,6 +12,7 @@ class Application : public QApplication
 public:
 	Application(int &argc, char **argv);
 	int load(const char* appname);
+	PubSubHub pubsubhub;
 
 public slots:
 	void setWindowIconByData(QByteArray &data);

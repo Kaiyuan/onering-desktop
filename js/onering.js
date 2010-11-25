@@ -303,6 +303,32 @@ ONERING.bind = function(event, callback) {
     }
 };
 
+ONERING.subscribe = function(channel, callback) {
+    ONERING.connect(_OneRing.getPubSubHub().published, function(ch, msg) {
+	    ONERING.log(ch);
+	    if (ch == channel) {
+		var data = eval('('+msg+')');
+		callback(data);
+	    }
+	});
+};
+
+ONERING._connections = [];
+
+ONERING.connect = function(signal, slot) {
+    ONERING._connections.push([signal, slot]);
+    signal.connect(slot);
+}
+
+window.addEventListener('unload', function() {
+	var signal, slot;
+	ONERING._connections.forEach(function(connection){
+	    signal = connection[0];
+	    slot = connection[1];
+	    signal.disconnect(slot);
+	});
+    });
+
 ONERING.Application = function(q) {
     this.q = q;
 };

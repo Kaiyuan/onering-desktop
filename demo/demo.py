@@ -3,7 +3,7 @@
 
 __version__ = '0.1'
 
-import sys
+import sys, os
 try:
     import json
 except ImportError:
@@ -31,6 +31,8 @@ urls = (
     '/browser/launcher', 'browser_launcher',
     '/audio', 'audio',
     '/about', 'about',
+    '/pubsub', 'pubsub',
+    '/pubsub/scan', 'pubsub_scan',
     '/static/(.*)', 'static',
 )
 
@@ -114,6 +116,31 @@ class audio:
 class about:
     def GET(self):
         return render.about()
+
+class pubsub:
+    def GET(self):
+        return render.pubsub()
+
+class pubsub_scan:
+    def POST(self):
+        def scan():
+            import time
+            i = 0
+            for dirpath, dirnames, filenames in os.walk('.'):
+                for filename in filenames:
+                    print filename
+                    onering.publish("filescan",
+                                    os.path.join(dirpath, filename))
+                    time.sleep(1)
+                    i += 1
+                    if i > 10:
+                        onering.publish("filescan", None);
+                        return
+        import threading
+        t = threading.Thread(target=scan)
+        t.setDaemon(True)
+        t.start()
+        return True
 
 class static:
     def GET(self, filename):

@@ -1,0 +1,22 @@
+<%inherit file="/demo_base.html" />
+
+<%def name="demo_name()">Publish/Subscribe</%def>
+
+<button id="start">Start scan files</button>
+<div id="output"></div>
+
+<script>
+    ONERING.subscribe('filescan', function(filepath) {
+        if (filepath) {
+            $('#output').append(filepath + "<br/>");
+        } else {
+            $('#start').removeAttr('disabled');
+        }
+    });
+    $("#start").click(function(){
+        ONERING.post("/pubsub/scan", function(e) {
+            $('#output').html("start scanning...<br/>")
+        });
+        this.disabled = 'disabled';
+    });
+</script>

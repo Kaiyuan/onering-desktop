@@ -26,6 +26,7 @@ public:
 	void invokeCallback(const QString &funcname);
 	void invokeCallback(const QString &funcname, const QString &param);
 	QVariant call(const QString &funcname);
+	Q_INVOKABLE QObject* getPubSubHub(void);
 
 public slots:
 	QVariant test(QVariant param);

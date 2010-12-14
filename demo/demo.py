@@ -100,7 +100,7 @@ class browser:
 class browser_url:
     @jsonize
     def GET(self):
-        return dict(url="http://www.douban.com");
+        return dict(url="http://code.google.com/p/onering-desktop/")
 
 class browser_launcher:
     def POST(self):

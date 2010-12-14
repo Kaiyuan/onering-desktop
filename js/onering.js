@@ -114,85 +114,93 @@ ONERING.Audio.prototype.bind = function(event, callback) {
 // System Tray Icon {{{
 
 ONERING.SystemTrayIcon = function(url) {
-    this.handler = _OneRing.SystemTrayIcon_new();
+    this.q = _OneRing.SystemTrayIcon_new();
     if (url) {
 	this.load(url);
     }
 };
 ONERING.SystemTrayIcon.prototype.destroy = function() {
-    if (!this.handler) return;
-    _OneRing.SystemTrayIcon_delete(this.handler);
-    this.handler = null;
+    this.q.deleteLater();
+    this.q = null;
 };
 ONERING.SystemTrayIcon.prototype.load = function(url) {
-    if (!this.handler) return;
-    _OneRing.SystemTrayIcon_load(this.handler, url);
+    this.q.load(_OneRing.resolve(url));
 };
 ONERING.SystemTrayIcon.prototype.bind = function(event, callback) {
-    if (!this.handler) return;
-    if (event == 'click') {
-	var callback_name = _register_function(callback);
-	_OneRing.SystemTrayIcon_bind(this.handler, event, callback_name);
-    }
+    ONERING.connect(this.q[event], callback);
 };
 ONERING.SystemTrayIcon.prototype.getGeometry = function() {
-    if (!this.handler) return;
-    return _OneRing.SystemTrayIcon_getGeometry(this.handler);
+    return this.q.getGeometry();
 };
 ONERING.SystemTrayIcon.prototype.setContextMenu = function(menu) {
-    if (!this.handler) return;
-    _OneRing.SystemTrayIcon_setContextMenu(this.handler, menu.handler);
-}
+    this.q.setContextMenu(menu.q);
+};
 
 // }}}
 
 // Menu {{{
 
 ONERING.Menu = function(items) {
-    this.handler = _OneRing.Menu_new();
-    for (var i in items) {
+    this.q = _OneRing.Menu_new();
+    for (var i=0; i<items.length; i++) {
 	var item = items[i];
 	if (item === ONERING.Menu.SEPARATOR) {
 	    this.addSeparator();
 	} else {
 	    this.addItem(item[0], item[1], item[2]);
 	}
-    }
+    };
 };
 ONERING.Menu.SEPARATOR = Object();  // a const
 ONERING.Menu.prototype.destroy = function() {
-    if (!this.handler) return;
-    _OneRing.Menu_delete(this.handler);
-    this.handler = null;
+    this.q.deleteLater();
+    this.q = null;
 }
 ONERING.Menu.prototype.addSeparator = function() {
-    if (!this.handler) return;
-    _OneRing.Menu_addSeparator(this.handler);
+    this.q.addSeparator();
 };
 ONERING.Menu.prototype.addItem = function(title, callback, props) {
-    if (!this.handler) return;
-    if (callback instanceof Function) {
-	callback = _register_function(callback);
-    } else {
-	if (callback instanceof Object) {
-	    props = callback;
-	}
-	callback = "";
+    if (!(callback instanceof Function)) {
+	props = callback;
+	callback = null;
     }
-    _OneRing.Menu_addItem(this.handler, title, callback, props);
+    var item = new ONERING.MenuItem(this.q.addAction(title));
+    if (callback) {
+	item.bind('triggered', callback);
+    }
+    if (props) {
+	item.setProperties(props);
+    }
 };
 ONERING.Menu.prototype.get = function(index) {
-    return new ONERING.MenuItem(_OneRing.Menu_get(this.handler, index));
+    return new ONERING.MenuItem(this.q.get(index));
 };
 
 ONERING.MenuItem = function(qaction) {
     this.q = qaction;
 };
-ONERING.MenuItem.prototype.setText = function(text) {
-    this.q.text = text;
-};
-ONERING.MenuItem.prototype.setEnabled = function(enabled) {
-    this.q.setEnabled(enabled);
+ONERING.MenuItem.prototype = {
+    bind: function(event, callback) {
+	ONERING.connect(this.q[event], callback);
+    },
+    setProperties: function(props) {
+	if (props.shortcut !== undefined) {
+	    this.q.shortcut = props.shortcut;
+	    this.q.shortcutContext = 2; // ApplicationShortcut
+	}
+	if (props.enabled !== undefined) {
+	    this.q.enabled = props.enabled;
+	}
+	if (props.disabled !== undefined) {
+	    this.q.enabled = !props.disabled;
+	}
+    },
+    setText: function(text) {
+	this.q.text = text;
+    },
+    setEnabled: function(enabled) {
+	this.q.setEnabled(enabled);
+    },
 };
 
 // }}}

@@ -6,7 +6,7 @@
 class HotKey : public QxtGlobalShortcut
 {
 public:
-	HotKey(const QKeySequence & shortcut, QObject *parent);
+	HotKey(const QKeySequence & shortcut, QObject *parent=0);
 };
 
 #endif

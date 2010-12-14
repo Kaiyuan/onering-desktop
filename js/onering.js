@@ -220,18 +220,23 @@ ONERING.log = function(o) {
     return _OneRing.log(o);
 };
 
-var hotkey_handlers = {};
+ONERING._hotkeys = {};
 ONERING.setHotKey = function(shortcut, func) {
-    var handler = _OneRing.HotKey_new(shortcut, _register_function(func));
-    hotkey_handlers[shortcut] = handler;
-}
-ONERING.clearHotKey = function(shortcut) {
-    var handler = hotkey_handlers[shortcut];
-    if (handler) {
-	_OneRing.HotKey_delete(handler);
-	delete hotkey_handlers[shortcut];
+    var hotkey = ONERING._hotkeys[shortcut];
+    if (hotkey === undefined) {
+	var hotkey = _OneRing.HotKey_new(shortcut);
+	ONERING._hotkeys[shortcut] = hotkey;
     }
-}
+    ONERING.connect(hotkey.activated, func);
+};
+ONERING.clearHotKey = function(shortcut) {
+    var hotkey = ONERING._hotkeys[shortcut];
+    if (hotkey !== undefined) {
+	hotkey.enabled = false;
+	hotkey.deleteLater();
+	delete ONERING._hotkeys[shortcut];
+    }
+};
 
 ONERING.callback = function(name, para) {
     var window_id = name.split('_')[1];
@@ -333,7 +338,10 @@ window.addEventListener('unload', function() {
 	ONERING._connections.forEach(function(connection){
 	    signal = connection[0];
 	    slot = connection[1];
-	    signal.disconnect(slot);
+	    try {
+		signal.disconnect(slot);
+	    } catch (e) {
+	    }
 	});
     });
 

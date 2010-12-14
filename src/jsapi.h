@@ -25,15 +25,13 @@ public:
 	void setWindow(QWidget *window);
 	void invokeCallback(const QString &funcname);
 	void invokeCallback(const QString &funcname, const QString &param);
-	QVariant call(const QString &funcname);
+
 	Q_INVOKABLE QObject* getPubSubHub(void);
 	Q_INVOKABLE QString resolve(const QString &relative);
 
 public slots:
 	QVariant test(QVariant param);
 	QObject* createWindow(const QString &url, int width, int height, const QVariantMap &props);
-	void Window_enableContextMenu();
-	void Window_disableContextMenu();
 
 	void log(const QString &s);
 	void showInspector(void);

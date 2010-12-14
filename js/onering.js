@@ -14,90 +14,92 @@ ONERING.Window = function(q) {
 	}, false);
 };
 
-ONERING.Window.prototype._eventOccurred = function(event) {
-    var callbacks = this.boundEvents[event.type()];
-    if (callbacks) {
-	callbacks.forEach(function(callback) {
-		callback(event);
-	    });
-    }
-};
-
-ONERING.Window.prototype.bind = function(event, callback) {
-    this.q.bind(event);
-    if (!this.boundEvents[event]) {
-	this.boundEvents[event] = [];
-    }
-    this.boundEvents[event].push(callback);
-};
-
-ONERING.Window.prototype.unbind = function(event, callback) {
-    if (event) {
-	var callbacks = this.boundEvents[event];
+ONERING.Window.prototype = {
+    _eventOccurred: function(event) {
+	var callbacks = this.boundEvents[event.type()];
 	if (callbacks) {
-	    var new_callbacks;
-	    if (callback) {
-		new_callbacks = callbacks.filter(function(c) {
-			return c !== callback;
-		    });
-	    } else {
-		new_callbacks = [];
-	    }
-	    var unbind_count = callbacks.length - new_callbacks.length;
-	    if (unbind_count) {
-		this.q.unbind(event, unbind_count);
-		if (new_callbacks.length) {
-		    this.boundEvents[event] = new_callbacks;
+	    callbacks.forEach(function(callback) {
+		    callback(event);
+		});
+	}
+    },
+
+    bind: function(event, callback) {
+	this.q.bind(event);
+	if (!this.boundEvents[event]) {
+	    this.boundEvents[event] = [];
+	}
+	this.boundEvents[event].push(callback);
+    },
+
+    unbind: function(event, callback) {
+	if (event) {
+	    var callbacks = this.boundEvents[event];
+	    if (callbacks) {
+		var new_callbacks;
+		if (callback) {
+		    new_callbacks = callbacks.filter(function(c) {
+			    return c !== callback;
+			});
 		} else {
-		    delete this.boundEvents[event];
+		    new_callbacks = [];
+		}
+		var unbind_count = callbacks.length - new_callbacks.length;
+		if (unbind_count) {
+		    this.q.unbind(event, unbind_count);
+		    if (new_callbacks.length) {
+			this.boundEvents[event] = new_callbacks;
+		    } else {
+			delete this.boundEvents[event];
+		    }
 		}
 	    }
+	} else {
+	    for (var e in this.boundEvents) {
+		this.q.unbind(e, this.boundEvents[e].length);
+	    }
+	    this.boundEvents = {};
 	}
-    } else {
-	for (var e in this.boundEvents) {
-	    this.q.unbind(e, this.boundEvents[e].length);
-	}
-	this.boundEvents = {};
+    },
+
+    createWindow: function(url, width, height, props) {
+	return new ONERING.Window(_OneRing.createWindow(url, width, height, props));
+    },
+
+    isAlive: function() {
+	return _OneRing.checkAlive(this.q);
+    },
+
+    showInspector: function() {
+	return _OneRing.showInspector();
+    },
+
+    enableContextMenu: function() {
+	_OneRing.Window_enableContextMenu();
+    },
+
+    disableContextMenu: function() {
+	_OneRing.Window_disableContextMenu();
+    },
+
+    hide: function() {
+	this.q.hide();
+    },
+    show: function() {
+	this.q.show();
+    },
+    maximize: function() {
+	this.q.showMaximized();
+    },
+    showNormal: function() {
+	this.q.showNormal();
+    },
+    isMinimized: function() {
+	return this.q.minimized;
+    },
+    activateWindow: function() {
+	return this.q.activateWindow();
     }
-};
-
-ONERING.Window.prototype.createWindow = function(url, width, height, props) {
-    return new ONERING.Window(_OneRing.createWindow(url, width, height, props));
-};
-
-ONERING.Window.prototype.isAlive = function() {
-    return _OneRing.checkAlive(this.q);
-};
-
-ONERING.Window.prototype.showInspector = function() {
-    return _OneRing.showInspector();
-};
-
-ONERING.Window.prototype.enableContextMenu = function() {
-    _OneRing.Window_enableContextMenu();
-};
-
-ONERING.Window.prototype.disableContextMenu = function() {
-    _OneRing.Window_disableContextMenu();
-};
-
-ONERING.Window.prototype.hide = function() {
-    this.q.hide();
-};
-ONERING.Window.prototype.show = function() {
-    this.q.show();
-};
-ONERING.Window.prototype.maximize = function() {
-    this.q.showMaximized();
-};
-ONERING.Window.prototype.showNormal = function() {
-    this.q.showNormal();
-};
-ONERING.Window.prototype.isMinimized = function() {
-    return this.q.minimized;
-};
-ONERING.Window.prototype.activateWindow = function() {
-    return this.q.activateWindow();
 };
 
 // }}}
@@ -119,21 +121,23 @@ ONERING.SystemTrayIcon = function(url) {
 	this.load(url);
     }
 };
-ONERING.SystemTrayIcon.prototype.destroy = function() {
-    this.q.deleteLater();
-    this.q = null;
-};
-ONERING.SystemTrayIcon.prototype.load = function(url) {
-    this.q.load(_OneRing.resolve(url));
-};
-ONERING.SystemTrayIcon.prototype.bind = function(event, callback) {
-    ONERING.connect(this.q[event], callback);
-};
-ONERING.SystemTrayIcon.prototype.getGeometry = function() {
-    return this.q.getGeometry();
-};
-ONERING.SystemTrayIcon.prototype.setContextMenu = function(menu) {
-    this.q.setContextMenu(menu.q);
+ONERING.SystemTrayIcon.prototype = {
+    destroy: function() {
+	this.q.deleteLater();
+	this.q = null;
+    },
+    load: function(url) {
+	this.q.load(_OneRing.resolve(url));
+    },
+    bind: function(event, callback) {
+	ONERING.connect(this.q[event], callback);
+    },
+    getGeometry: function() {
+	return this.q.getGeometry();
+    },
+    setContextMenu: function(menu) {
+	this.q.setContextMenu(menu.q);
+    }
 };
 
 // }}}
@@ -152,28 +156,30 @@ ONERING.Menu = function(items) {
     };
 };
 ONERING.Menu.SEPARATOR = Object();  // a const
-ONERING.Menu.prototype.destroy = function() {
-    this.q.deleteLater();
-    this.q = null;
-}
-ONERING.Menu.prototype.addSeparator = function() {
-    this.q.addSeparator();
-};
-ONERING.Menu.prototype.addItem = function(title, callback, props) {
-    if (!(callback instanceof Function)) {
-	props = callback;
-	callback = null;
+ONERING.Menu.prototype = {
+    destroy: function() {
+	this.q.deleteLater();
+	this.q = null;
+    },
+    addSeparator: function() {
+	this.q.addSeparator();
+    },
+    addItem: function(title, callback, props) {
+	if (!(callback instanceof Function)) {
+	    props = callback;
+	    callback = null;
+	}
+	var item = new ONERING.MenuItem(this.q.addAction(title));
+	if (callback) {
+	    item.bind('triggered', callback);
+	}
+	if (props) {
+	    item.setProperties(props);
+	}
+    },
+    get: function(index) {
+	return new ONERING.MenuItem(this.q.get(index));
     }
-    var item = new ONERING.MenuItem(this.q.addAction(title));
-    if (callback) {
-	item.bind('triggered', callback);
-    }
-    if (props) {
-	item.setProperties(props);
-    }
-};
-ONERING.Menu.prototype.get = function(index) {
-    return new ONERING.MenuItem(this.q.get(index));
 };
 
 ONERING.MenuItem = function(qaction) {
@@ -387,15 +393,6 @@ ONERING.param = function(a) {
 	s.push( encodeURIComponent(key) + "=" + encodeURIComponent(value) );
     }
     return s.join("&").replace(/%20/g, "+");
-};
-
-ONERING.Dict = function() {
-};
-ONERING.Dict.prototype.setDefault = function(key, defaultValue) {
-    if (this[key] === undefined) {
-	this[key] = defaultValue;
-    }
-    return this[key];
 };
 
 // }}}

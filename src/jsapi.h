@@ -43,14 +43,9 @@ public slots:
 	QObject* getCurrentWindow();
 	QObject* getApplication();
 
-	// SystemTrayIcon
 	QObject* SystemTrayIcon_new(void);
-
-	// Menu
 	QObject* Menu_new(void);
-
-	long HotKey_new(const QString &keyseq, const QString &callback);
-	void HotKey_delete(long handler);
+	QObject* HotKey_new(const QString &keyseq);
 
 private slots:
 	void attachObject();

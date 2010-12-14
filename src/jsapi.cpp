@@ -203,22 +203,12 @@ QObject* JsApi::Menu_new()
 // }}}
 
 // HotKey {{{
-long JsApi::HotKey_new(const QString &keyseq, const QString &callback)
+QObject* JsApi::HotKey_new(const QString &keyseq)
 {
-	qDebug() << "JsApi::HotKey_new" << keyseq << callback;
-	HotKey *hotkey = new HotKey(QKeySequence(keyseq), this);
+	qDebug() << "JsApi::HotKey_new" << keyseq;
+	HotKey *hotkey = new HotKey(QKeySequence(keyseq));
 	Debugger::traceObj(hotkey);
-	registerCallback(hotkey, "", callback);
-	connect(hotkey, SIGNAL(activated()), this, SLOT(callback()));
-	return (long)hotkey;
-}
-
-void JsApi::HotKey_delete(long handler)
-{
-	qDebug() << "JsApi::HotKey_delete" << handler;
-	HotKey *hotkey = (HotKey *)handler;
-	hotkey->setDisabled();
-	delete hotkey;
+	return hotkey;
 }
 
 //}}}

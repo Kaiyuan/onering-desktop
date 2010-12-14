@@ -82,10 +82,9 @@ QVariant JsApi::call(const QString &funcname)
 	return frame->evaluateJavaScript(QString("ONERING.%1()").arg(funcname));
 }
 
-QObject* JsApi::createWindow(const QString &url, int width, int height, const QString &props_json)
+QObject* JsApi::createWindow(const QString &url, int width, int height, const QVariantMap &props)
 {
-	qDebug() << "JsApi::createWindow" << url << width << height << props_json;
-	QVariantMap props = parseJSON(props_json).toVariant().toMap();
+	qDebug() << "JsApi::createWindow" << url << width << height << props;
 	OneRingView *window = new OneRingView(frame->baseUrl().resolved(url),
 			width, height, props);
 	Debugger::traceObj(window);
@@ -212,15 +211,6 @@ QObject* JsApi::HotKey_new(const QString &keyseq)
 }
 
 //}}}
-
-// }}}
-
-// private methods {{{
-
-QScriptValue JsApi::parseJSON(const QString &json)
-{
-	return engine.evaluate("("+json+")");
-}
 
 // }}}
 

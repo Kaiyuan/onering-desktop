@@ -13,7 +13,7 @@ class OneRingView : public QWebView
 	Q_OBJECT
 
 public:
-	OneRingView(const QUrl &url, int width, int height, QVariantMap &props);
+	OneRingView(const QUrl &url, int width, int height, const QVariantMap &props);
 	void enableContextMenu();
 	void disableContextMenu();
 

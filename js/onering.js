@@ -62,7 +62,7 @@ ONERING.Window.prototype.unbind = function(event, callback) {
 };
 
 ONERING.Window.prototype.createWindow = function(url, width, height, props) {
-    return new ONERING.Window(_OneRing.createWindow(url, width, height, JSON.stringify(props)));
+    return new ONERING.Window(_OneRing.createWindow(url, width, height, props));
 };
 
 ONERING.Window.prototype.isAlive = function() {

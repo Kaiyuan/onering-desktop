@@ -31,7 +31,7 @@ public:
 
 public slots:
 	QVariant test(QVariant param);
-	QObject* createWindow(const QString &url, int width, int height, const QString &props);
+	QObject* createWindow(const QString &url, int width, int height, const QVariantMap &props);
 	void Window_enableContextMenu();
 	void Window_disableContextMenu();
 

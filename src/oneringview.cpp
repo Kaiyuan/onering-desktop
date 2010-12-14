@@ -8,7 +8,7 @@
 #include "debugger.h"
 #include "event.h"
 
-OneRingView::OneRingView(const QUrl &url, int width, int height, QVariantMap &props)
+OneRingView::OneRingView(const QUrl &url, int width, int height, const QVariantMap &props)
 	: QWebView(), contextMenuEnabled(false)
 {
 	QNetworkAccessManager *oldManager = page()->networkAccessManager();

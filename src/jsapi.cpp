@@ -75,13 +75,6 @@ void JsApi::invokeCallback(const QString &funcname, const QString &param)
 }
 
 
-QVariant JsApi::call(const QString &funcname)
-{
-	qDebug() << "call" << funcname;
-
-	return frame->evaluateJavaScript(QString("ONERING.%1()").arg(funcname));
-}
-
 QObject* JsApi::createWindow(const QString &url, int width, int height, const QVariantMap &props)
 {
 	qDebug() << "JsApi::createWindow" << url << width << height << props;
@@ -162,19 +155,6 @@ QObject* JsApi::getPubSubHub()
 QString JsApi::resolve(const QString &relative)
 {
 	return frame->baseUrl().resolved(relative).toString();
-}
-
-// }}}
-
-// Window {{{
-void JsApi::Window_enableContextMenu()
-{
-	static_cast<OneRingView*>(window)->enableContextMenu();
-}
-
-void JsApi::Window_disableContextMenu()
-{
-	static_cast<OneRingView*>(window)->disableContextMenu();
 }
 
 // }}}

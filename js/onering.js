@@ -75,11 +75,11 @@ ONERING.Window.prototype = {
     },
 
     enableContextMenu: function() {
-	_OneRing.Window_enableContextMenu();
+	this.q.enableContextMenu();
     },
 
     disableContextMenu: function() {
-	_OneRing.Window_disableContextMenu();
+	this.q.disableContextMenu();
     },
 
     hide: function() {

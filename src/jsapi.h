@@ -27,6 +27,7 @@ public:
 	void invokeCallback(const QString &funcname, const QString &param);
 	QVariant call(const QString &funcname);
 	Q_INVOKABLE QObject* getPubSubHub(void);
+	Q_INVOKABLE QString resolve(const QString &relative);
 
 public slots:
 	QVariant test(QVariant param);
@@ -43,19 +44,10 @@ public slots:
 	QObject* getApplication();
 
 	// SystemTrayIcon
-	long SystemTrayIcon_new(void);
-	void SystemTrayIcon_delete(long handler);
-	void SystemTrayIcon_load(long handler, const QString &url);
-	void SystemTrayIcon_bind(long handler, const QString &event, const QString &callback);
-	QString SystemTrayIcon_getGeometry(long handler);
-	void SystemTrayIcon_setContextMenu(long handler, long menu_handler);
+	QObject* SystemTrayIcon_new(void);
 
 	// Menu
-	long Menu_new(void);
-	void Menu_delete(long handler);
-	void Menu_addSeparator(long handler);
-	void Menu_addItem(long handler, const QString &title, const QString &callback, const QVariant &props);
-	QObject* Menu_get(long handler, QVariant index);
+	QObject* Menu_new(void);
 
 	long HotKey_new(const QString &keyseq, const QString &callback);
 	void HotKey_delete(long handler);

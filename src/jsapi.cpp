@@ -160,6 +160,11 @@ QObject* JsApi::getPubSubHub()
 	return &(static_cast<Application *>(qApp)->pubsubhub);
 }
 
+QString JsApi::resolve(const QString &relative)
+{
+	return frame->baseUrl().resolved(relative).toString();
+}
+
 // }}}
 
 // Window {{{
@@ -176,109 +181,23 @@ void JsApi::Window_disableContextMenu()
 // }}}
 
 // SystemTrayIcon {{{
-long JsApi::SystemTrayIcon_new()
+QObject* JsApi::SystemTrayIcon_new()
 {
 	qDebug() << "JsApi::systemTrayIcon_new";
 
 	SystemTrayIcon *icon = new SystemTrayIcon(qApp);
 	Debugger::traceObj(icon);
-	return (long)icon;
+	return icon;
 }
 
-void JsApi::SystemTrayIcon_delete(long handler)
-{
-	qDebug() << "JsApi::SystemTrayIcon_delete";
-	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
-	delete icon;
-}
-
-void JsApi::SystemTrayIcon_load(long handler, const QString &url)
-{
-	qDebug() << "JsApi::systemTrayIcon_load" << handler << url;
-
-	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
-	icon->load(frame->baseUrl().resolved(url));
-}
-
-void JsApi::SystemTrayIcon_bind(long handler, const QString &event, const QString &callback_funcname)
-{
-	qDebug() << "JsApi::systemTrayIcon_bind" << handler << event << callback_funcname;
-
-	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
-
-	if (event == "click") {
-		registerCallback(icon, event, callback_funcname);
-		connect(icon, SIGNAL(activated(const QString&)),
-			this, SLOT(callback(const QString&)));
-	}
-}
-
-void JsApi::SystemTrayIcon_setContextMenu(long handler, long menu_handler)
-{
-	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
-	Menu *menu = (Menu *)menu_handler;
-	icon->setContextMenu(menu);
-}
-
-QString JsApi::SystemTrayIcon_getGeometry(long handler)
-{
-	SystemTrayIcon *icon = (SystemTrayIcon *)handler;
-
-	QRect rect = icon->geometry();
-	return QString("{top:%1, left:%2, width:%3, height:%4}")
-		.arg(rect.top()).arg(rect.left())
-		.arg(rect.width()).arg(rect.height());
-}
 //}}}
 
 // Menu {{{
-long JsApi::Menu_new()
+QObject* JsApi::Menu_new()
 {
 	Menu *menu = new Menu();
 	Debugger::traceObj(menu);
-	return (long)menu;
-}
-
-void JsApi::Menu_delete(long handler)
-{
-	qDebug() << "JsApi::Menu_delete";
-	Menu *menu = (Menu *)handler;
-	delete menu;
-}
-
-void JsApi::Menu_addSeparator(long handler)
-{
-	Menu *menu = (Menu *)handler;
-	menu->addSeparator();
-}
-
-void JsApi::Menu_addItem(long handler, const QString &title, const QString &callback, const QVariant &props)
-{
-	Menu *menu = (Menu *)handler;
-	MenuItem *item = menu->addItem(title);
-	QVariantMap vpm = props.toMap();
-	QVariant v;
-	if ((v = vpm["shortcut"]).isValid()) {
-		item->setShortcut(v.toString());
-		item->setShortcutContext(Qt::ApplicationShortcut);
-	}
-	if ((v = vpm["enabled"]).isValid()) {
-		item->setEnabled(v.toBool());
-	}
-	if ((v = vpm["disabled"]).isValid()) {
-		item->setDisabled(v.toBool());
-	}
-	if (!callback.isEmpty()) {
-		registerCallback(item, "", callback);
-		connect(item, SIGNAL(triggered()), this, SLOT(callback()));
-	}
-}
-
-QObject* JsApi::Menu_get(long handler, QVariant index)
-{
-	qDebug() << "JsApi::Menu_get" << handler << index;
-	Menu *menu = (Menu *)handler;
-	return menu->actions()[index.toInt()];
+	return menu;
 }
 
 // }}}

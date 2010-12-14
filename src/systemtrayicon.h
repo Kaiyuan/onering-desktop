@@ -4,6 +4,7 @@
 #include <QSystemTrayIcon>
 #include <QByteArray>
 #include "jsapi.h"
+#include "menu.h"
 
 class SystemTrayIcon : public QSystemTrayIcon
 {
@@ -12,10 +13,14 @@ class SystemTrayIcon : public QSystemTrayIcon
 public:
 	SystemTrayIcon(QObject *parent=0);
 
-	void load(const QUrl &url);
+	Q_INVOKABLE void load(const QString &url);
+	Q_INVOKABLE QVariantMap getGeometry(void);
+	Q_INVOKABLE void setContextMenu(QObject* menu);
 
 signals:
-	void activated(const QString &event);
+	void click();
+	void doubleclick();
+	void rightclick();
 
 private slots:
 	void iconFetched(QByteArray &data);

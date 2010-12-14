@@ -1,21 +1,29 @@
+#include <QList>
 #include <QAction>
 #include "menu.h"
 #include "debugger.h"
-
-MenuItem::MenuItem(const QString &title, QObject *parent)
-	: QAction(title, parent)
-{
-}
 
 Menu::Menu(QWidget *parent)
 	: QMenu(parent)
 {
 }
 
-MenuItem * Menu::addItem(const QString &title)
+QObject* Menu::addSeparator()
 {
-	MenuItem *item = new MenuItem(title, this);
-	Debugger::traceObj(item);
-	this->addAction(item);
-	return item;
+	return QMenu::addSeparator();
+}
+
+QObject* Menu::addAction(const QString &text)
+{
+	return QMenu::addAction(text);
+}
+
+QObject* Menu::get(int index)
+{
+	QList<QAction *> actions = this->actions();
+	if (index < 0 || index >= actions.size()) {
+		return 0;
+	} else {
+		return actions[index];
+	}
 }

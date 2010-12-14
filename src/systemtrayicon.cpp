@@ -15,8 +15,9 @@ SystemTrayIcon::SystemTrayIcon(QObject *parent)
 		this, SLOT(deleteLater()));
 }
 
-void SystemTrayIcon::load(const QUrl &url)
+void SystemTrayIcon::load(const QString &url)
 {
+	qDebug() << "SystemTrayIcon::load" << url;
 	DataLoader *loader = new DataLoader(this);
 	Debugger::traceObj(loader);
 	connect(loader, SIGNAL(got(QByteArray&)),
@@ -37,21 +38,34 @@ void SystemTrayIcon::iconFetched(QByteArray &data)
 
 void SystemTrayIcon::emitActivatedEvent(QSystemTrayIcon::ActivationReason reason)
 {
-	static const QString click("click");
-	static const QString doubleclick("doubleclick");
-	static const QString rightclick("rightclick");
-
 	switch (reason) {
 		case QSystemTrayIcon::Trigger:
-			emit activated(click);
+			emit click();
 			break;
 		case QSystemTrayIcon::Context:
-			emit activated(rightclick);
+			emit rightclick();
 			break;
 		case QSystemTrayIcon::DoubleClick:
-			emit activated(doubleclick);
+			emit doubleclick();
 			break;
 		default:
 			;
 	}
+}
+
+QVariantMap SystemTrayIcon::getGeometry()
+{
+	QVariantMap geo;
+	QRect rect = geometry();
+
+	geo["top"] = rect.top();
+	geo["left"] = rect.left();
+	geo["width"] = rect.width();
+	geo["height"] = rect.height();
+	return geo;
+}
+
+void SystemTrayIcon::setContextMenu(QObject* menu)
+{
+	QSystemTrayIcon::setContextMenu(static_cast<QMenu *>(menu));
 }

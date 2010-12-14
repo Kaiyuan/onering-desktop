@@ -3,6 +3,11 @@
 
 #include <QApplication>
 #include <QObject>
+
+#ifdef Q_WS_MAC
+#include <Carbon/Carbon.h>
+#endif
+
 #include "pubsubhub.h"
 
 class Application : public QApplication
@@ -16,6 +21,16 @@ public:
 
 public slots:
 	void setWindowIconByData(QByteArray &data);
+
+#ifdef Q_WS_MAC
+public:
+	void emitReopen(void);
+	bool macEventFilter(EventHandlerCallRef caller, EventRef event);
+signals:
+	void dockClicked(void);
+private:
+	AEEventHandlerUPP m_appleEventProcessorUPP;
+#endif
 };
 
 #endif

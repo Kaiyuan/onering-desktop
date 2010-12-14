@@ -217,30 +217,6 @@ QObject* JsApi::HotKey_new(const QString &keyseq)
 
 // private methods {{{
 
-void JsApi::callback(const QString &event)
-{
-	qDebug() << "callback" << event;
-
-	QObject *sender = QObject::sender();
-	const QList<QString>& funcnames = callbacks[EventSource(sender, event)];
-	for (int i = 0; i < funcnames.size(); ++i) {
-		invokeCallback(funcnames.at(i));
-	}
-}
-
-void JsApi::callback()
-{
-	callback("");
-}
-
-void JsApi::registerCallback(QObject *sender, const QString &event, const QString &callback_funcname)
-{
-	if (!callback_funcname.isEmpty()) {
-		qDebug() << "registerCallback" << sender << event << callback_funcname;
-		callbacks[EventSource(sender, event)] << callback_funcname;
-	}
-}
-
 QScriptValue JsApi::parseJSON(const QString &json)
 {
 	return engine.evaluate("("+json+")");

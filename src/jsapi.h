@@ -49,8 +49,6 @@ public slots:
 
 private slots:
 	void attachObject();
-	void callback(const QString &event);
-	void callback();
 
 private:
 	QWidget *window;

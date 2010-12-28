@@ -159,7 +159,6 @@ QString JsApi::resolve(const QString &relative)
 
 // }}}
 
-// SystemTrayIcon {{{
 QObject* JsApi::SystemTrayIcon_new()
 {
 	qDebug() << "JsApi::systemTrayIcon_new";
@@ -169,9 +168,6 @@ QObject* JsApi::SystemTrayIcon_new()
 	return icon;
 }
 
-//}}}
-
-// Menu {{{
 QObject* JsApi::Menu_new()
 {
 	Menu *menu = new Menu();
@@ -179,9 +175,6 @@ QObject* JsApi::Menu_new()
 	return menu;
 }
 
-// }}}
-
-// HotKey {{{
 QObject* JsApi::HotKey_new(const QString &keyseq)
 {
 	qDebug() << "JsApi::HotKey_new" << keyseq;
@@ -189,8 +182,6 @@ QObject* JsApi::HotKey_new(const QString &keyseq)
 	Debugger::traceObj(hotkey);
 	return hotkey;
 }
-
-//}}}
 
 // }}}
 

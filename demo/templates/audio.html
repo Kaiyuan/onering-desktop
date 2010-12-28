@@ -3,11 +3,18 @@
 <%def name="demo_name()">Audio</%def>
 
 <button id="start">Start play online audio</button>
+<div id="info"></div>
 
 <script>
     $('#start').click(function() {
-        var player = new ONERING.Audio();
-        player.src = "http://www.douban.com/static/test.mp3";
+        var player = new Audio();
+        player.src = "http://onering-desktop.googlecode.com/hg/media/test.mp3";
+        player.bind('ended', function() {
+            $('#info').text("ended");
+        });
+        player.bind('timeupdate', function() {
+            $('#info').text(player.currentTime + "/" + player.duration);
+        });
         player.play();
     });
 </script>

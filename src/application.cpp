@@ -6,6 +6,7 @@
 #include <QVariantMap>
 #include <QDesktopServices>
 #include <QApplication>
+#include <QUrl>
 #include <onering.h>
 #include "application.h"
 #include "oneringapp.h"
@@ -81,7 +82,11 @@ int Application::load(const char* appname)
 		return -1;
 	onering_register_app("onering", &onering_app, &onering_app_free_response);
 
-	QByteArray response = call_app_body(appname, "GET", "/init");
+	QUrl initurl;
+	initurl.setScheme("onering");
+	initurl.setHost(appname);
+	initurl.setPath("/init");
+	QByteArray response = call_app_body("GET", initurl);
 
 	QScriptEngine engine;
 	QVariantMap props = engine.evaluate("("+response+")").toVariant().toMap();

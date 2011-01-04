@@ -126,7 +126,7 @@ int Application::load(const char* appname)
 	qDebug() << "install";
 	m_appleEventProcessorUPP = AEEventHandlerUPP(appleEventProcessor);
 	AEInstallEventHandler(kCoreEventClass, kAEReopenApplication,
-			m_appleEventProcessorUPP, (long) this, true);
+			m_appleEventProcessorUPP, (SRefCon)this, true);
 #endif
 	Debugger::traceObj(window);
 	window->show();

@@ -41,10 +41,7 @@ void AppReply::readBody()
 
 void AppReply::parseResponse()
 {
-	QByteArray appname = url.host().toUtf8();
-	QByteArray path = url.path().toUtf8();
-	content = call_app(appname.constData(), method.toUtf8().constData(),
-			path.constData(), body);
+	content = call_app(method.toUtf8().constData(), url, body);
 	offset = 0;
 
 	open(ReadOnly | Unbuffered);

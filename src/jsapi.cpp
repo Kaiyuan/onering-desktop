@@ -125,9 +125,7 @@ void JsApi::ajax(const QString &type, const QString &url, const QString &body, c
 {
 	qDebug() << "JsApi::ajax" << type << url << body << callback;
 	QUrl absurl = frame->baseUrl().resolved(url);
-	QByteArray response = call_app_body(qPrintable(absurl.host()),
-			qPrintable(type), qPrintable(absurl.path()),
-			qPrintable(body));
+	QByteArray response = call_app_body(qPrintable(type), absurl, qPrintable(body));
 	invokeCallback(callback, response);
 }
 

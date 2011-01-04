@@ -2,6 +2,7 @@
 #include <QString>
 #include <QHash>
 #include <QPair>
+#include <QUrl>
 #include <string.h>
 #include <onering.h>
 
@@ -24,15 +25,22 @@ int is_appname_registered(const QString &appname)
 	return g_apps.contains(appname);
 }
 
-QByteArray call_app(const char* appname, const char* method, const char* path, const char* body=NULL)
+QByteArray call_app(const char* method, const QUrl &url, const char* body=NULL)
 {
+	QString appname = url.host();
 	const char * response;
 	int response_len;
 	onering_response_handle_t response_handle;
 	QByteArray retval;
 
 	if (is_appname_registered(appname)) {
-		response_handle = g_apps[appname].first(method, path, body, &response, &response_len);
+		QByteArray surl = url.toString().toUtf8();
+		QByteArray path_query = url.path().toUtf8();
+		if (url.hasQuery()) {
+			path_query += surl.mid(surl.indexOf('?'));
+		}
+
+		response_handle = g_apps[appname].first(method, path_query, body, &response, &response_len);
 		retval.append(response, response_len);
 		// free response
 		g_apps[appname].second(response_handle);
@@ -41,9 +49,9 @@ QByteArray call_app(const char* appname, const char* method, const char* path, c
 	return retval;
 }
 
-QByteArray call_app_body(const char* appname, const char* method, const char* path, const char* body=NULL)
+QByteArray call_app_body(const char* method, const QUrl &url, const char* body=NULL)
 {
-	QByteArray response = call_app(appname, method, path, body);
+	QByteArray response = call_app(method, url, body);
 	
 	int index;
 	if ((index = response.indexOf("\r\n\r\n")) < 0) {

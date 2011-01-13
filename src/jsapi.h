@@ -36,7 +36,7 @@ public slots:
 	void log(const QString &s);
 	void showInspector(void);
 	void exit(void);
-	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback);
+	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
 	bool checkAlive(QObject* o=0);
 	QObject* getCurrentWindow();
 	QObject* getApplication();

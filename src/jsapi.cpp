@@ -121,7 +121,7 @@ void JsApi::exit()
 	qApp->quit();
 }
 
-void JsApi::ajax(const QString &type, const QString &url, const QString &body, const QString &callback)
+void JsApi::ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async)
 {
 	qDebug() << "JsApi::ajax" << type << url << body << callback;
 	QUrl absurl = frame->baseUrl().resolved(url);

@@ -265,6 +265,7 @@ ONERING.ajax = function(settings) {
     var type = settings.type || "GET";
     var dataType = settings.dataType;
     var success = settings.success;
+    var async = settings.async || true;
 
     if (data && type == "GET") {
 	url += ((url.indexOf('?') < 0) ? '?' : '&') + data;
@@ -276,7 +277,7 @@ ONERING.ajax = function(settings) {
 		s = eval('('+s+')');
 	    }
 	    success && success(s);
-	}));
+	}), async);
 };
 
 ONERING.get = function(url, data, callback, dataType) {
@@ -312,6 +313,22 @@ ONERING.post = function(url, data, callback, dataType) {
 	    data: data,
 	    success: callback,
 	    dataType: dataType
+	});
+};
+
+ONERING.call = function(type, url, data, callback) {
+    if (data instanceof Function) {
+	callback = data;
+	data = null;
+    }
+
+    return ONERING.ajax({
+	    type: type,
+	    url: url,
+	    data: data,
+	    success: callback,
+	    dataType: 'json',
+	    async: false
 	});
 };
 

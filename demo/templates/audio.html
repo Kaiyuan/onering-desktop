@@ -8,7 +8,7 @@
 <script>
     $('#start').click(function() {
         var player = new Audio();
-        player.src = "http://onering-desktop.googlecode.com/hg/media/test.mp3";
+        player.src = "http://onering-desktop.googlecode.com/hg/media/test.mp3?"+Math.random();
         player.bind('ended', function() {
             $('#info').text("ended");
         });

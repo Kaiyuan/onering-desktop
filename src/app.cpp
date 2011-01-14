@@ -40,10 +40,10 @@ QByteArray call_app(const char* method, const QUrl &url, const char* body=NULL)
 			path_query += surl.mid(surl.indexOf('?'));
 		}
 
-		response_handle = g_apps[appname].first(method, path_query, body, &response, &response_len);
+		response_handle = g_apps[appname].first(qPrintable(appname), method, path_query, body, &response, &response_len);
 		retval.append(response, response_len);
 		// free response
-		g_apps[appname].second(response_handle);
+		g_apps[appname].second(qPrintable(appname), response_handle);
 	}
 
 	return retval;
@@ -54,6 +54,16 @@ QByteArray call_app_body(const char* method, const QUrl &url, const char* body=N
 	QByteArray response = call_app(method, url, body);
 	
 	int index;
+	if ((index = response.indexOf("\r\n")) < 0) {
+		qDebug() << "Body not found:" << response;
+		return "";
+	}
+	QByteArray line = response.left(index);
+	if (line.indexOf("200") < 0) {
+		qDebug() << "error status line:" << line;
+		return "";
+	}
+
 	if ((index = response.indexOf("\r\n\r\n")) < 0) {
 		qDebug() << "Body not found:" << response;
 		return "";

@@ -261,7 +261,10 @@ ONERING.exit = function() {
 
 ONERING.ajax = function(settings) {
     var url = settings.url;
-    var data = ONERING.param(settings.data || {});
+    var data = settings.data || "";
+    if ( data instanceof Object ) {
+	data = ONERING.param(data);
+    }
     var type = settings.type || "GET";
     var dataType = settings.dataType;
     var success = settings.success;
@@ -274,7 +277,7 @@ ONERING.ajax = function(settings) {
 
     _OneRing.ajax(type, url, data, _register_function(function(s) {
 	    if (dataType == "json") {
-		s = eval('('+s+')');
+		s = window.JSON.parse(s);
 	    }
 	    success && success(s);
 	}), async);

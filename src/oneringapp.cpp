@@ -17,7 +17,7 @@ int onering_app_init()
 	return 0;
 }
 
-onering_response_handle_t onering_app(const char* method, const char* path, const char* body, const char **response, int *response_len)
+onering_response_handle_t onering_app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)
 {
 	if (strcmp(method, "GET") == 0 && strcmp(path, "/onering.js") == 0 && onering_js) {
 		*response = onering_js->constData();
@@ -31,6 +31,6 @@ onering_response_handle_t onering_app(const char* method, const char* path, cons
 	return 0;
 }
 
-void onering_app_free_response(onering_response_handle_t response_handle)
+void onering_app_free_response(const char *appname, onering_response_handle_t response_handle)
 {
 }

@@ -15,9 +15,9 @@ extern "C" {
 
 typedef long onering_response_handle_t;
 
-typedef onering_response_handle_t (*onering_app_func_t) (const char* method, const char* path, const char* body,
+typedef onering_response_handle_t (*onering_app_func_t) (const char* appname, const char* method, const char* path, const char* body,
 		/*OUT*/ const char** response, int* response_len);
-typedef void (*onering_free_response_func_t) (onering_response_handle_t response_handle);
+typedef void (*onering_free_response_func_t) (const char* appname, onering_response_handle_t response_handle);
 
 /* Return -1 means strlen(appname) > MAX_APPNAME_LEN */
 ONERING_EXPORT int onering_register_app(const char* appname, onering_app_func_t app_func, onering_free_response_func_t free_response_func);

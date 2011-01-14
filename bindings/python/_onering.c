@@ -2,14 +2,14 @@
 #include <Python.h>
 
 static PyObject *OneRingError;
-static PyObject *g_appfunc = NULL;
+static PyObject *g_appfuncs = NULL;  /* a dict */
 
 static onering_response_handle_t
-c_appfunc(const char* method, const char* path, const char* body,
-		const char **response, int *response_len)
+c_appfunc(const char* appname, const char* method, const char* path, const
+		char* body, const char **response, int *response_len)
 {
 	int code = 0;
-	PyObject *args, *py_response=NULL;
+	PyObject *args, *py_response=NULL, *appfunc;
 	PyGILState_STATE gstate;
 
 	gstate = PyGILState_Ensure();
@@ -17,7 +17,13 @@ c_appfunc(const char* method, const char* path, const char* body,
 	*response = "";
 	*response_len = 0;
 
-	if (!g_appfunc) {
+	if (!g_appfuncs) {
+		code = 404;
+		goto exit;
+	}
+
+	appfunc = PyDict_GetItemString(g_appfuncs, appname);
+	if (!appfunc) {
 		code = 404;
 		goto exit;
 	}
@@ -28,7 +34,7 @@ c_appfunc(const char* method, const char* path, const char* body,
 		goto exit;
 	}
 
-	py_response = PyObject_CallObject(g_appfunc, args);
+	py_response = PyObject_CallObject(appfunc, args);
 	if (!py_response) {
 		code = 500;
 		goto exit_args;
@@ -46,7 +52,7 @@ exit:
 }
 
 static void
-free_response(onering_response_handle_t response_handle)
+free_response(const char *appname, onering_response_handle_t response_handle)
 {
 	PyObject *py_response = (PyObject*)response_handle;
 	PyGILState_STATE gstate;
@@ -64,7 +70,7 @@ static PyObject *
 register_app(PyObject *self, PyObject *args)
 {
 	const char *appname;
-	PyObject *appfunc;
+	PyObject *appfunc, *oldappfunc;
 	int err;
 
 	if (!PyArg_ParseTuple(args, "sO:register_app", &appname, &appfunc))
@@ -75,17 +81,29 @@ register_app(PyObject *self, PyObject *args)
 		return NULL;
 	}
 
-	Py_XDECREF(g_appfunc);
-	g_appfunc = appfunc;
-	Py_INCREF(g_appfunc);
+	if (!g_appfuncs) {
+		g_appfuncs = PyDict_New();
+	}
+
+	oldappfunc = PyDict_GetItemString(g_appfuncs, appname);
+
+	if (PyDict_SetItemString(g_appfuncs, appname, appfunc) == -1) {
+		return NULL;
+	}
 
 	err = onering_register_app(appname, &c_appfunc, &free_response);
 	if (err) {
-		Py_DECREF(g_appfunc);
-		g_appfunc = NULL;
+		if (oldappfunc) {
+			PyDict_SetItemString(g_appfuncs, appname, oldappfunc);
+		} else {
+			PyDict_DelItemString(g_appfuncs, appname);
+		}
 		return PyErr_Format(OneRingError,
 				"onering_register_app() returns %d", err);
 	}
+
+	Py_XDECREF(oldappfunc);
+	Py_INCREF(appfunc);
 
 	Py_RETURN_NONE;
 }

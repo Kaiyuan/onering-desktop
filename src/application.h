@@ -16,8 +16,11 @@ class Application : public QApplication
 
 public:
 	Application(int &argc, char **argv);
+	~Application();
+
 	int load(const char* appname);
 	PubSubHub pubsubhub;
+	bool quiting;
 
 public slots:
 	void setWindowIconByData(QByteArray &data);

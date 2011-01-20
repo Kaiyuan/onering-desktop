@@ -319,20 +319,17 @@ ONERING.post = function(url, data, callback, dataType) {
 	});
 };
 
-ONERING.call = function(type, url, data, callback) {
-    if (data instanceof Function) {
-	callback = data;
-	data = null;
-    }
-
-    return ONERING.ajax({
-	    type: type,
-	    url: url,
+ONERING.call = function(appname, command, data) {
+    var retval;
+    ONERING.ajax({
+	    type: "POST",
+	    url: "onering://"+appname+"/"+command,
 	    data: data,
-	    success: callback,
+	    success: function(r) { retval = r; },
 	    dataType: 'json',
 	    async: false
 	});
+    return retval;
 };
 
 ONERING.bind = function(event, callback) {

@@ -53,8 +53,14 @@ static OSStatus appleEventProcessor(const AppleEvent *ae, AppleEvent *event,
 #endif
 
 Application::Application(int &argc, char **argv)
-	: QApplication(argc, argv)
+	: QApplication(argc, argv),
+	  quiting(false)
 {
+}
+
+Application::~Application()
+{
+	quiting = true;
 }
 
 int Application::load(const char* appname)

@@ -35,6 +35,7 @@ HEADERS += include/onering.h \
 	   src/oneringapp.h \
 	   src/systemtrayicon.h \
 	   src/menu.h \
+	   src/menuitem.h \
 	   src/dataloader.h \
 	   src/application.h \
 	   src/debugger.h \
@@ -50,6 +51,7 @@ SOURCES += src/onering.cpp \
 	   src/oneringapp.cpp \
 	   src/systemtrayicon.cpp \
 	   src/menu.cpp \
+           src/menuitem.cpp \
 	   src/dataloader.cpp \
            src/application.cpp \
 	   src/debugger.cpp \

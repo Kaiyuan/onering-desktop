@@ -182,30 +182,30 @@ ONERING.Menu.prototype = {
     }
 };
 
-ONERING.MenuItem = function(qaction) {
-    this.q = qaction;
+ONERING.MenuItem = function(qmenuitem) {
+    this.q = qmenuitem;
 };
 ONERING.MenuItem.prototype = {
     bind: function(event, callback) {
-	ONERING.connect(this.q[event], callback);
+	ONERING.connect(this.q.action[event], callback);
     },
     setProperties: function(props) {
 	if (props.shortcut !== undefined) {
 	    this.q.shortcut = props.shortcut;
-	    this.q.shortcutContext = 2; // ApplicationShortcut
+	    this.q.action.shortcutContext = 2; // ApplicationShortcut
 	}
 	if (props.enabled !== undefined) {
-	    this.q.enabled = props.enabled;
+	    this.q.action.enabled = props.enabled;
 	}
 	if (props.disabled !== undefined) {
-	    this.q.enabled = !props.disabled;
+	    this.q.action.enabled = !props.disabled;
 	}
     },
     setText: function(text) {
-	this.q.text = text;
+	this.q.action.text = text;
     },
     setEnabled: function(enabled) {
-	this.q.setEnabled(enabled);
+	this.q.action.setEnabled(enabled);
     },
 };
 

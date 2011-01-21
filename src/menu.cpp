@@ -1,6 +1,7 @@
 #include <QList>
 #include <QAction>
 #include "menu.h"
+#include "menuitem.h"
 #include "debugger.h"
 
 Menu::Menu(QWidget *parent)
@@ -15,7 +16,8 @@ QObject* Menu::addSeparator()
 
 QObject* Menu::addAction(const QString &text)
 {
-	return QMenu::addAction(text);
+	QAction* action = QMenu::addAction(text);
+	return new MenuItem(action, action);
 }
 
 QObject* Menu::get(int index)
@@ -24,6 +26,7 @@ QObject* Menu::get(int index)
 	if (index < 0 || index >= actions.size()) {
 		return 0;
 	} else {
-		return actions[index];
+		QAction* action = actions[index];
+		return new MenuItem(action, action);
 	}
 }

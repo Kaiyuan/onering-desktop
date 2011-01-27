@@ -5,19 +5,26 @@
 #include <QSet>
 #include <QMenu>
 
-class MenuManager
+class MenuManager : public QObject
 {
+Q_OBJECT
+
 public:
-	MenuManager();
+	MenuManager(QObject* parent=0);
 	~MenuManager();
 
 	onering_response_handle_t processRequest(const char* appname, const char* method, const char* path, const char* body, const char** response, int* response_len);
 	void freeResponse(const char* appname, onering_response_handle_t response_handle);
 
+private:
 	QByteArray createMenu();
 	QByteArray destroyMenu(QMenu* menu);
 	QByteArray addSeparator(QMenu* menu);
 	QByteArray addMenuItem(QMenu* menu, const QString& text);
+	QByteArray getMenuItem(QMenu* menu, int index);
+
+private slots:
+	void menuItemTriggered(bool checked=false);
 
 private:
 	QString getId(QObject* obj);

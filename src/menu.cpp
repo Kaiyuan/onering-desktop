@@ -1,12 +1,17 @@
 #include <string.h>
+#include <QObject>
 #include <QString>
 #include <QMenu>
 #include <QUrl>
+#include <assert.h>
 #include "menu.h"
+
+#define APPNAME "menu"
 
 static MenuManager* g_manager = 0;
 
-MenuManager::MenuManager()
+MenuManager::MenuManager(QObject* parent)
+	: QObject(parent)
 {
 }
 
@@ -18,8 +23,9 @@ onering_response_handle_t MenuManager::processRequest(const char* appname,
 		const char* method, const char* path, const char* body,
 	       	const char** response, int* response_len)
 {
-	Q_UNUSED(appname);
 	Q_UNUSED(method);
+
+	assert(strcmp(appname, APPNAME) == 0);
 
 	QByteArray* res = new QByteArray();
 	QUrl url = QUrl::fromEncoded(body);
@@ -37,6 +43,8 @@ onering_response_handle_t MenuManager::processRequest(const char* appname,
 		*res = addSeparator(menu);
 	} else if (strcmp(path, "/Menu.addMenuItem") == 0) {
 		*res = addMenuItem(menu, url.queryItemValue("text"));
+	} else if (strcmp(path, "/Menu.getMenuItem") == 0) {
+		*res = getMenuItem(menu, url.queryItemValue("index").toInt());
 	}
 	*response = res->constData();
 	*response_len = res->size();
@@ -46,6 +54,8 @@ onering_response_handle_t MenuManager::processRequest(const char* appname,
 void MenuManager::freeResponse(const char* appname, onering_response_handle_t handle)
 {
 	Q_UNUSED(appname);
+
+	assert(strcmp(appname, APPNAME) == 0);
 
 	delete reinterpret_cast<QByteArray *>(handle);
 }
@@ -71,7 +81,26 @@ QByteArray MenuManager::addSeparator(QMenu* menu)
 QByteArray MenuManager::addMenuItem(QMenu* menu, const QString& text)
 {
 	QAction* action = menu->addAction(text);
+	connect(action, SIGNAL(triggered(bool)),
+			this, SLOT(menuItemTriggered(bool)));
 	return QString("{\"item_id\":\"%1\"}").arg(getId(action)).toLatin1();
+}
+
+QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
+{
+	QList<QAction *> actions = menu->actions();
+	if (index < 0 || index >= actions.size()) {
+		return "null";
+	}
+	QAction* action = actions[index];
+	return QString("{\"item_id\":\"%1\"}").arg(getId(action)).toLatin1();
+}
+
+void MenuManager::menuItemTriggered(bool checked)
+{
+	QAction* action = static_cast<QAction *>(sender());
+	onering_publish(qPrintable(QString("MenuItem.%1.triggered").arg(getId(action))),
+		       	qPrintable(QString("%1").arg(checked?"true":"false")));
 }
 
 QString MenuManager::getId(QObject* obj)
@@ -102,31 +131,3 @@ void menu_app_free_response(const char* appname, onering_response_handle_t respo
 	g_manager->freeResponse(appname, response_handle);
 }
 
-/*
-Menu::Menu(QWidget *parent)
-	: QMenu(parent)
-{
-}
-
-QObject* Menu::addSeparator()
-{
-	return QMenu::addSeparator();
-}
-
-QObject* Menu::addAction(const QString &text)
-{
-	QAction* action = QMenu::addAction(text);
-	return new MenuItem(action, action);
-}
-
-QObject* Menu::get(int index)
-{
-	QList<QAction *> actions = this->actions();
-	if (index < 0 || index >= actions.size()) {
-		return 0;
-	} else {
-		QAction* action = actions[index];
-		return new MenuItem(action, action);
-	}
-}
-*/

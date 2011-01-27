@@ -28,6 +28,8 @@ public:
 
 	Q_INVOKABLE QObject* getPubSubHub(void);
 	Q_INVOKABLE QString resolve(const QString &relative);
+	Q_INVOKABLE QString call(const QString& method, const QString& url,
+			const QString& body) const;
 
 public slots:
 	QVariant test(QVariant param);

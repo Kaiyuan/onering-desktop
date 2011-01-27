@@ -320,16 +320,15 @@ ONERING.post = function(url, data, callback, dataType) {
 };
 
 ONERING.call = function(appname, command, data) {
-    var retval;
-    ONERING.ajax({
-	    type: "POST",
-	    url: "onering://"+appname+"/"+command,
-	    data: data,
-	    success: function(r) { retval = r; },
-	    dataType: 'json',
-	    async: false
-	});
-    return retval;
+    var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
+    if (!data) {
+	data = "";
+    }
+    if (data instanceof Object) {
+	data = ONERING.param(data);
+    }
+    var r = _OneRing.call("POST", url, data);
+    return JSON.parse(r);
 };
 
 ONERING.bind = function(event, callback) {
@@ -341,7 +340,6 @@ ONERING.bind = function(event, callback) {
 
 ONERING.subscribe = function(channel, callback) {
     ONERING.connect(_OneRing.getPubSubHub().published, function(ch, msg) {
-	    ONERING.log(ch);
 	    if (ch == channel) {
 		var data = eval('('+msg+')');
 		callback(data);

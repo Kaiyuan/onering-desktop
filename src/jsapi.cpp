@@ -174,13 +174,6 @@ QObject* JsApi::SystemTrayIcon_new()
 	return icon;
 }
 
-QObject* JsApi::Menu_new()
-{
-	Menu *menu = new Menu();
-	Debugger::traceObj(menu);
-	return menu;
-}
-
 QObject* JsApi::HotKey_new(const QString &keyseq)
 {
 	qDebug() << "JsApi::HotKey_new" << keyseq;

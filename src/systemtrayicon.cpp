@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QApplication>
+#include <QMenu>
 #include "systemtrayicon.h"
 #include "jsapi.h"
 #include "dataloader.h"

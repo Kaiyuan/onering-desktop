@@ -6,68 +6,102 @@
 #include "dataloader.h"
 #include "debugger.h"
 
-SystemTrayIcon::SystemTrayIcon(QObject *parent)
-	: QSystemTrayIcon(parent)
+static SystemTrayIconApp* g_app = 0;
+
+SystemTrayIconApp::SystemTrayIconApp(QObject *parent)
+	: App(parent)
 {
-	setContextMenu(0);
-	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-		this, SLOT(emitActivatedEvent(QSystemTrayIcon::ActivationReason)));
-	connect(qApp, SIGNAL(aboutToQuit()),
-		this, SLOT(deleteLater()));
 }
 
-void SystemTrayIcon::load(const QString &url)
+QByteArray SystemTrayIconApp::processCall(const QString& command, const QVariantMap& param)
 {
-	qDebug() << "SystemTrayIcon::load" << url;
-	DataLoader *loader = new DataLoader(this);
-	Debugger::traceObj(loader);
-	connect(loader, SIGNAL(got(QByteArray&)),
-		this, SLOT(iconFetched(QByteArray&)));
-	connect(loader, SIGNAL(got(QByteArray&)),
-		loader, SLOT(deleteLater()));
-	loader->load(url);
+	QSystemTrayIcon* icon;
+
+	if (command == "create") {
+		icon = new QSystemTrayIcon();
+		connect(icon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+				this, SLOT(notifyClicked(QSystemTrayIcon::ActivationReason)));
+		return QString("{\"type\":\"SystemTrayIcon\",\"id\":\"%1\"}")
+			.arg(getId(icon)).toLatin1();
+	}
+
+	
+	QString id = param.value("id").toString();
+	if (id.isEmpty()) {
+		return "{\"err\":\"invalid id\"}";
+	}
+	icon = static_cast<QSystemTrayIcon *>(getInstance(id));
+
+	if (command == "destroy") {
+		delete icon;
+		return "null";
+	} else if (command == "load") {
+		DataLoader *loader = new DataLoader(icon);
+		connect(loader, SIGNAL(got(QByteArray&)),
+				this, SLOT(iconFetched(QByteArray&)));
+		connect(loader, SIGNAL(got(QByteArray&)),
+				loader, SLOT(deleteLater()));
+		loader->load(param["url"].toString());
+		return "null";
+	} else if (command == "setContextMenu") {
+		QString menu_id = param.value("menuId").toString();
+		QMenu* menu = static_cast<QMenu *>(getInstance(menu_id));
+		icon->setContextMenu(menu);
+		return "null";
+	}
+
+	return "{\"err\":\"invalid command\"}";
 }
 
-void SystemTrayIcon::iconFetched(QByteArray &data)
+void SystemTrayIconApp::iconFetched(QByteArray &data)
 {
+	QSystemTrayIcon *icon = static_cast<QSystemTrayIcon *>(sender()->parent());
+
 	QPixmap pixmap;
 	pixmap.loadFromData(data);
 
-	setIcon(QIcon(pixmap));
-	show();
+	icon->setIcon(QIcon(pixmap));
+	icon->show();
 }
 
-void SystemTrayIcon::emitActivatedEvent(QSystemTrayIcon::ActivationReason reason)
+void SystemTrayIconApp::notifyClicked(QSystemTrayIcon::ActivationReason reason)
 {
+	QSystemTrayIcon *icon = static_cast<QSystemTrayIcon *>(sender());
+	QString channel = QString("SystemTrayIcon.%1.").arg(getId(icon));
+
 	switch (reason) {
 		case QSystemTrayIcon::Trigger:
-			emit click();
+			onering_publish(qPrintable(channel+"click"), "null");
 			break;
 		case QSystemTrayIcon::Context:
-			emit rightclick();
+			onering_publish(qPrintable(channel+"rightclick"), "null");
 			break;
 		case QSystemTrayIcon::DoubleClick:
-			emit doubleclick();
+			onering_publish(qPrintable(channel+"doubleclick"), "null");
 			break;
 		default:
 			;
 	}
 }
 
-QVariantMap SystemTrayIcon::getGeometry()
+static onering_response_handle_t app(const char* appname, const char* method, 
+		const char* path, const char* body,
+		const char** response, int* response_len)
 {
-	QVariantMap geo;
-	QRect rect = geometry();
+	if (!g_app) {
+		g_app = new SystemTrayIconApp();
+	}
 
-	geo["top"] = rect.top();
-	geo["left"] = rect.left();
-	geo["width"] = rect.width();
-	geo["height"] = rect.height();
-	return geo;
+	return g_app->processRequest(appname, method, path, body, response, response_len);
 }
 
-void SystemTrayIcon::setContextMenu(const QString &menu_id)
+
+static void app_free_response(const char* appname, onering_response_handle_t response_handle)
 {
-	bool ok;
-	QSystemTrayIcon::setContextMenu(reinterpret_cast<QMenu *>(menu_id.toLong(&ok, 16)));
+	g_app->freeResponse(appname, response_handle);
+}
+
+void register_systray_app(const char* appname)
+{
+	onering_register_app(appname, &app, &app_free_response);
 }

@@ -14,7 +14,10 @@
 #include "oneringview.h"
 #include "dataloader.h"
 #include "debugger.h"
+
+// plugins
 #include "menu.h"
+#include "systemtrayicon.h"
 
 static QUrl getAbsUrl(const QString &url, const QString &appname)
 {
@@ -91,6 +94,7 @@ int Application::load(const char* appname)
 
 	// register plugin apps
 	register_menu_app("menu");
+	register_systray_app("systray");
 
 	QUrl initurl;
 	initurl.setScheme("onering");

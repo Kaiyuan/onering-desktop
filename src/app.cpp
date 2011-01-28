@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <string.h>
 #include <onering.h>
+#include "app.h"
 
 QHash<QString, QPair<onering_app_func_t, onering_free_response_func_t> > g_apps;
 
@@ -25,7 +26,7 @@ int is_appname_registered(const QString &appname)
 	return g_apps.contains(appname);
 }
 
-QByteArray call_app(const char* method, const QUrl &url, const char* body=NULL)
+QByteArray call_app(const char* method, const QUrl &url, const char* body)
 {
 	QString appname = url.host();
 	const char * response;
@@ -49,7 +50,7 @@ QByteArray call_app(const char* method, const QUrl &url, const char* body=NULL)
 	return retval;
 }
 
-QByteArray call_app_body(const char* method, const QUrl &url, const char* body=NULL)
+QByteArray call_app_body(const char* method, const QUrl &url, const char* body)
 {
 	QByteArray response = call_app(method, url, body);
 	
@@ -72,4 +73,53 @@ QByteArray call_app_body(const char* method, const QUrl &url, const char* body=N
 	response.remove(0, index+4);
 	return response;
 }
+
+App::App(QObject* parent)
+	: QObject(parent)
+{
+}
+
+onering_response_handle_t App::processRequest(const char* appname,
+		const char* method, const QString& path, const QByteArray& body,
+	       	const char** response, int* response_len)
+{
+	Q_UNUSED(appname);
+	Q_UNUSED(method);
+
+	assert(path.startsWith("/"));
+
+	QByteArray* res = new QByteArray();
+	QByteArray bbody(body);
+
+	QUrl url = QUrl::fromEncoded("?"+bbody.replace('+', ' '));
+	QList<QPair<QString, QString> > queries = url.queryItems();
+	QVariantMap param;
+	for (int i=0; i<queries.size(); ++i) {
+		param[queries[i].first] = queries[i].second;
+	}
+	*res = processCall(path.mid(1), param);
+
+	*response = res->constData();
+	*response_len = res->size();
+	return reinterpret_cast<onering_response_handle_t>(res);
+}
+
+void App::freeResponse(const char* appname, onering_response_handle_t handle)
+{
+	Q_UNUSED(appname);
+
+	delete reinterpret_cast<QByteArray *>(handle);
+}
+
+QString App::getId(QObject* obj)
+{
+	return QString::number(reinterpret_cast<long>(obj), 16);
+}
+
+QObject* App::getInstance(const QString& id)
+{
+	bool ok;
+	return reinterpret_cast<QObject *>(id.toLong(&ok, 16));
+}
+
 

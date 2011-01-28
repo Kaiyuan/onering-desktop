@@ -7,14 +7,14 @@
 #include <assert.h>
 #include "menu.h"
 
-static MenuManager* g_manager = 0;
+static MenuApp* g_manager = 0;
 
-MenuManager::MenuManager(QObject* parent)
+MenuApp::MenuApp(QObject* parent)
 	: App(parent)
 {
 }
 
-QByteArray MenuManager::processCall(const QString& command, const QVariantMap& param)
+QByteArray MenuApp::processCall(const QString& command, const QVariantMap& param)
 {
 	if (command == "Menu.create") {
 		return createMenu();
@@ -49,25 +49,25 @@ QByteArray MenuManager::processCall(const QString& command, const QVariantMap& p
 	return "{\"err\":\"invalid command\"}";
 }
 
-QByteArray MenuManager::createMenu()
+QByteArray MenuApp::createMenu()
 {
 	QMenu* menu = new QMenu();
 	return QString("{\"type\":\"Menu\",\"id\":\"%1\"}").arg(getId(menu)).toLatin1();
 }
 
-QByteArray MenuManager::destroyMenu(QMenu* menu)
+QByteArray MenuApp::destroyMenu(QMenu* menu)
 {
 	delete menu;
 	return "null";
 }
 
-QByteArray MenuManager::addSeparator(QMenu* menu)
+QByteArray MenuApp::addSeparator(QMenu* menu)
 {
 	menu->addSeparator();
 	return "null";
 }
 
-QByteArray MenuManager::addMenuItem(QMenu* menu, const QString& text)
+QByteArray MenuApp::addMenuItem(QMenu* menu, const QString& text)
 {
 	QAction* action = menu->addAction(text);
 	connect(action, SIGNAL(triggered(bool)),
@@ -75,7 +75,7 @@ QByteArray MenuManager::addMenuItem(QMenu* menu, const QString& text)
 	return QString("{\"type\":\"MenuItem\",\"id\":\"%1\"}").arg(getId(action)).toLatin1();
 }
 
-QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
+QByteArray MenuApp::getMenuItem(QMenu* menu, int index)
 {
 	QList<QAction *> actions = menu->actions();
 	if (index < 0 || index >= actions.size()) {
@@ -85,7 +85,7 @@ QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
 	return QString("{\"type\":\"MenuItem\",\"id\":\"%1\"}").arg(getId(action)).toLatin1();
 }
 
-QByteArray MenuManager::setMenuItemProperties(QAction* item, const QVariantMap& props)
+QByteArray MenuApp::setMenuItemProperties(QAction* item, const QVariantMap& props)
 {
 	if (props.contains("shortcut")) {
 		QString shortcut = props.value("shortcut").toString();
@@ -101,13 +101,13 @@ QByteArray MenuManager::setMenuItemProperties(QAction* item, const QVariantMap& 
 	return "null";
 }
 
-QByteArray MenuManager::setMenuItemText(QAction* item, const QString& text)
+QByteArray MenuApp::setMenuItemText(QAction* item, const QString& text)
 {
 	item->setText(text);
 	return "null";
 }
 
-void MenuManager::menuItemTriggered(bool checked)
+void MenuApp::menuItemTriggered(bool checked)
 {
 	QAction* action = static_cast<QAction *>(sender());
 	onering_publish(qPrintable(QString("MenuItem.%1.triggered").arg(getId(action))),
@@ -119,7 +119,7 @@ static onering_response_handle_t menu_app(const char* appname, const char* metho
 		const char** response, int* response_len)
 {
 	if (!g_manager) {
-		g_manager = new MenuManager();
+		g_manager = new MenuApp();
 	}
 
 	return g_manager->processRequest(appname, method, path, body, response, response_len);

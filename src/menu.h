@@ -8,12 +8,12 @@
 #include <QVariantMap>
 #include "app.h"
 
-class MenuManager : public App
+class MenuApp : public App
 {
 Q_OBJECT
 
 public:
-	MenuManager(QObject* parent=0);
+	MenuApp(QObject* parent=0);
 
 private:
 	QByteArray createMenu();

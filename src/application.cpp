@@ -90,7 +90,7 @@ int Application::load(const char* appname)
 
 	if (onering_app_init())
 		return -1;
-	onering_register_app("onering", &onering_app, &onering_app_free_response);
+	register_onering_app("onering");
 
 	// register plugin apps
 	register_menu_app("menu");

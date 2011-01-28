@@ -136,7 +136,7 @@ ONERING.SystemTrayIcon.prototype = {
 	return this.q.getGeometry();
     },
     setContextMenu: function(menu) {
-	this.q.setContextMenu(menu.q);
+	this.q.setContextMenu(menu.obj.id);
     }
 };
 
@@ -144,8 +144,27 @@ ONERING.SystemTrayIcon.prototype = {
 
 // Menu {{{
 
+ONERING.Base = function() {};
+ONERING.Base.prototype = {
+    _call: function(command, param) {
+	if (!param) { param = {}; }
+	param.id = this.obj.id;
+	return ONERING.call_app(this.appname, command, param);
+    },
+    extend: function(d) {
+	for (var k in d) {
+	    this[k] = d[k];
+	}
+	return this;
+    },
+};
+
 ONERING.Menu = function(items) {
-    this.q = _OneRing.Menu_new();
+    this.appname = "menu";
+    this.obj = ONERING.call_app("menu", "Menu.create");
+    if (!this.obj || this.obj.type != "Menu") {
+	throw new Error("Menu not created");
+    }
     for (var i=0; i<items.length; i++) {
 	var item = items[i];
 	if (item === ONERING.Menu.SEPARATOR) {
@@ -156,20 +175,25 @@ ONERING.Menu = function(items) {
     };
 };
 ONERING.Menu.SEPARATOR = Object();  // a const
-ONERING.Menu.prototype = {
+ONERING.Menu.prototype = new ONERING.Base();
+ONERING.Menu.prototype.extend({
     destroy: function() {
-	this.q.deleteLater();
-	this.q = null;
+	if (!this.obj) {
+	    return;
+	}
+	var r = this._call("Menu.destroy");
+	this.obj = null;
+	return r;
     },
     addSeparator: function() {
-	this.q.addSeparator();
+	return this._call("Menu.addSeparator");
     },
     addItem: function(title, callback, props) {
 	if (!(callback instanceof Function)) {
 	    props = callback;
 	    callback = null;
 	}
-	var item = new ONERING.MenuItem(this.q.addAction(title));
+	var item = new ONERING.MenuItem(this._call("Menu.addMenuItem", {text: title}));
 	if (callback) {
 	    item.bind('triggered', callback);
 	}
@@ -178,36 +202,31 @@ ONERING.Menu.prototype = {
 	}
     },
     get: function(index) {
-	return new ONERING.MenuItem(this.q.get(index));
+	return new ONERING.MenuItem(this._call("Menu.getMenuItem", {index: index}));
     }
-};
+});
 
-ONERING.MenuItem = function(qmenuitem) {
-    this.q = qmenuitem;
+ONERING.MenuItem = function(item) {
+    if (!item || item.type != "MenuItem") {
+	throw new Error("invalid menu item");
+    }
+    this.appname = "menu";
+    this.obj = item;
 };
-ONERING.MenuItem.prototype = {
+ONERING.MenuItem.prototype = (new ONERING.Base()).extend({
     bind: function(event, callback) {
-	ONERING.connect(this.q.action[event], callback);
+	ONERING.subscribe("MenuItem."+this.obj.id+"."+event, callback);
     },
     setProperties: function(props) {
-	if (props.shortcut !== undefined) {
-	    this.q.shortcut = props.shortcut;
-	    this.q.action.shortcutContext = 2; // ApplicationShortcut
-	}
-	if (props.enabled !== undefined) {
-	    this.q.action.enabled = props.enabled;
-	}
-	if (props.disabled !== undefined) {
-	    this.q.action.enabled = !props.disabled;
-	}
+	return this._call("MenuItem.setProperties", props);
     },
     setText: function(text) {
-	this.q.action.text = text;
+	return this._call("MenuItem.setText", {text: text});
     },
     setEnabled: function(enabled) {
-	this.q.action.setEnabled(enabled);
+	return this.setProperties({enabled: enabled});
     },
-};
+});
 
 // }}}
 
@@ -319,16 +338,15 @@ ONERING.post = function(url, data, callback, dataType) {
 	});
 };
 
-ONERING.call = function(appname, command, data) {
+ONERING.call_app = function(appname, command, param) {
     var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
-    if (!data) {
-	data = "";
-    }
-    if (data instanceof Object) {
-	data = ONERING.param(data);
-    }
+    var data = ONERING.param(param || {});
     var r = _OneRing.call("POST", url, data);
-    return JSON.parse(r);
+    r = JSON.parse(r);
+    if (r && r.err) {
+	throw new Error("ONERING.call_app("+appname+", "+command+") failed: " + r.err);
+    }
+    return r;
 };
 
 ONERING.bind = function(event, callback) {

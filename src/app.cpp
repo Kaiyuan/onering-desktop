@@ -55,8 +55,9 @@ QByteArray call_app_body(const char* method, const QUrl &url, const char* body=N
 	
 	int index;
 	if ((index = response.indexOf("\r\n")) < 0) {
-		qDebug() << "Body not found:" << response;
-		return "";
+		// not header/body seperator found.
+		// consider the whole response is body
+		return response;
 	}
 	QByteArray line = response.left(index);
 	if (line.indexOf("200") < 0) {

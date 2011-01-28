@@ -126,7 +126,12 @@ QString JsApi::call(const QString &method, const QString &url, const QString &bo
 	qDebug() << "JsApi::call" << method << url << body;
 	QUrl absurl = frame->baseUrl().resolved(url);
 	QString response = call_app_body(qPrintable(method), absurl, qPrintable(body));
-	return response;
+	if (response.isEmpty()) {
+		return "null";
+	} else {
+		qDebug() << "JsApi::call returns" << response;
+		return response;
+	}
 }
 
 void JsApi::ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async)
@@ -172,13 +177,6 @@ QObject* JsApi::SystemTrayIcon_new()
 	SystemTrayIcon *icon = new SystemTrayIcon(qApp);
 	Debugger::traceObj(icon);
 	return icon;
-}
-
-QObject* JsApi::Menu_new()
-{
-	Menu *menu = new Menu();
-	Debugger::traceObj(menu);
-	return menu;
 }
 
 QObject* JsApi::HotKey_new(const QString &keyseq)

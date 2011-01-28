@@ -2,6 +2,7 @@
 #include <QObject>
 #include <QString>
 #include <QMenu>
+#include <QUrl>
 #include <QKeySequence>
 #include <assert.h>
 #include "menu.h"
@@ -43,7 +44,7 @@ QByteArray MenuManager::processCall(const QString& command, const QVariantMap& p
 		}
 		QAction* item = static_cast<QAction *>(getInstance(id));
 		if (command == "MenuItem.setProperties") {
-			return setMenuItemProperties(item, param.value("props").toMap());
+			return setMenuItemProperties(item, param);
 		} else if (command == "MenuItem.setText") {
 			return setMenuItemText(item, param.value("text").toString());
 		}
@@ -61,9 +62,15 @@ onering_response_handle_t MenuManager::processRequest(const char* appname,
 
 	assert(path.startsWith("/"));
 
-	QVariantMap param = engine.evaluate("("+body+")").toVariant().toMap();
 	QByteArray* res = new QByteArray();
+	QByteArray bbody(body);
 
+	QUrl url = QUrl::fromEncoded("?"+bbody.replace('+', ' '));
+	QList<QPair<QString, QString> > queries = url.queryItems();
+	QVariantMap param;
+	for (int i=0; i<queries.size(); ++i) {
+		param[queries[i].first] = queries[i].second;
+	}
 	*res = processCall(path.mid(1), param);
 
 	*response = res->constData();

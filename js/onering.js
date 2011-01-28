@@ -213,7 +213,7 @@ ONERING.MenuItem.prototype = (new ONERING.Base()).extend({
 	ONERING.subscribe("MenuItem."+this.obj.id+"."+event, callback);
     },
     setProperties: function(props) {
-	return this._call("MenuItem.setProperties", {props: props});
+	return this._call("MenuItem.setProperties", props);
     },
     setText: function(text) {
 	return this._call("MenuItem.setText", {text: text});
@@ -333,21 +333,9 @@ ONERING.post = function(url, data, callback, dataType) {
 	});
 };
 
-ONERING.call = function(appname, command, data) {
-    var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
-    if (!data) {
-	data = "";
-    }
-    if (data instanceof Object) {
-	data = ONERING.param(data);
-    }
-    var r = _OneRing.call("POST", url, data);
-    return JSON.parse(r);
-};
-
 ONERING.callapp = function(appname, command, param) {
     var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
-    var data = JSON.stringify(param || {});
+    var data = ONERING.param(param || {});
     var r = _OneRing.call("POST", url, data);
     r = JSON.parse(r);
     if (r && r.err) {

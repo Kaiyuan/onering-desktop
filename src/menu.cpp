@@ -10,11 +10,7 @@
 static MenuManager* g_manager = 0;
 
 MenuManager::MenuManager(QObject* parent)
-	: QObject(parent)
-{
-}
-
-MenuManager::~MenuManager()
+	: App(parent)
 {
 }
 
@@ -51,38 +47,6 @@ QByteArray MenuManager::processCall(const QString& command, const QVariantMap& p
 	}
 
 	return "{\"err\":\"invalid command\"}";
-}
-
-onering_response_handle_t MenuManager::processRequest(const char* appname,
-		const char* method, const QString& path, const QByteArray& body,
-	       	const char** response, int* response_len)
-{
-	Q_UNUSED(appname);
-	Q_UNUSED(method);
-
-	assert(path.startsWith("/"));
-
-	QByteArray* res = new QByteArray();
-	QByteArray bbody(body);
-
-	QUrl url = QUrl::fromEncoded("?"+bbody.replace('+', ' '));
-	QList<QPair<QString, QString> > queries = url.queryItems();
-	QVariantMap param;
-	for (int i=0; i<queries.size(); ++i) {
-		param[queries[i].first] = queries[i].second;
-	}
-	*res = processCall(path.mid(1), param);
-
-	*response = res->constData();
-	*response_len = res->size();
-	return reinterpret_cast<onering_response_handle_t>(res);
-}
-
-void MenuManager::freeResponse(const char* appname, onering_response_handle_t handle)
-{
-	Q_UNUSED(appname);
-
-	delete reinterpret_cast<QByteArray *>(handle);
 }
 
 QByteArray MenuManager::createMenu()
@@ -148,17 +112,6 @@ void MenuManager::menuItemTriggered(bool checked)
 	QAction* action = static_cast<QAction *>(sender());
 	onering_publish(qPrintable(QString("MenuItem.%1.triggered").arg(getId(action))),
 		       	qPrintable(QString("%1").arg(checked?"true":"false")));
-}
-
-QString MenuManager::getId(QObject* obj)
-{
-	return QString::number(reinterpret_cast<long>(obj), 16);
-}
-
-QObject* MenuManager::getInstance(const QString& id)
-{
-	bool ok;
-	return reinterpret_cast<QObject *>(id.toLong(&ok, 16));
 }
 
 static onering_response_handle_t menu_app(const char* appname, const char* method, 

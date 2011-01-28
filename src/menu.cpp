@@ -1,12 +1,9 @@
-#include <string.h>
 #include <QObject>
 #include <QString>
 #include <QMenu>
 #include <QUrl>
 #include <assert.h>
 #include "menu.h"
-
-#define APPNAME "menu"
 
 static MenuManager* g_manager = 0;
 
@@ -20,31 +17,39 @@ MenuManager::~MenuManager()
 }
 
 onering_response_handle_t MenuManager::processRequest(const char* appname,
-		const char* method, const char* path, const char* body,
+		const char* method, const QString& path, const QByteArray& body,
 	       	const char** response, int* response_len)
 {
+	Q_UNUSED(appname);
 	Q_UNUSED(method);
 
-	assert(strcmp(appname, APPNAME) == 0);
-
 	QByteArray* res = new QByteArray();
-	QUrl url = QUrl::fromEncoded(body);
-	QString id = url.queryItemValue("id");
+	QVariantMap param = engine.evaluate("("+body+")").toVariant().toMap();
+	QString id = param.value("id").toString();
 	QMenu *menu = 0;
+	QAction *item = 0;
 	if (!id.isEmpty()) {
-		menu = getInstance(id);
+		if (path.startsWith("/Menu.")) {
+			menu = static_cast<QMenu *>(getInstance(id));
+		} else if (path.startsWith("/MenuItem.")) {
+			item = static_cast<QAction *>(getInstance(id));
+		}
 	}
 
-	if (strcmp(path, "/Menu.create") == 0) {
+	if (path == "/Menu.create") {
 		*res = createMenu();
-	} else if (strcmp(path, "/Menu.destroy") == 0) {
+	} else if (path == "/Menu.destroy") {
 		*res = destroyMenu(menu);
-	} else if (strcmp(path, "/Menu.addSeparator") == 0) {
+	} else if (path == "/Menu.addSeparator") {
 		*res = addSeparator(menu);
-	} else if (strcmp(path, "/Menu.addMenuItem") == 0) {
-		*res = addMenuItem(menu, url.queryItemValue("text"));
-	} else if (strcmp(path, "/Menu.getMenuItem") == 0) {
-		*res = getMenuItem(menu, url.queryItemValue("index").toInt());
+	} else if (path == "/Menu.addMenuItem") {
+		*res = addMenuItem(menu, param.value("text").toString());
+	} else if (path == "/Menu.getMenuItem") {
+		*res = getMenuItem(menu, param.value("index").toInt());
+	} else if (path == "/MenuItem.setProperties") {
+		*res = setMenuItemProperties(item, param);
+	} else if (path == "/MenuItem.setText") {
+		*res = setMenuItemText(item, param.value("text").toString());
 	}
 	*response = res->constData();
 	*response_len = res->size();
@@ -54,8 +59,6 @@ onering_response_handle_t MenuManager::processRequest(const char* appname,
 void MenuManager::freeResponse(const char* appname, onering_response_handle_t handle)
 {
 	Q_UNUSED(appname);
-
-	assert(strcmp(appname, APPNAME) == 0);
 
 	delete reinterpret_cast<QByteArray *>(handle);
 }
@@ -96,6 +99,28 @@ QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
 	return QString("{\"item_id\":\"%1\"}").arg(getId(action)).toLatin1();
 }
 
+QByteArray MenuManager::setMenuItemProperties(QAction* item, const QVariantMap& props)
+{
+	if (props.contains("shortcut")) {
+		QString shortcut = props.value("shortcut").toString();
+		item->setShortcut(QKeySequence(shortcut));
+		item->setShortcutContext(Qt::ApplicationShortcut);
+	}
+	if (props.contains("enabled")) {
+		item->setEnabled(props.value("enabled").toBool());
+	}
+	if (props.contains("disabled")) {
+		item->setEnabled(!(props.value("disabled").toBool()));
+	}
+	return "null";
+}
+
+QByteArray MenuManager::setMenuItemText(QAction* item, const QString& text)
+{
+	item->setText(text);
+	return "null";
+}
+
 void MenuManager::menuItemTriggered(bool checked)
 {
 	QAction* action = static_cast<QAction *>(sender());
@@ -108,13 +133,13 @@ QString MenuManager::getId(QObject* obj)
 	return QString::number(reinterpret_cast<long>(obj), 16);
 }
 
-QMenu* MenuManager::getInstance(const QString& id)
+QObject* MenuManager::getInstance(const QString& id)
 {
 	bool ok;
-	return reinterpret_cast<QMenu*>(id.toInt(&ok, 16));
+	return reinterpret_cast<QObject *>(id.toInt(&ok, 16));
 }
 
-onering_response_handle_t menu_app(const char* appname, const char* method, 
+static onering_response_handle_t menu_app(const char* appname, const char* method, 
 		const char* path, const char* body,
 		const char** response, int* response_len)
 {
@@ -126,8 +151,12 @@ onering_response_handle_t menu_app(const char* appname, const char* method,
 }
 
 
-void menu_app_free_response(const char* appname, onering_response_handle_t response_handle)
+static void menu_app_free_response(const char* appname, onering_response_handle_t response_handle)
 {
 	g_manager->freeResponse(appname, response_handle);
 }
 
+void register_menu_app(const char* appname)
+{
+	onering_register_app(appname, &menu_app, &menu_app_free_response);
+}

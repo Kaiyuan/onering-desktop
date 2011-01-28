@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QWebSettings>
 #include <QWebSecurityOrigin>
-#include <QScriptEngine>
 #include <QVariantMap>
 #include <QDesktopServices>
 #include <QApplication>
@@ -14,6 +13,7 @@
 #include "oneringview.h"
 #include "dataloader.h"
 #include "debugger.h"
+#include "json.h"
 
 // plugins
 #include "menu.h"
@@ -100,8 +100,7 @@ int Application::load(const char* appname)
 	initurl.setPath("/init");
 	QByteArray response = call_app_body("GET", initurl);
 
-	QScriptEngine engine;
-	QVariantMap props = engine.evaluate("("+response+")").toVariant().toMap();
+	QVariantMap props = Json::parse(QString::fromUtf8(response)).toMap();
 
 	QString s;
 	QUrl url;

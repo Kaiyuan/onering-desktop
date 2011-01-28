@@ -4,7 +4,6 @@
 #include <onering.h>
 #include <QSet>
 #include <QMenu>
-#include <QScriptEngine>
 #include <QVariantMap>
 #include "app.h"
 

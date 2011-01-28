@@ -5,7 +5,7 @@
 #include <QWebInspector>
 #include <QHash>
 #include <QList>
-#include <QScriptEngine>
+#include <QVariantMap>
 
 class QWebView;
 class QWebFrame;
@@ -53,10 +53,8 @@ private:
 	QWebFrame *frame;
 	QWebInspector *inspector;
 	QHash< EventSource, QList<QString> > callbacks;
-	QScriptEngine engine;
 
 	void registerCallback(QObject *sender, const QString &event, const QString &callback_funcname);
-	QScriptValue parseJSON(const QString &json);
 };
 
 #endif

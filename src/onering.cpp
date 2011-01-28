@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QApplication>
 #include <QCoreApplication>
-#include <QScriptEngine>
 #include <QWebSettings>
 #include <QWebSecurityOrigin>
 #include <string.h>

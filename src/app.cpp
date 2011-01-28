@@ -6,6 +6,7 @@
 #include <string.h>
 #include <onering.h>
 #include "app.h"
+#include "json.h"
 
 QHash<QString, QPair<onering_app_func_t, onering_free_response_func_t> > g_apps;
 
@@ -89,14 +90,8 @@ onering_response_handle_t App::processRequest(const char* appname,
 	assert(path.startsWith("/"));
 
 	QByteArray* res = new QByteArray();
-	QByteArray bbody(body);
-
-	QUrl url = QUrl::fromEncoded("?"+bbody.replace('+', ' '));
-	QList<QPair<QString, QString> > queries = url.queryItems();
-	QVariantMap param;
-	for (int i=0; i<queries.size(); ++i) {
-		param[queries[i].first] = queries[i].second;
-	}
+	
+	QVariantMap param = Json::parse(QString::fromUtf8(body)).toMap();
 	*res = processCall(path.mid(1), param);
 
 	*response = res->constData();

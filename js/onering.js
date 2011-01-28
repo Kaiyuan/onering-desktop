@@ -342,7 +342,7 @@ ONERING.post = function(url, data, callback, dataType) {
 
 ONERING.call_app = function(appname, command, param) {
     var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
-    var data = ONERING.param(param || {});
+    var data = JSON.stringify(param || {});
     var r = _OneRing.call("POST", url, data);
     r = JSON.parse(r);
     if (r && r.err) {

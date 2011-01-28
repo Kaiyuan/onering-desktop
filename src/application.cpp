@@ -14,6 +14,7 @@
 #include "oneringview.h"
 #include "dataloader.h"
 #include "debugger.h"
+#include "menu.h"
 
 static QUrl getAbsUrl(const QString &url, const QString &appname)
 {
@@ -87,6 +88,9 @@ int Application::load(const char* appname)
 	if (onering_app_init())
 		return -1;
 	onering_register_app("onering", &onering_app, &onering_app_free_response);
+
+	// register plugin apps
+	register_menu_app("menu");
 
 	QUrl initurl;
 	initurl.setScheme("onering");

@@ -4,6 +4,8 @@
 #include <onering.h>
 #include <QSet>
 #include <QMenu>
+#include <QScriptEngine>
+#include <QVariantMap>
 
 class MenuManager : public QObject
 {
@@ -13,7 +15,7 @@ public:
 	MenuManager(QObject* parent=0);
 	~MenuManager();
 
-	onering_response_handle_t processRequest(const char* appname, const char* method, const char* path, const char* body, const char** response, int* response_len);
+	onering_response_handle_t processRequest(const char* appname, const char* method, const QString& path, const QByteArray& body, const char** response, int* response_len);
 	void freeResponse(const char* appname, onering_response_handle_t response_handle);
 
 private:
@@ -23,18 +25,19 @@ private:
 	QByteArray addMenuItem(QMenu* menu, const QString& text);
 	QByteArray getMenuItem(QMenu* menu, int index);
 
+	QByteArray setMenuItemProperties(QAction* action, const QVariantMap& props);
+	QByteArray setMenuItemText(QAction* action, const QString& text);
+
 private slots:
 	void menuItemTriggered(bool checked=false);
 
 private:
 	QString getId(QObject* obj);
-	QMenu* getInstance(const QString& id);
+	QObject* getInstance(const QString& id);
+	QScriptEngine engine;
 
 };
 
-onering_response_handle_t menu_app(const char* appname, const char* method, 
-		const char* path, const char* body,
-		const char** response, int* response_len);
-void menu_app_free_response(const char* appname, onering_response_handle_t response_handle);
+void register_menu_app(const char* appname);
 
 #endif

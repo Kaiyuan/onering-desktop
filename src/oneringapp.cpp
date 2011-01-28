@@ -4,32 +4,35 @@
 #include "oneringapp.h"
 #include "debugger.h"
 
-static QByteArray *onering_js = 0;  // global to hold char * reference
+static OneRingApp* g_app = 0;
 
-int onering_app_init()
+OneRingApp::OneRingApp(QObject *parent)
+	: App(parent)
 {
 	QFile file(":/js/onering.js");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		return -1;
+		return;
 	}
-	onering_js = new QByteArray(file.readAll());
-	qDebug() << "=== NEW" << onering_js;
-	onering_js->prepend("HTTP/1.0 200 OK\r\nContent-Type: text/javascript\r\n\r\n");
-	return 0;
+	_js = file.readAll();
+	file.close();
+}
+
+QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& param)
+{
+	if (command == "onering.js") {
+		return _js;
+	}
+
+	return "{\"err\":\"invalid command\"}";
 }
 
 static onering_response_handle_t onering_app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)
 {
-	if (strcmp(method, "GET") == 0 && strcmp(path, "/onering.js") == 0 && onering_js) {
-		*response = onering_js->constData();
-		*response_len = onering_js->size();
-	} else {
-		// TODO: 404
-		*response = "";
-		*response_len = 0;
+	if (!g_app) {
+		g_app = new OneRingApp();
 	}
 
-	return 0;
+	return g_app->processRequest(appname, method, path, body, response, response_len);
 }
 
 static void onering_app_free_response(const char *appname, onering_response_handle_t response_handle)

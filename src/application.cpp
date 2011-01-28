@@ -88,8 +88,6 @@ int Application::load(const char* appname)
 
 	QWebSecurityOrigin::addLocalScheme("onering");
 
-	if (onering_app_init())
-		return -1;
 	register_onering_app("onering");
 
 	// register plugin apps

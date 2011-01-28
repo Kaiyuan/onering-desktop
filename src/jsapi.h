@@ -43,7 +43,6 @@ public slots:
 	QObject* getCurrentWindow();
 	QObject* getApplication();
 
-	QObject* SystemTrayIcon_new(void);
 	QObject* HotKey_new(const QString &keyseq);
 
 private slots:

@@ -1,5 +1,36 @@
 ONERING = new Object();
 
+ONERING.Base = function() {};
+ONERING.Base.prototype = {
+    _call: function(command, param) {
+	if (!param) { param = {}; }
+	param.id = this.id;
+	return ONERING.call_app(this.appname, command, param);
+    },
+    _create: function(command) {
+	var obj = ONERING.call_app(this.appname, command);
+	if (!obj || obj.type != this.type) {
+	    throw new Error(this.type + " not created");
+	}
+	this.id =  obj.id;
+    },
+    _destroy: function(command) {
+	if (!this.id) { return; }
+	var r = this._call(command);
+	this.id = null;
+	return r;
+    },
+    bind: function(event, callback) {
+	ONERING.subscribe(this.type+"."+this.id+"."+event, callback);
+    },
+    extend: function(d) {
+	for (var k in d) {
+	    this[k] = d[k];
+	}
+	return this;
+    },
+};
+
 // Window class {{{
 
 ONERING.Window = function(q) {
@@ -116,55 +147,31 @@ ONERING.Audio.prototype.bind = function(event, callback) {
 // System Tray Icon {{{
 
 ONERING.SystemTrayIcon = function(url) {
-    this.q = _OneRing.SystemTrayIcon_new();
+    this._create("create");
     if (url) {
 	this.load(url);
     }
 };
-ONERING.SystemTrayIcon.prototype = {
+ONERING.SystemTrayIcon.prototype = (new ONERING.Base()).extend({
+    appname: "systray",
+    type: "SystemTrayIcon",
     destroy: function() {
-	this.q.deleteLater();
-	this.q = null;
+	this._destroy("destroy");
     },
     load: function(url) {
-	this.q.load(_OneRing.resolve(url));
-    },
-    bind: function(event, callback) {
-	ONERING.connect(this.q[event], callback);
-    },
-    getGeometry: function() {
-	return this.q.getGeometry();
+	return this._call("load", {url: _OneRing.resolve(url)});
     },
     setContextMenu: function(menu) {
-	this.q.setContextMenu(menu.obj.id);
+	return this._call("setContextMenu", {menuId: menu.id});
     }
-};
+});
 
 // }}}
 
 // Menu {{{
 
-ONERING.Base = function() {};
-ONERING.Base.prototype = {
-    _call: function(command, param) {
-	if (!param) { param = {}; }
-	param.id = this.obj.id;
-	return ONERING.call_app(this.appname, command, param);
-    },
-    extend: function(d) {
-	for (var k in d) {
-	    this[k] = d[k];
-	}
-	return this;
-    },
-};
-
 ONERING.Menu = function(items) {
-    this.appname = "menu";
-    this.obj = ONERING.call_app("menu", "Menu.create");
-    if (!this.obj || this.obj.type != "Menu") {
-	throw new Error("Menu not created");
-    }
+    this._create("Menu.create");
     for (var i=0; i<items.length; i++) {
 	var item = items[i];
 	if (item === ONERING.Menu.SEPARATOR) {
@@ -177,13 +184,10 @@ ONERING.Menu = function(items) {
 ONERING.Menu.SEPARATOR = Object();  // a const
 ONERING.Menu.prototype = new ONERING.Base();
 ONERING.Menu.prototype.extend({
+    appname: "menu",
+    type: "Menu",
     destroy: function() {
-	if (!this.obj) {
-	    return;
-	}
-	var r = this._call("Menu.destroy");
-	this.obj = null;
-	return r;
+	this._destroy("Menu.destroy");
     },
     addSeparator: function() {
 	return this._call("Menu.addSeparator");
@@ -207,16 +211,14 @@ ONERING.Menu.prototype.extend({
 });
 
 ONERING.MenuItem = function(item) {
-    if (!item || item.type != "MenuItem") {
+    if (!item || item.type != this.type) {
 	throw new Error("invalid menu item");
     }
-    this.appname = "menu";
-    this.obj = item;
+    this.id = item.id;
 };
 ONERING.MenuItem.prototype = (new ONERING.Base()).extend({
-    bind: function(event, callback) {
-	ONERING.subscribe("MenuItem."+this.obj.id+"."+event, callback);
-    },
+    appname: "menu",
+    type: "MenuItem",
     setProperties: function(props) {
 	return this._call("MenuItem.setProperties", props);
     },

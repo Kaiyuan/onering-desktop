@@ -170,15 +170,6 @@ QString JsApi::resolve(const QString &relative)
 
 // }}}
 
-QObject* JsApi::SystemTrayIcon_new()
-{
-	qDebug() << "JsApi::systemTrayIcon_new";
-
-	SystemTrayIcon *icon = new SystemTrayIcon(qApp);
-	Debugger::traceObj(icon);
-	return icon;
-}
-
 QObject* JsApi::HotKey_new(const QString &keyseq)
 {
 	qDebug() << "JsApi::HotKey_new" << keyseq;

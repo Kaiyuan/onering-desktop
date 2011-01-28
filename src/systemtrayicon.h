@@ -15,7 +15,7 @@ public:
 
 	Q_INVOKABLE void load(const QString &url);
 	Q_INVOKABLE QVariantMap getGeometry(void);
-	Q_INVOKABLE void setContextMenu(QObject* menu);
+	Q_INVOKABLE void setContextMenu(const QString& menu_id);
 
 signals:
 	void click();

@@ -9,7 +9,12 @@
 #include "event.h"
 
 OneRingView::OneRingView(const QUrl &url, int width, int height, const QVariantMap &props)
-	: QWebView(), contextMenuEnabled(false)
+	: QWebView(),
+#ifdef CONTEXTMENU
+       	contextMenuEnabled(true)
+#else
+       	contextMenuEnabled(false)
+#endif
 {
 	QNetworkAccessManager *oldManager = page()->networkAccessManager();
 	NetworkAccessManager *newManager = new NetworkAccessManager(this, oldManager);

@@ -32,6 +32,7 @@ private slots:
 	void menuItemTriggered(bool checked=false);
 
 private:
+	QByteArray processCall(const QString& command, const QVariantMap& param);
 	QString getId(QObject* obj);
 	QObject* getInstance(const QString& id);
 	QScriptEngine engine;

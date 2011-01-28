@@ -1,7 +1,8 @@
+#include <QDebug>
 #include <QObject>
 #include <QString>
 #include <QMenu>
-#include <QUrl>
+#include <QKeySequence>
 #include <assert.h>
 #include "menu.h"
 
@@ -16,6 +17,41 @@ MenuManager::~MenuManager()
 {
 }
 
+QByteArray MenuManager::processCall(const QString& command, const QVariantMap& param)
+{
+	if (command == "Menu.create") {
+		return createMenu();
+	} else if (command.startsWith("Menu.")) {
+		QString id = param.value("id").toString();
+		if (id.isEmpty()) {
+			return "{\"err\":\"invalid id\"}";
+		}
+		QMenu* menu = static_cast<QMenu *>(getInstance(id));
+		if (command == "Menu.destroy") {
+			return destroyMenu(menu);
+		} else if (command == "Menu.addSeparator") {
+			return addSeparator(menu);
+		} else if (command == "Menu.addMenuItem") {
+			return addMenuItem(menu, param.value("text").toString());
+		} else if (command == "Menu.getMenuItem") {
+			return getMenuItem(menu, param.value("index").toInt());
+		}
+	} else if (command.startsWith("MenuItem.")) {
+		QString id = param.value("id").toString();
+		if (id.isEmpty()) {
+			return "{\"err\":\"invalid id\"}";
+		}
+		QAction* item = static_cast<QAction *>(getInstance(id));
+		if (command == "MenuItem.setProperties") {
+			return setMenuItemProperties(item, param.value("props").toMap());
+		} else if (command == "MenuItem.setText") {
+			return setMenuItemText(item, param.value("text").toString());
+		}
+	}
+
+	return "{\"err\":\"invalid command\"}";
+}
+
 onering_response_handle_t MenuManager::processRequest(const char* appname,
 		const char* method, const QString& path, const QByteArray& body,
 	       	const char** response, int* response_len)
@@ -23,34 +59,13 @@ onering_response_handle_t MenuManager::processRequest(const char* appname,
 	Q_UNUSED(appname);
 	Q_UNUSED(method);
 
-	QByteArray* res = new QByteArray();
-	QVariantMap param = engine.evaluate("("+body+")").toVariant().toMap();
-	QString id = param.value("id").toString();
-	QMenu *menu = 0;
-	QAction *item = 0;
-	if (!id.isEmpty()) {
-		if (path.startsWith("/Menu.")) {
-			menu = static_cast<QMenu *>(getInstance(id));
-		} else if (path.startsWith("/MenuItem.")) {
-			item = static_cast<QAction *>(getInstance(id));
-		}
-	}
+	assert(path.startsWith("/"));
 
-	if (path == "/Menu.create") {
-		*res = createMenu();
-	} else if (path == "/Menu.destroy") {
-		*res = destroyMenu(menu);
-	} else if (path == "/Menu.addSeparator") {
-		*res = addSeparator(menu);
-	} else if (path == "/Menu.addMenuItem") {
-		*res = addMenuItem(menu, param.value("text").toString());
-	} else if (path == "/Menu.getMenuItem") {
-		*res = getMenuItem(menu, param.value("index").toInt());
-	} else if (path == "/MenuItem.setProperties") {
-		*res = setMenuItemProperties(item, param);
-	} else if (path == "/MenuItem.setText") {
-		*res = setMenuItemText(item, param.value("text").toString());
-	}
+	QVariantMap param = engine.evaluate("("+body+")").toVariant().toMap();
+	QByteArray* res = new QByteArray();
+
+	*res = processCall(path.mid(1), param);
+
 	*response = res->constData();
 	*response_len = res->size();
 	return reinterpret_cast<onering_response_handle_t>(res);
@@ -66,7 +81,7 @@ void MenuManager::freeResponse(const char* appname, onering_response_handle_t ha
 QByteArray MenuManager::createMenu()
 {
 	QMenu* menu = new QMenu();
-	return QString("{\"id\":\"%1\"}").arg(getId(menu)).toLatin1();
+	return QString("{\"type\":\"Menu\",\"id\":\"%1\"}").arg(getId(menu)).toLatin1();
 }
 
 QByteArray MenuManager::destroyMenu(QMenu* menu)
@@ -86,7 +101,7 @@ QByteArray MenuManager::addMenuItem(QMenu* menu, const QString& text)
 	QAction* action = menu->addAction(text);
 	connect(action, SIGNAL(triggered(bool)),
 			this, SLOT(menuItemTriggered(bool)));
-	return QString("{\"item_id\":\"%1\"}").arg(getId(action)).toLatin1();
+	return QString("{\"type\":\"MenuItem\",\"id\":\"%1\"}").arg(getId(action)).toLatin1();
 }
 
 QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
@@ -96,7 +111,7 @@ QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
 		return "null";
 	}
 	QAction* action = actions[index];
-	return QString("{\"item_id\":\"%1\"}").arg(getId(action)).toLatin1();
+	return QString("{\"type\":\"MenuItem\",\"id\":\"%1\"}").arg(getId(action)).toLatin1();
 }
 
 QByteArray MenuManager::setMenuItemProperties(QAction* item, const QVariantMap& props)
@@ -136,7 +151,7 @@ QString MenuManager::getId(QObject* obj)
 QObject* MenuManager::getInstance(const QString& id)
 {
 	bool ok;
-	return reinterpret_cast<QObject *>(id.toInt(&ok, 16));
+	return reinterpret_cast<QObject *>(id.toLong(&ok, 16));
 }
 
 static onering_response_handle_t menu_app(const char* appname, const char* method, 

@@ -2,6 +2,7 @@
 #include <QFile>
 #include <onering.h>
 #include "oneringapp.h"
+#include "oneringview.h"
 #include "debugger.h"
 
 static OneRingApp* g_app = 0;
@@ -21,6 +22,13 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 {
 	if (command == "onering.js") {
 		return _js;
+	} else if (command == "Window.create") {
+		OneRingView* window = new OneRingView(param["url"].toString(),
+				param["width"].toInt(),
+				param["height"].toInt(),
+			       	param["props"].toMap());
+		return QString("{\"type\":\"Window\",\"id\":\"%1\"}")
+			.arg(getId(window)).toLatin1();
 	}
 
 	return "{\"err\":\"invalid command\"}";

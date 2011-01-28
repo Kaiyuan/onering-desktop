@@ -159,7 +159,7 @@ ONERING.SystemTrayIcon.prototype = (new ONERING.Base()).extend({
 	this._destroy("destroy");
     },
     load: function(url) {
-	return this._call("load", {url: _OneRing.resolve(url)});
+	return this._call("load", {url: ONERING.resolve(url)});
     },
     setContextMenu: function(menu) {
 	return this._call("setContextMenu", {menuId: menu.id});
@@ -397,6 +397,10 @@ ONERING.Application.prototype = {
 
 ONERING.getApplication = function() {
     return new ONERING.Application(_OneRing.getApplication());
+};
+
+ONERING.resolve = function(url) {
+    return _OneRing.resolve(url);
 };
 
 // }}}

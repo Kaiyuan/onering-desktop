@@ -149,7 +149,7 @@ ONERING.Base.prototype = {
     _call: function(command, param) {
 	if (!param) { param = {}; }
 	param.id = this.obj.id;
-	return ONERING.callapp(this.appname, command, param);
+	return ONERING.call_app(this.appname, command, param);
     },
     extend: function(d) {
 	for (var k in d) {
@@ -161,7 +161,7 @@ ONERING.Base.prototype = {
 
 ONERING.Menu = function(items) {
     this.appname = "menu";
-    this.obj = ONERING.callapp("menu", "Menu.create");
+    this.obj = ONERING.call_app("menu", "Menu.create");
     if (!this.obj || this.obj.type != "Menu") {
 	throw new Error("Menu not created");
     }
@@ -178,7 +178,12 @@ ONERING.Menu.SEPARATOR = Object();  // a const
 ONERING.Menu.prototype = new ONERING.Base();
 ONERING.Menu.prototype.extend({
     destroy: function() {
-	return this._call("Menu.destroy");
+	if (!this.obj) {
+	    return;
+	}
+	var r = this._call("Menu.destroy");
+	this.obj = null;
+	return r;
     },
     addSeparator: function() {
 	return this._call("Menu.addSeparator");
@@ -333,13 +338,13 @@ ONERING.post = function(url, data, callback, dataType) {
 	});
 };
 
-ONERING.callapp = function(appname, command, param) {
+ONERING.call_app = function(appname, command, param) {
     var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
     var data = ONERING.param(param || {});
     var r = _OneRing.call("POST", url, data);
     r = JSON.parse(r);
     if (r && r.err) {
-	throw new Error("ONERING.callapp("+appname+", "+command+") failed: " + r.err);
+	throw new Error("ONERING.call_app("+appname+", "+command+") failed: " + r.err);
     }
     return r;
 };

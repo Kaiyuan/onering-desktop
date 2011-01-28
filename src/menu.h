@@ -35,8 +35,6 @@ private:
 	QByteArray processCall(const QString& command, const QVariantMap& param);
 	QString getId(QObject* obj);
 	QObject* getInstance(const QString& id);
-	QScriptEngine engine;
-
 };
 
 void register_menu_app(const char* appname);

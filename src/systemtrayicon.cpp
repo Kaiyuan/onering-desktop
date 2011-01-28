@@ -66,7 +66,8 @@ QVariantMap SystemTrayIcon::getGeometry()
 	return geo;
 }
 
-void SystemTrayIcon::setContextMenu(QObject* menu)
+void SystemTrayIcon::setContextMenu(const QString &menu_id)
 {
-	QSystemTrayIcon::setContextMenu(static_cast<QMenu *>(menu));
+	bool ok;
+	QSystemTrayIcon::setContextMenu(reinterpret_cast<QMenu *>(menu_id.toLong(&ok, 16)));
 }

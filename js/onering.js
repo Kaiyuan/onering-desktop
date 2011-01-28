@@ -136,7 +136,7 @@ ONERING.SystemTrayIcon.prototype = {
 	return this.q.getGeometry();
     },
     setContextMenu: function(menu) {
-	this.q.setContextMenu(menu.q);
+	this.q.setContextMenu(menu.obj.id);
     }
 };
 
@@ -146,12 +146,10 @@ ONERING.SystemTrayIcon.prototype = {
 
 ONERING.Base = function() {};
 ONERING.Base.prototype = {
-    _call: function(command, data) {
-	if (!data) {
-	    data = {};
-	}
-	data.id = this.obj.id;
-	return ONERING.call(this.appname, command, data, {json: true});
+    _call: function(command, param) {
+	if (!param) { param = {}; }
+	param.id = this.obj.id;
+	return ONERING.callapp(this.appname, command, param);
     },
     extend: function(d) {
 	for (var k in d) {
@@ -163,8 +161,8 @@ ONERING.Base.prototype = {
 
 ONERING.Menu = function(items) {
     this.appname = "menu";
-    this.obj = ONERING.call("menu", "Menu.create");
-    if (!this.obj) {
+    this.obj = ONERING.callapp("menu", "Menu.create");
+    if (!this.obj || this.obj.type != "Menu") {
 	throw new Error("Menu not created");
     }
     for (var i=0; i<items.length; i++) {
@@ -204,7 +202,7 @@ ONERING.Menu.prototype.extend({
 });
 
 ONERING.MenuItem = function(item) {
-    if (!item) {
+    if (!item || item.type != "MenuItem") {
 	throw new Error("invalid menu item");
     }
     this.appname = "menu";
@@ -335,16 +333,27 @@ ONERING.post = function(url, data, callback, dataType) {
 	});
 };
 
-ONERING.call = function(appname, command, data, settings) {
+ONERING.call = function(appname, command, data) {
     var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
     if (!data) {
 	data = "";
     }
     if (data instanceof Object) {
-	data = (settings || {}).json ? JSON.stringify(data) : ONERING.param(data);
+	data = ONERING.param(data);
     }
     var r = _OneRing.call("POST", url, data);
     return JSON.parse(r);
+};
+
+ONERING.callapp = function(appname, command, param) {
+    var url = appname ? ("onering://"+appname+"/"+command) : ("/"+command);
+    var data = JSON.stringify(param || {});
+    var r = _OneRing.call("POST", url, data);
+    r = JSON.parse(r);
+    if (r && r.err) {
+	throw new Error("ONERING.callapp("+appname+", "+command+") failed: " + r.err);
+    }
+    return r;
 };
 
 ONERING.bind = function(event, callback) {

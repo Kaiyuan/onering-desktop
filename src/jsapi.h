@@ -41,6 +41,7 @@ public slots:
 	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
 	bool checkAlive(QObject* o=0);
 	QObject* getCurrentWindow();
+	QString getCurrentWindowId();
 	QObject* getApplication();
 
 	QObject* HotKey_new(const QString &keyseq);

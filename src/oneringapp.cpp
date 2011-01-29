@@ -16,6 +16,7 @@ OneRingApp::OneRingApp(QObject *parent)
 	}
 	_js = file.readAll();
 	file.close();
+	_js.prepend("HTTP/1.1 200 OK\r\nContent-Type: application/javascript\r\n\r\n");
 }
 
 QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& param)

@@ -153,6 +153,11 @@ QObject* JsApi::getCurrentWindow()
 	return window;
 }
 
+QString JsApi::getCurrentWindowId()
+{
+	return App::getId(window);
+}
+
 QObject* JsApi::getApplication()
 {
 	return qApp;

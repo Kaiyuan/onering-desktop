@@ -9,7 +9,7 @@ ONERING.Base.prototype = {
 	},
 	_create: function(command, param) {
 		var obj = ONERING.call_app(this.appname, command, param);
-		if (!obj || obj.type != this.type) {
+		if (!(this.validate_type(obj))) {
 			throw new Error(this.type + " not created");
 		}
 		return obj;
@@ -19,6 +19,9 @@ ONERING.Base.prototype = {
 		var r = this._call(command);
 		this.id = null;
 		return r;
+	},
+	validate_type: function(obj) {
+		return (obj && obj.type == this.type);
 	},
 	bind: function(event, callback) {
 		ONERING.subscribe(this.type+"."+this.id+"."+event, callback);
@@ -134,6 +137,9 @@ ONERING.Window.prototype = {
 };
 
 ONERING.Window = function(obj) {
+	if (!this.validate_type(obj)) {
+		throw new Error("invalid type");
+	}
 	this.id = obj.id;
 };
 ONERING.Window.prototype = (new ONERING.Base()).extend({
@@ -146,6 +152,13 @@ ONERING.Window.prototype = (new ONERING.Base()).extend({
 			return new ONERING.Window(window);
 		},
 	});
+
+ONERING.window = new ONERING.Window({type: "Window",
+	   								 id: _OneRing.getCurrentWindowId()});
+
+ONERING.getCurrentWindow = function() {
+	return ONERING.window;
+};
 
 // }}}
 
@@ -247,10 +260,6 @@ ONERING.MenuItem.prototype = (new ONERING.Base()).extend({
 // }}}
 
 // functions {{{
-
-ONERING.getCurrentWindow = function() {
-	return ONERING.window;
-};
 
 
 ONERING.createWindow = function(url, width, height, props) {
@@ -449,7 +458,5 @@ ONERING.param = function(a) {
 };
 
 // }}}
-
-ONERING.window = new ONERING.Window(_OneRing.getCurrentWindow());
 
 // vim:set foldmethod=marker:

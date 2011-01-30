@@ -31,6 +31,30 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 		window->show();
 		return QString("{\"type\":\"Window\",\"id\":\"%1\"}")
 			.arg(getId(window)).toLatin1();
+	} else if (command.startsWith("Window.")) {
+		QString id = param.value("id").toString();
+		if (id.isEmpty()) {
+			return "{\"err\":\"invalid id\"}";
+		}
+		OneRingView* window = static_cast<OneRingView *>(getInstance(id));
+
+		if (command == "Window.isAlive") {
+			return window ? "true" : "false";
+		} else if (command == "Window.showInspector") {
+			window->showInspector();
+		} else if (command == "Window.hide") {
+			window->hide();
+		} else if (command == "Window.show") {
+			window->show();
+		} else if (command == "Window.maximize") {
+			window->showMaximized();
+		} else if (command == "Window.showNormal") {
+			window->showNormal();
+		} else if (command == "Window.isMinimized") {
+			return window->isMinimized() ? "true" : "false";
+		} else if (command == "Window.activateWindow") {
+			window->activateWindow();
+		}
 	}
 
 	return "{\"err\":\"invalid command\"}";

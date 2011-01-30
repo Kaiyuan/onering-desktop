@@ -106,15 +106,30 @@ void App::freeResponse(const char* appname, onering_response_handle_t handle)
 	delete reinterpret_cast<QByteArray *>(handle);
 }
 
-QString App::getId(QObject* obj)
+QString App::generateObjectId(QObject* obj)
 {
 	return QString::number(reinterpret_cast<long>(obj), 16);
+}
+
+
+QString App::getId(QObject* obj)
+{
+	if (!(_instances.contains(obj))) {
+		_instances.insert(obj);
+		connect(obj, SIGNAL(destroyed(QObject* obj)),
+				this, SLOT(instanceDestroyed(QObject* obj)));
+	}
+	return generateObjectId(obj);
 }
 
 QObject* App::getInstance(const QString& id)
 {
 	bool ok;
-	return reinterpret_cast<QObject *>(id.toLong(&ok, 16));
+	QObject* instance = reinterpret_cast<QObject *>(id.toLong(&ok, 16));
+	return _instances.contains(instance) ? instance : 0;
 }
 
-
+void App::instanceDestroyed(QObject* obj)
+{
+	_instances.remove(obj);
+}

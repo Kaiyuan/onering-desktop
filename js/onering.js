@@ -96,36 +96,6 @@ ONERING.Window.prototype = {
 		}
 	},
 
-	showInspector: function() {
-		return _OneRing.showInspector();
-	},
-
-	enableContextMenu: function() {
-		this.q.enableContextMenu();
-	},
-
-	disableContextMenu: function() {
-		this.q.disableContextMenu();
-	},
-
-	hide: function() {
-		this.q.hide();
-	},
-	show: function() {
-		this.q.show();
-	},
-	maximize: function() {
-		this.q.showMaximized();
-	},
-	showNormal: function() {
-		this.q.showNormal();
-	},
-	isMinimized: function() {
-		return this.q.minimized;
-	},
-	activateWindow: function() {
-		return this.q.activateWindow();
-	}
 };
 
 ONERING.Window = function(obj) {
@@ -144,7 +114,30 @@ ONERING.Window.prototype = (new ONERING.Base()).extend({
 			return new ONERING.Window(window);
 		},
 		isAlive: function() {
+			return this._call("Window.isAlive");
 		},
+		showInspector: function() {
+			return this._call("Window.showInspector");
+		},
+		hide: function() {
+			return this._call("Window.hide");
+		},
+		show: function() {
+			return this._call("Window.show");
+		},
+		maximize: function() {
+			return this._call("Window.maximize");
+		},
+		showNormal: function() {
+			return this._call("Window.showNormal");
+		},
+		isMinimized: function() {
+			return this._call("Window.isMinimized");
+		},
+		activateWindow: function() {
+			return this._call("Window.activateWindow");
+		}
+
 	});
 
 ONERING.window = new ONERING.Window({type: "Window",

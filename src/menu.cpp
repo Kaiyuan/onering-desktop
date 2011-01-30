@@ -111,7 +111,7 @@ void MenuApp::menuItemTriggered(bool checked)
 {
 	QAction* action = static_cast<QAction *>(sender());
 	onering_publish(qPrintable(QString("menu.MenuItem.%1.triggered").arg(getId(action))),
-		       	qPrintable(QString("%1").arg(checked?"true":"false")));
+		       	qPrintable(QString("{\"checked\":%1}").arg(checked?"true":"false")));
 }
 
 static onering_response_handle_t menu_app(const char* appname, const char* method, 

@@ -34,7 +34,6 @@ void onering_publish(const char* channel, const char* msg)
 {
 	Application *app = static_cast<Application *>(qApp);
 	if (app && !app->quiting) {
-		QEvent *event = new PublishEvent(channel, msg);
-		QCoreApplication::postEvent(&(app->pubsubhub), event);
+		app->pubsubhub.publish(channel, msg);
 	}
 }

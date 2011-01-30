@@ -31,7 +31,7 @@ private slots:
 protected:
 	QString getId(QObject* obj);
 	QString getId(void* obj);
-	QObject* getInstance(const QString& id);
+	void* getInstance(const QString& id);
 
 private:
 	virtual QByteArray processCall(const QString& command, const QVariantMap& param) = 0;

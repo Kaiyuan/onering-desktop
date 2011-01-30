@@ -73,7 +73,9 @@ void OneRingView::changeEvent(QEvent * event)
 
 void OneRingView::closeEvent(QCloseEvent *event)
 {
+	qDebug() << "closeEvent" << event;
 	emit eventOccurred(event, "close");
+	qDebug() << "exit closeEvent" << event;
 }
 
 void OneRingView::activateWindow()

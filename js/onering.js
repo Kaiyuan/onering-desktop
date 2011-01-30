@@ -24,7 +24,13 @@ ONERING.Base.prototype = {
 		return (obj && obj.type == this.type);
 	},
 	bind: function(event, callback) {
-		ONERING.subscribe(this.appname+"."+this.type+"."+this.id+"."+event, callback);
+		ONERING.subscribe(this.appname+"."+this.type+"."+this.id+"."+event,
+		   	function(e) {
+				if (e instanceof Object && e.event_id) {
+					e = new ONERING.Event(e.event_id);
+				}
+				callback(e);
+			});
 	},
 	extend: function(d) {
 		for (var k in d) {
@@ -33,6 +39,17 @@ ONERING.Base.prototype = {
 		return this;
 	},
 };
+
+ONERING.Event = function(id) {
+	this.id = id;
+};
+ONERING.Event.prototype = (new ONERING.Base()).extend({
+		appname: "onering",
+		type: "Event",
+		preventDefault: function() {
+			this._call("Event.preventDefault");
+		}
+	});
 
 // Application {{{
 
@@ -385,7 +402,7 @@ ONERING.call_app = function(appname, command, param) {
 ONERING.subscribe = function(channel, callback) {
 	ONERING.connect(_OneRing.getPubSubHub().published, function(ch, msg) {
 			if (ch == channel) {
-				var data = eval('('+msg+')');
+				var data = JSON.parse(msg);
 				callback(data);
 			}
 		});

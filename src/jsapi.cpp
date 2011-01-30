@@ -74,8 +74,6 @@ void JsApi::invokeCallback(const QString &funcname, const QString &param)
 
 // javascript api {{{
 
-// module level {{{
-
 QVariant JsApi::test(QVariant param)
 {
 	qDebug() << param;
@@ -128,16 +126,6 @@ QObject* JsApi::getPubSubHub()
 QString JsApi::resolve(const QString &relative)
 {
 	return frame->baseUrl().resolved(relative).toString();
-}
-
-// }}}
-
-QObject* JsApi::HotKey_new(const QString &keyseq)
-{
-	qDebug() << "JsApi::HotKey_new" << keyseq;
-	HotKey *hotkey = new HotKey(QKeySequence(keyseq));
-	Debugger::traceObj(hotkey);
-	return hotkey;
 }
 
 // }}}

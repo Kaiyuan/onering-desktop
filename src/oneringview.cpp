@@ -8,7 +8,7 @@
 #include "debugger.h"
 #include "event.h"
 
-OneRingView::OneRingView(const QUrl &url, int width, int height, const QVariantMap &props)
+OneRingView::OneRingView(const QVariantMap &props)
 	: QWebView(),
 #ifdef CONTEXTMENU
        	contextMenuEnabled(true),
@@ -36,9 +36,6 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, const QVariantM
 	jsapi->setWindow(this);
 
 	setAttribute(Qt::WA_DeleteOnClose, true);
-
-	load(url);
-	resize(width, height);
 
 	setProperties(props);
 
@@ -121,6 +118,9 @@ void OneRingView::activateWindow()
 
 void OneRingView::setProperties(const QVariantMap& props)
 {
+	load(props["url"].toString());
+	resize(props["width"].toInt(), props["height"].toInt());
+
 	if (props["fixedSize"].toBool()) {
 		setFixedSize(width(), height());
 	}

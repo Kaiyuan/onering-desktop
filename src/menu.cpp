@@ -20,10 +20,10 @@ QByteArray MenuApp::processCall(const QString& command, const QVariantMap& param
 		return createMenu();
 	} else if (command.startsWith("Menu.")) {
 		QString id = param.value("id").toString();
-		if (id.isEmpty()) {
+		QMenu* menu = static_cast<QMenu *>(getInstance(id));
+		if (!menu) {
 			return "{\"err\":\"invalid id\"}";
 		}
-		QMenu* menu = static_cast<QMenu *>(getInstance(id));
 		if (command == "Menu.destroy") {
 			return destroyMenu(menu);
 		} else if (command == "Menu.addSeparator") {
@@ -35,10 +35,10 @@ QByteArray MenuApp::processCall(const QString& command, const QVariantMap& param
 		}
 	} else if (command.startsWith("MenuItem.")) {
 		QString id = param.value("id").toString();
-		if (id.isEmpty()) {
+		QAction* item = static_cast<QAction *>(getInstance(id));
+		if (!item) {
 			return "{\"err\":\"invalid id\"}";
 		}
-		QAction* item = static_cast<QAction *>(getInstance(id));
 		if (command == "MenuItem.setProperties") {
 			return setMenuItemProperties(item, param);
 		} else if (command == "MenuItem.setText") {

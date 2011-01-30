@@ -27,10 +27,10 @@ QByteArray SystemTrayIconApp::processCall(const QString& command, const QVariant
 
 	
 	QString id = param.value("id").toString();
-	if (id.isEmpty()) {
+	icon = static_cast<QSystemTrayIcon *>(getInstance(id));
+	if (!icon) {
 		return "{\"err\":\"invalid id\"}";
 	}
-	icon = static_cast<QSystemTrayIcon *>(getInstance(id));
 
 	if (command == "destroy") {
 		delete icon;
@@ -46,6 +46,9 @@ QByteArray SystemTrayIconApp::processCall(const QString& command, const QVariant
 	} else if (command == "setContextMenu") {
 		QString menu_id = param.value("menuId").toString();
 		QMenu* menu = static_cast<QMenu *>(getInstance(menu_id));
+		if (!menu) {
+			return "{\"err\":\"invalid menu id\"}";
+		}
 		icon->setContextMenu(menu);
 		return "null";
 	}

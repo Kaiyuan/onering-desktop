@@ -24,10 +24,7 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 	if (command == "onering.js") {
 		return _js;
 	} else if (command == "Window.create") {
-		OneRingView* window = new OneRingView(param["url"].toString(),
-				param["width"].toInt(),
-				param["height"].toInt(),
-			       	param["props"].toMap());
+		OneRingView* window = new OneRingView(param);
 		window->show();
 		return QString("{\"type\":\"Window\",\"id\":\"%1\"}")
 			.arg(getId(window)).toLatin1();
@@ -40,24 +37,41 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 
 		if (command == "Window.isAlive") {
 			return window ? "true" : "false";
+		} else if (!window) {
+			return "{\"err\":\"invalid id\"}";
 		} else if (command == "Window.showInspector") {
 			window->showInspector();
+			return "null";
 		} else if (command == "Window.hide") {
 			window->hide();
+			return "null";
 		} else if (command == "Window.show") {
 			window->show();
+			return "null";
 		} else if (command == "Window.maximize") {
 			window->showMaximized();
+			return "null";
 		} else if (command == "Window.showNormal") {
 			window->showNormal();
+			return "null";
 		} else if (command == "Window.isMinimized") {
 			return window->isMinimized() ? "true" : "false";
 		} else if (command == "Window.activateWindow") {
 			window->activateWindow();
+			return "null";
 		}
 	}
 
 	return "{\"err\":\"invalid command\"}";
+}
+
+void OneRingApp::registerWindow(OneRingView *window)
+{
+	if (!g_app) {
+		g_app = new OneRingApp();
+	}
+
+	g_app->getId(window);
 }
 
 static onering_response_handle_t onering_app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)
@@ -77,3 +91,5 @@ void register_onering_app(const char* appname)
 {
 	onering_register_app(appname, &onering_app, &onering_app_free_response);
 }
+
+

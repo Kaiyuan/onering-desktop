@@ -70,17 +70,6 @@ void JsApi::invokeCallback(const QString &funcname, const QString &param)
 			.arg(funcname, jsparam));
 }
 
-
-QObject* JsApi::createWindow(const QString &url, int width, int height, const QVariantMap &props)
-{
-	qDebug() << "JsApi::createWindow" << url << width << height << props;
-	OneRingView *window = new OneRingView(frame->baseUrl().resolved(url),
-			width, height, props);
-	Debugger::traceObj(window);
-	window->show();
-	return window;
-}
-
 // }}}
 
 // javascript api {{{
@@ -124,11 +113,6 @@ void JsApi::ajax(const QString &type, const QString &url, const QString &body, c
 	QUrl absurl = frame->baseUrl().resolved(url);
 	QByteArray response = call_app_body(qPrintable(type), absurl, qPrintable(body));
 	invokeCallback(callback, response);
-}
-
-QObject* JsApi::getCurrentWindow()
-{
-	return window;
 }
 
 QString JsApi::getCurrentWindowId()

@@ -116,8 +116,8 @@ QString App::getId(QObject* obj)
 {
 	if (!(_instances.contains(obj))) {
 		_instances.insert(obj);
-		connect(obj, SIGNAL(destroyed(QObject* obj)),
-				this, SLOT(instanceDestroyed(QObject* obj)));
+		connect(obj, SIGNAL(destroyed(QObject*)),
+				this, SLOT(instanceDestroyed(QObject*)));
 	}
 	return generateObjectId(obj);
 }
@@ -126,10 +126,11 @@ QObject* App::getInstance(const QString& id)
 {
 	bool ok;
 	QObject* instance = reinterpret_cast<QObject *>(id.toLong(&ok, 16));
-	return _instances.contains(instance) ? instance : 0;
+	return instance;
 }
 
 void App::instanceDestroyed(QObject* obj)
 {
+	qDebug() << obj << generateObjectId(obj) << "deleted";
 	_instances.remove(obj);
 }

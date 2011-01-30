@@ -6,6 +6,7 @@
 #include <QEvent>
 #include <QList>
 #include <QPair>
+#include <QWebInspector>
 #include "jsapi.h"
 
 class OneRingView : public QWebView
@@ -14,8 +15,10 @@ class OneRingView : public QWebView
 
 public:
 	OneRingView(const QUrl &url, int width, int height, const QVariantMap &props);
-	Q_INVOKABLE void enableContextMenu();
-	Q_INVOKABLE void disableContextMenu();
+	~OneRingView();
+
+	void setProperties(const QVariantMap &props);
+	void showInspector(void);
 
 signals:
 	void eventOccurred(QObject *event);
@@ -39,6 +42,7 @@ private:
 	QHash<QEvent::Type, QPair<QString, int> > boundEvents;
 	QHash<QString, QEvent::Type> eventMap;
 	JsApi *jsapi;
+	QWebInspector *inspector;
 };
 
 #endif

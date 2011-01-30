@@ -36,10 +36,8 @@ public slots:
 	QObject* createWindow(const QString &url, int width, int height, const QVariantMap &props);
 
 	void log(const QString &s);
-	void showInspector(void);
 	void exit(void);
 	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
-	bool checkAlive(QObject* o=0);
 	QObject* getCurrentWindow();
 	QString getCurrentWindowId();
 	QObject* getApplication();
@@ -52,7 +50,6 @@ private slots:
 private:
 	QWidget *window;
 	QWebFrame *frame;
-	QWebInspector *inspector;
 	QHash< EventSource, QList<QString> > callbacks;
 
 	void registerCallback(QObject *sender, const QString &event, const QString &callback_funcname);

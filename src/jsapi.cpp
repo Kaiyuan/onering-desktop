@@ -24,16 +24,12 @@
 // public methods {{{
 
 JsApi::JsApi(QObject *parent)
-	: QObject(parent),
-	  inspector(0)
+	: QObject(parent)
 {
 }
 
 JsApi::~JsApi()
 {
-	if (inspector) {
-		delete inspector;
-	}
 }
 
 void JsApi::setWebView(QWebView *view)
@@ -102,20 +98,6 @@ void JsApi::log(const QString &s)
 	qDebug() << "JsApi::log" << s;
 }
 
-void JsApi::showInspector()
-{
-	qDebug() << "JsApi::showInspector";
-	if (!inspector) {
-		inspector = new QWebInspector();
-	}
-	if (!inspector->page()) {
-		inspector->setPage(frame->page());
-	}
-	inspector->resize(800, 600);
-	inspector->show();
-	inspector->activateWindow();  // put inspector at the top most
-}
-
 void JsApi::exit()
 {
 	qApp->quit();
@@ -136,16 +118,12 @@ QString JsApi::call(const QString &method, const QString &url, const QString &bo
 
 void JsApi::ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async)
 {
+	Q_UNUSED(async);
+
 	qDebug() << "JsApi::ajax" << type << url << body << callback;
 	QUrl absurl = frame->baseUrl().resolved(url);
 	QByteArray response = call_app_body(qPrintable(type), absurl, qPrintable(body));
 	invokeCallback(callback, response);
-}
-
-bool JsApi::checkAlive(QObject* o)
-{
-	qDebug() << "JsApi::checkAlive" << o;
-	return o != 0;
 }
 
 QObject* JsApi::getCurrentWindow()
@@ -155,7 +133,7 @@ QObject* JsApi::getCurrentWindow()
 
 QString JsApi::getCurrentWindowId()
 {
-	return App::getId(window);
+	return App::generateObjectId(window);
 }
 
 QObject* JsApi::getApplication()

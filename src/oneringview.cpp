@@ -11,10 +11,11 @@
 OneRingView::OneRingView(const QUrl &url, int width, int height, const QVariantMap &props)
 	: QWebView(),
 #ifdef CONTEXTMENU
-       	contextMenuEnabled(true)
+       	contextMenuEnabled(true),
 #else
-       	contextMenuEnabled(false)
+       	contextMenuEnabled(false),
 #endif
+	inspector(0)
 {
 	QNetworkAccessManager *oldManager = page()->networkAccessManager();
 	NetworkAccessManager *newManager = new NetworkAccessManager(this, oldManager);
@@ -39,30 +40,16 @@ OneRingView::OneRingView(const QUrl &url, int width, int height, const QVariantM
 	load(url);
 	resize(width, height);
 
-	if (props["fixedSize"].toBool()) {
-		setFixedSize(width, height);
-	}
-	if (!props["title"].toString().isEmpty()) {
-		setWindowTitle(props["title"].toString());
-	}
-
-	Qt::WindowFlags flags = Qt::Widget;
-	if (props.contains("minimizeButton") ||
-		       	props.contains("maximizeButton")) {
-		flags |= Qt::CustomizeWindowHint
-		       	| Qt::WindowTitleHint
-		       	| Qt::WindowSystemMenuHint
-		       	| Qt::WindowMinimizeButtonHint
-		       	| Qt::WindowMaximizeButtonHint
-		       	| Qt::WindowCloseButtonHint;
-		if (!(props.value("minimizeButton", QVariant(true)).toBool()))
-			flags ^= Qt::WindowMinimizeButtonHint;
-		if (!(props.value("maximizeButton", QVariant(true)).toBool()))
-			flags ^= Qt::WindowMaximizeButtonHint;
-	}
-	setWindowFlags(flags);
+	setProperties(props);
 
 	initializEventMap();
+}
+
+OneRingView::~OneRingView()
+{
+	if (inspector) {
+		delete inspector;
+	}
 }
 
 void OneRingView::initializEventMap()
@@ -81,16 +68,6 @@ void OneRingView::contextMenuEvent(QContextMenuEvent *ev)
 	if (contextMenuEnabled) {
 		QWebView::contextMenuEvent(ev);
 	}
-}
-
-void OneRingView::enableContextMenu()
-{
-	contextMenuEnabled = true;
-}
-
-void OneRingView::disableContextMenu()
-{
-	contextMenuEnabled = false;
 }
 
 void OneRingView::bind(const QString &eventTypeName)
@@ -140,4 +117,43 @@ void OneRingView::closeEvent(QCloseEvent *event)
 void OneRingView::activateWindow()
 {
 	QWebView::activateWindow();
+}
+
+void OneRingView::setProperties(const QVariantMap& props)
+{
+	if (props["fixedSize"].toBool()) {
+		setFixedSize(width(), height());
+	}
+	if (!props["title"].toString().isEmpty()) {
+		setWindowTitle(props["title"].toString());
+	}
+
+	if (props.contains("minimizeButton")
+		       	|| props.contains("maximizeButton")) {
+		Qt::WindowFlags flags = Qt::Widget;
+		flags |= Qt::CustomizeWindowHint
+		       	| Qt::WindowTitleHint
+		       	| Qt::WindowSystemMenuHint
+		       	| Qt::WindowMinimizeButtonHint
+		       	| Qt::WindowMaximizeButtonHint
+		       	| Qt::WindowCloseButtonHint;
+		if (!(props.value("minimizeButton", QVariant(true)).toBool()))
+			flags ^= Qt::WindowMinimizeButtonHint;
+		if (!(props.value("maximizeButton", QVariant(true)).toBool()))
+			flags ^= Qt::WindowMaximizeButtonHint;
+		setWindowFlags(flags);
+	}
+}
+
+void OneRingView::showInspector()
+{
+	if (!inspector) {
+		inspector = new QWebInspector();
+	}
+	if (!inspector->page()) {
+		inspector->setPage(page());
+	}
+	inspector->resize(800, 600);
+	inspector->show();
+	inspector->activateWindow();  // put inspector at the top most
 }

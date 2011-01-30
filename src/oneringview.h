@@ -21,11 +21,9 @@ public:
 	void showInspector(void);
 
 signals:
-	void eventOccurred(QObject *event);
+	void eventOccurred(QEvent *event, const QString& type);
 
 public slots:
-	void bind(const QString &eventTypeName);
-	void unbind(const QString &eventTypeName, int times=1);
 	void activateWindow(void);
 
 private slots:
@@ -39,8 +37,6 @@ protected:
 
 private:
 	bool contextMenuEnabled;
-	QHash<QEvent::Type, QPair<QString, int> > boundEvents;
-	QHash<QString, QEvent::Type> eventMap;
 	JsApi *jsapi;
 	QWebInspector *inspector;
 };

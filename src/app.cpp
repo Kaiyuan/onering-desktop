@@ -106,7 +106,7 @@ void App::freeResponse(const char* appname, onering_response_handle_t handle)
 	delete reinterpret_cast<QByteArray *>(handle);
 }
 
-QString App::generateObjectId(QObject* obj)
+QString App::generateObjectId(void* obj)
 {
 	return QString::number(reinterpret_cast<long>(obj), 16);
 }
@@ -122,6 +122,11 @@ QString App::getId(QObject* obj)
 	return generateObjectId(obj);
 }
 
+QString App::getId(void* obj)
+{
+	return generateObjectId(obj);
+}
+
 QObject* App::getInstance(const QString& id)
 {
 	bool ok;
@@ -134,3 +139,4 @@ void App::instanceDestroyed(QObject* obj)
 	qDebug() << obj << "deleted";
 	_instances.remove(obj);
 }
+

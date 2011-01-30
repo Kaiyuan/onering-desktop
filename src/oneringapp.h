@@ -5,7 +5,6 @@
 #include <QVariantMap>
 #include "oneringview.h"
 #include "app.h"
-#include "event.h"
 
 class OneRingApp : public App
 {
@@ -17,7 +16,7 @@ public:
 	static OneRingView* createWindow(const QVariantMap& props);
 
 private slots:
-	void windowEventOccurred(Event* e);
+	void windowEventOccurred(QEvent* e, const QString& type);
 
 private:
        	QByteArray processCall(const QString& command, const QVariantMap& param);

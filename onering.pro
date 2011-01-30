@@ -39,7 +39,6 @@ HEADERS += include/onering.h \
 	   src/dataloader.h \
 	   src/application.h \
 	   src/debugger.h \
-	   src/event.h \
 	   src/pubsubhub.h \
 	   src/publishevent.h \
 	   src/json.h
@@ -56,7 +55,6 @@ SOURCES += src/onering.cpp \
 	   src/dataloader.cpp \
            src/application.cpp \
 	   src/debugger.cpp \
-  	   src/event.cpp \
 	   src/pubsubhub.cpp \
 	   src/publishevent.cpp \
 	   src/json.cpp

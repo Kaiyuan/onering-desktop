@@ -23,13 +23,14 @@ public:
 	onering_response_handle_t processRequest(const char* appname, const char* method, const QString& path, const QByteArray& body, const char** response, int* response_len);
 	void freeResponse(const char* appname, onering_response_handle_t response_handle);
 
-	static QString generateObjectId(QObject* obj);
+	static QString generateObjectId(void* obj);
 
 private slots:
 	void instanceDestroyed(QObject* obj);
 
 protected:
 	QString getId(QObject* obj);
+	QString getId(void* obj);
 	QObject* getInstance(const QString& id);
 
 private:

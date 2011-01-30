@@ -13,8 +13,7 @@ class OneRingApp : public App
 public:
 	OneRingApp(QObject* parent=0);
 
-	// for application to initilize the first window.
-	static void registerWindow(OneRingView *window);
+	static OneRingView* createWindow(const QVariantMap& props);
 
 public:
        	QByteArray processCall(const QString& command, const QVariantMap& param);

@@ -38,8 +38,6 @@ OneRingView::OneRingView(const QVariantMap &props)
 	setAttribute(Qt::WA_DeleteOnClose, true);
 
 	setProperties(props);
-
-	initializEventMap();
 }
 
 OneRingView::~OneRingView()
@@ -47,12 +45,6 @@ OneRingView::~OneRingView()
 	if (inspector) {
 		delete inspector;
 	}
-}
-
-void OneRingView::initializEventMap()
-{
-	eventMap["windowStateChange"] = QEvent::WindowStateChange;
-	eventMap["close"] = QEvent::Close;
 }
 
 void OneRingView::printCurrentUrl(const QUrl &url)
@@ -67,48 +59,21 @@ void OneRingView::contextMenuEvent(QContextMenuEvent *ev)
 	}
 }
 
-void OneRingView::bind(const QString &eventTypeName)
-{
-	if (eventMap.contains(eventTypeName)) {
-		QEvent::Type type = eventMap.value(eventTypeName);
-		if (!boundEvents.contains(type)) {
-			boundEvents[type].first = eventTypeName;
-		}
-		boundEvents[type].second += 1;
-	}
-}
-
-void OneRingView::unbind(const QString &eventTypeName, int times)
-{
-	if (eventMap.contains(eventTypeName)) {
-		QEvent::Type type = eventMap.value(eventTypeName);
-		if (boundEvents.contains(type)) {
-			boundEvents[type].second -= times;
-			if (boundEvents.value(type).second <= 0) {
-				boundEvents.remove(type);
-			}
-		}
-	}
-}
-
 void OneRingView::changeEvent(QEvent * event)
 {
-	QEvent::Type type = event->type();
-	if (boundEvents.contains(type)) {
-		Event e(event, boundEvents.value(type).first);
-		emit eventOccurred(&e);
+	switch (event->type()) {
+		case QEvent::WindowStateChange:
+			emit eventOccurred(event, "windowStateChange");
+			break;
+		default:
+			;
 	}
 	QWebView::changeEvent(event);
 }
 
 void OneRingView::closeEvent(QCloseEvent *event)
 {
-	QEvent::Type type(event->type());
-	if (boundEvents.contains(type)) {
-		Event e(reinterpret_cast<QEvent *>(event),
-		      boundEvents.value(type).first);
-		emit eventOccurred(&e);
-	}
+	emit eventOccurred(event, "close");
 }
 
 void OneRingView::activateWindow()

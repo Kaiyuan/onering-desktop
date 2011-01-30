@@ -78,16 +78,16 @@ OneRingView* OneRingApp::createWindow(const QVariantMap& props)
 	}
 
 	OneRingView* window = new OneRingView(props);
-	connect(window, SIGNAL(eventOccurred(Event*)),
-			g_app, SLOT(windowEventOccurred(Event*)));
+	connect(window, SIGNAL(eventOccurred(QEvent*, const QString&)),
+			g_app, SLOT(windowEventOccurred(QEvent*, const QString&)));
 	return window;
 }
 
-void OneRingApp::windowEventOccurred(Event * e)
+void OneRingApp::windowEventOccurred(QEvent* e, const QString& type)
 {
 	OneRingView* window = static_cast<OneRingView *>(sender());
 	onering_publish(qPrintable(QString("onering.Window.%1.%2")
-				.arg(getId(window), e->type())),
+				.arg(getId(window), type)),
 			qPrintable(QString("{\"event_id\":\"%1\"}")
 				.arg(getId(e))));
 }

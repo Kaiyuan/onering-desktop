@@ -15,7 +15,7 @@ public:
 
 	static OneRingView* createWindow(const QVariantMap& props);
 
-public:
+private:
        	QByteArray processCall(const QString& command, const QVariantMap& param);
 	QByteArray _js;
 };

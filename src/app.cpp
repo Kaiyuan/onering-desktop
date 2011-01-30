@@ -108,7 +108,7 @@ void App::freeResponse(const char* appname, onering_response_handle_t handle)
 
 QString App::generateObjectId(void* obj)
 {
-	return QString::number(reinterpret_cast<long>(obj), 16);
+	return QString::number(reinterpret_cast<unsigned long>(obj), 16);
 }
 
 
@@ -127,11 +127,10 @@ QString App::getId(void* obj)
 	return generateObjectId(obj);
 }
 
-QObject* App::getInstance(const QString& id)
+void* App::getInstance(const QString& id)
 {
 	bool ok;
-	QObject* instance = reinterpret_cast<QObject *>(id.toLong(&ok, 16));
-	return instance;
+	return reinterpret_cast<void *>(id.toULong(&ok, 16));
 }
 
 void App::instanceDestroyed(QObject* obj)

@@ -2,12 +2,8 @@
 #include "publishevent.h"
 #include "pubsubhub.h"
 
-bool PubSubHub::event(QEvent *e)
+void PubSubHub::publish(const QString& channel, const QString& message)
 {
-	if (e->type() == PublishEvent::type()) {
-		PublishEvent *pe = static_cast<PublishEvent *>(e);
-		qDebug() << "emit published" << pe->channel();
-		emit published(pe->channel(), pe->message());
-	}
-	return true;
+	qDebug() << "publish" << channel << message;
+	emit published(channel, message);
 }

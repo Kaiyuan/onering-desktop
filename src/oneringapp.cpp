@@ -31,9 +31,6 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 			.arg(getId(window)).toLatin1();
 	} else if (command.startsWith("Window.")) {
 		QString id = param.value("id").toString();
-		if (id.isEmpty()) {
-			return "{\"err\":\"invalid id\"}";
-		}
 		OneRingView* window = static_cast<OneRingView *>(getInstance(id));
 
 		if (command == "Window.isAlive") {
@@ -66,6 +63,14 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 			qApp->setQuitOnLastWindowClosed(param["quit"].toBool());
 			return "null";
 		}
+	} else if (command == "Event.preventDefault") {
+		QString id = param.value("id").toString();
+		QEvent* event = static_cast<QEvent *>(getInstance(id));
+		if (!event) {
+			return "{\"err\":\"invalid id\"}";
+		}
+		event->ignore();
+		return "null";
 	}
 
 	return "{\"err\":\"invalid command\"}";

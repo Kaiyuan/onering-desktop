@@ -24,7 +24,7 @@ ONERING.Base.prototype = {
 		return (obj && obj.type == this.type);
 	},
 	bind: function(event, callback) {
-		ONERING.subscribe(this.type+"."+this.id+"."+event, callback);
+		ONERING.subscribe(this.appname+"."+this.type+"."+this.id+"."+event, callback);
 	},
 	extend: function(d) {
 		for (var k in d) {

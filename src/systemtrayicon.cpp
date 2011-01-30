@@ -70,7 +70,7 @@ void SystemTrayIconApp::iconFetched(QByteArray &data)
 void SystemTrayIconApp::notifyClicked(QSystemTrayIcon::ActivationReason reason)
 {
 	QSystemTrayIcon *icon = static_cast<QSystemTrayIcon *>(sender());
-	QString channel = QString("SystemTrayIcon.%1.").arg(getId(icon));
+	QString channel = QString("systray.SystemTrayIcon.%1.").arg(getId(icon));
 
 	switch (reason) {
 		case QSystemTrayIcon::Trigger:

@@ -110,7 +110,7 @@ QByteArray MenuApp::setMenuItemText(QAction* item, const QString& text)
 void MenuApp::menuItemTriggered(bool checked)
 {
 	QAction* action = static_cast<QAction *>(sender());
-	onering_publish(qPrintable(QString("MenuItem.%1.triggered").arg(getId(action))),
+	onering_publish(qPrintable(QString("menu.MenuItem.%1.triggered").arg(getId(action))),
 		       	qPrintable(QString("%1").arg(checked?"true":"false")));
 }
 

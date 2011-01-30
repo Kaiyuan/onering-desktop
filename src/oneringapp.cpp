@@ -25,7 +25,7 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 	if (command == "onering.js") {
 		return _js;
 	} else if (command == "Window.create") {
-		OneRingView* window = new OneRingView(param);
+		OneRingView* window = createWindow(param);
 		window->show();
 		return QString("{\"type\":\"Window\",\"id\":\"%1\"}")
 			.arg(getId(window)).toLatin1();
@@ -71,13 +71,14 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 	return "{\"err\":\"invalid command\"}";
 }
 
-void OneRingApp::registerWindow(OneRingView *window)
+OneRingView* OneRingApp::createWindow(const QVariantMap& props)
 {
 	if (!g_app) {
 		g_app = new OneRingApp();
 	}
 
-	g_app->getId(window);
+	OneRingView* window = new OneRingView(props);
+	return window;
 }
 
 static onering_response_handle_t app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)

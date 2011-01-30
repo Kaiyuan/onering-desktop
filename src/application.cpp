@@ -134,8 +134,7 @@ int Application::load(const char* appname)
 	}
 	props["url"] = getAbsUrl(s, appname);
 
-	OneRingView *window = new OneRingView(props);
-	OneRingApp::registerWindow(window);
+	OneRingView* window = OneRingApp::createWindow(props);
 
 #ifdef Q_WS_MAC
 	// Install Reopen Application Event (Dock Clicked)

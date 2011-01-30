@@ -109,8 +109,10 @@ ONERING.Window.prototype = (new ONERING.Base()).extend({
 		type: "Window",
 		createWindow: function(url, width, height, props) {
 			url = ONERING.resolve(url);
-			var window = this._create("Window.create", {url: url, width: width,
-					height: height, props: props});
+			props.url = url;
+			props.width = width;
+			props.height = height;
+			var window = this._create("Window.create", props);
 			return new ONERING.Window(window);
 		},
 		isAlive: function() {

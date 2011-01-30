@@ -128,15 +128,15 @@ int Application::load(const char* appname)
 		dataloader->load(url);
 	}
 
-	int width = props["width"].toInt();
-	int height = props["height"].toInt();
 	s = props["url"].toString();
 	if (s.isEmpty()) {
 		s = "/";
 	}
-	url = getAbsUrl(s, appname);
+	props["url"] = getAbsUrl(s, appname);
 
-	OneRingView *window = new OneRingView(url, width, height, props);
+	OneRingView *window = new OneRingView(props);
+	OneRingApp::registerWindow(window);
+
 #ifdef Q_WS_MAC
 	// Install Reopen Application Event (Dock Clicked)
 	qDebug() << "install";

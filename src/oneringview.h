@@ -14,7 +14,7 @@ class OneRingView : public QWebView
 	Q_OBJECT
 
 public:
-	OneRingView(const QUrl &url, int width, int height, const QVariantMap &props);
+	OneRingView(const QVariantMap &props);
 	~OneRingView();
 
 	void setProperties(const QVariantMap &props);

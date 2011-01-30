@@ -33,12 +33,10 @@ public:
 
 public slots:
 	QVariant test(QVariant param);
-	QObject* createWindow(const QString &url, int width, int height, const QVariantMap &props);
 
 	void log(const QString &s);
 	void exit(void);
 	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
-	QObject* getCurrentWindow();
 	QString getCurrentWindowId();
 	QObject* getApplication();
 

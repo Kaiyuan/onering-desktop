@@ -96,14 +96,6 @@ ONERING.Window.prototype = {
 		}
 	},
 
-	createWindow: function(url, width, height, props) {
-		return new ONERING.Window(_OneRing.createWindow(url, width, height, props));
-	},
-
-	isAlive: function() {
-		return _OneRing.checkAlive(this.q);
-	},
-
 	showInspector: function() {
 		return _OneRing.showInspector();
 	},
@@ -147,9 +139,11 @@ ONERING.Window.prototype = (new ONERING.Base()).extend({
 		type: "Window",
 		createWindow: function(url, width, height, props) {
 			url = ONERING.resolve(url);
-			var window = this._create("create", {url: url, width: width,
+			var window = this._create("Window.create", {url: url, width: width,
 					height: height, props: props});
 			return new ONERING.Window(window);
+		},
+		isAlive: function() {
 		},
 	});
 
@@ -158,6 +152,11 @@ ONERING.window = new ONERING.Window({type: "Window",
 
 ONERING.getCurrentWindow = function() {
 	return ONERING.window;
+};
+
+// shortcuts
+ONERING.createWindow = function(url, width, height, props) {
+	return ONERING.getCurrentWindow().createWindow(url, width, height, props);
 };
 
 // }}}
@@ -261,10 +260,6 @@ ONERING.MenuItem.prototype = (new ONERING.Base()).extend({
 
 // functions {{{
 
-
-ONERING.createWindow = function(url, width, height, props) {
-	return ONERING.getCurrentWindow().createWindow(url, width, height, props);
-};
 
 ONERING.log = function(o) {
 	return _OneRing.log(o);

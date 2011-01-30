@@ -28,6 +28,7 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 				param["width"].toInt(),
 				param["height"].toInt(),
 			       	param["props"].toMap());
+		window->show();
 		return QString("{\"type\":\"Window\",\"id\":\"%1\"}")
 			.arg(getId(window)).toLatin1();
 	}

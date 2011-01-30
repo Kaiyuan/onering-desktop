@@ -18,6 +18,7 @@
 // plugins
 #include "menu.h"
 #include "systemtrayicon.h"
+#include "hotkey.h"
 
 static QUrl getAbsUrl(const QString &url, const QString &appname)
 {
@@ -34,6 +35,8 @@ static QUrl getAbsUrl(const QString &url, const QString &appname)
 static OSStatus appleEventProcessor(const AppleEvent *ae, AppleEvent *event,
 		long handlerRefCon)
 {
+	Q_UNUSED(event);
+
 	qDebug() << "xxx";
 	Application *app = (Application *) handlerRefCon;
 
@@ -93,6 +96,7 @@ int Application::load(const char* appname)
 	// register plugin apps
 	register_menu_app("menu");
 	register_systray_app("systray");
+	register_hotkey_app("hotkey");
 
 	QUrl initurl;
 	initurl.setScheme("onering");

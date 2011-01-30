@@ -39,8 +39,6 @@ public slots:
 	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
 	QString getCurrentWindowId();
 
-	QObject* HotKey_new(const QString &keyseq);
-
 private slots:
 	void attachObject();
 

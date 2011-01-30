@@ -38,7 +38,6 @@ public slots:
 	void exit(void);
 	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
 	QString getCurrentWindowId();
-	QObject* getApplication();
 
 	QObject* HotKey_new(const QString &keyseq);
 

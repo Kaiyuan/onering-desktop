@@ -34,6 +34,24 @@ ONERING.Base.prototype = {
 	},
 };
 
+// Application {{{
+
+ONERING.Application = function() {
+};
+ONERING.Application.prototype = (new ONERING.Base()).extend({
+		appname: "onering",
+		type: "Application",
+		setQuitOnLastWindowClosed: function(quit) {
+			return this._call("Application.setQuitOnLastWindowClosed", {quit: quit}),
+		}
+	});
+
+ONERING.getApplication = function() {
+	return new ONERING.Application();
+};
+
+// }}}
+
 // Window class {{{
 
 ONERING.Window = function(q) {
@@ -364,13 +382,6 @@ ONERING.call_app = function(appname, command, param) {
 	return r;
 };
 
-ONERING.bind = function(event, callback) {
-	var signal = _OneRing.getApplication()[event];
-	if (signal) {
-		signal.connect(callback);
-	}
-};
-
 ONERING.subscribe = function(channel, callback) {
 	ONERING.connect(_OneRing.getPubSubHub().published, function(ch, msg) {
 			if (ch == channel) {
@@ -398,19 +409,6 @@ window.addEventListener('unload', function() {
 				}
 			});
 	});
-
-ONERING.Application = function(q) {
-	this.q = q;
-};
-ONERING.Application.prototype = {
-	setQuitOnLastWindowClosed: function(quit) {
-		this.q.quitOnLastWindowClosed = quit;
-	}
-}
-
-ONERING.getApplication = function() {
-	return new ONERING.Application(_OneRing.getApplication());
-};
 
 ONERING.resolve = function(url) {
 	return _OneRing.resolve(url);

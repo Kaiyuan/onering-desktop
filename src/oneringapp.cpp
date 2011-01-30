@@ -1,3 +1,4 @@
+#include <QApplication>
 #include <QDebug>
 #include <QFile>
 #include <onering.h>
@@ -60,6 +61,11 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 			window->activateWindow();
 			return "null";
 		}
+	} else if (command.startsWith("Application.")) {
+		if (command == "Application.setQuitOnLastWindowClosed") {
+			qApp->setQuitOnLastWindowClosed(param["quit"].toBool());
+			return "null";
+		}
 	}
 
 	return "{\"err\":\"invalid command\"}";
@@ -74,7 +80,7 @@ void OneRingApp::registerWindow(OneRingView *window)
 	g_app->getId(window);
 }
 
-static onering_response_handle_t onering_app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)
+static onering_response_handle_t app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)
 {
 	if (!g_app) {
 		g_app = new OneRingApp();
@@ -83,13 +89,14 @@ static onering_response_handle_t onering_app(const char *appname, const char* me
 	return g_app->processRequest(appname, method, path, body, response, response_len);
 }
 
-static void onering_app_free_response(const char *appname, onering_response_handle_t response_handle)
+static void free_response(const char *appname, onering_response_handle_t response_handle)
 {
+	g_app->freeResponse(appname, response_handle);
 }
 
 void register_onering_app(const char* appname)
 {
-	onering_register_app(appname, &onering_app, &onering_app_free_response);
+	onering_register_app(appname, &app, &free_response);
 }
 
 

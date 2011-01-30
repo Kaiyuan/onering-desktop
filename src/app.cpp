@@ -131,6 +131,6 @@ QObject* App::getInstance(const QString& id)
 
 void App::instanceDestroyed(QObject* obj)
 {
-	qDebug() << obj << generateObjectId(obj) << "deleted";
+	qDebug() << obj << "deleted";
 	_instances.remove(obj);
 }

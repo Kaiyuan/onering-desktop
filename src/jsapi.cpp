@@ -120,11 +120,6 @@ QString JsApi::getCurrentWindowId()
 	return App::generateObjectId(window);
 }
 
-QObject* JsApi::getApplication()
-{
-	return qApp;
-}
-
 QObject* JsApi::getPubSubHub()
 {
 	return &(static_cast<Application *>(qApp)->pubsubhub);

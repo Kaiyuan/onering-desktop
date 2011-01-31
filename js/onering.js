@@ -1,5 +1,6 @@
 ONERING = new Object();
 
+// Base {{{
 ONERING.Base = function() {};
 ONERING.Base.prototype = {
 	_call: function(command, param) {
@@ -42,7 +43,9 @@ ONERING.Base.prototype = {
 		return this;
 	},
 };
+//}}}
 
+// Event {{{
 ONERING.Event = function(id) {
 	this.id = id;
 };
@@ -53,6 +56,7 @@ ONERING.Event.prototype = (new ONERING.Base()).extend({
 			this._call("Event.preventDefault");
 		}
 	});
+// }}}
 
 // Application {{{
 
@@ -72,7 +76,7 @@ ONERING.getApplication = function() {
 
 // }}}
 
-// Window class {{{
+// Window {{{
 
 ONERING.Window = function(obj) {
 	if (!this.validate_type(obj)) {
@@ -132,7 +136,7 @@ ONERING.createWindow = function(url, width, height, props) {
 
 // }}}
 
-// Audio class {{{
+// Audio {{{
 
 ONERING.Audio = Audio;
 ONERING.Audio.prototype.bind = function(event, callback) {
@@ -268,8 +272,52 @@ window.addEventListener('unload', function() {
 
 // }}}
 
-// functions {{{
+// subscribe/unsubscribe {{{
 
+ONERING.subscriptions = {};
+ONERING.hub = _OneRing.getPubSubHub().published;
+
+ONERING.subscribe = function(channel, callback) {
+	var ss = ONERING.subscriptions[channel] = ONERING.subscriptions[channel] || {};
+	var f = ss[callback] = ss[callback] || function(ch, msg) {
+		if (ch === channel) {
+			callback(JSON.parse(msg));
+		}
+	};
+	ONERING.hub.connect(f);
+};
+
+ONERING.unsubscribe = function(channel, callback) {
+	if (channel === undefined) {
+		for (channel in ONERING.subscriptions) {
+			ONERING.unsubscribe(channel);
+		}
+	} else {
+		var ss = ONERING.subscriptions[channel];
+		if (ss) {
+			if (callback === undefined) {
+				for (callback in ss) {
+					ONERING.hub.disconnect(ss[callback]);
+				}
+				delete ONERING.subscriptions[channel];
+			} else {
+				var f = ss[callback];
+				if (f) {
+					ONERING.hub.disconnect(f);
+					delete ss[callback];
+				}
+			}
+		}
+	}
+};
+
+window.addEventListener('unload', function() {
+		ONERING.unsubscribe();
+	});
+
+// }}}
+
+// functions {{{
 
 ONERING.log = function(o) {
 	return _OneRing.log(o);
@@ -360,51 +408,6 @@ ONERING.call_app = function(appname, command, param) {
 	}
 	return r;
 };
-
-// subscribe/unsubscribe {{{
-
-ONERING.subscriptions = {};
-ONERING.hub = _OneRing.getPubSubHub().published;
-
-ONERING.subscribe = function(channel, callback) {
-	var ss = ONERING.subscriptions[channel] = ONERING.subscriptions[channel] || {};
-	var f = ss[callback] = ss[callback] || function(ch, msg) {
-		if (ch === channel) {
-			callback(JSON.parse(msg));
-		}
-	};
-	ONERING.hub.connect(f);
-};
-
-ONERING.unsubscribe = function(channel, callback) {
-	if (channel === undefined) {
-		for (channel in ONERING.subscriptions) {
-			ONERING.unsubscribe(channel);
-		}
-	} else {
-		var ss = ONERING.subscriptions[channel];
-		if (ss) {
-			if (callback === undefined) {
-				for (callback in ss) {
-					ONERING.hub.disconnect(ss[callback]);
-				}
-				delete ONERING.subscriptions[channel];
-			} else {
-				var f = ss[callback];
-				if (f) {
-					ONERING.hub.disconnect(f);
-					delete ss[callback];
-				}
-			}
-		}
-	}
-};
-
-window.addEventListener('unload', function() {
-		ONERING.unsubscribe();
-	});
-
-// }}}
 
 ONERING.resolve = function(url) {
 	return _OneRing.resolve(url);

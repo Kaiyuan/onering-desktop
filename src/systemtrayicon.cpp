@@ -74,13 +74,13 @@ void SystemTrayIconApp::notifyClicked(QSystemTrayIcon::ActivationReason reason)
 
 	switch (reason) {
 		case QSystemTrayIcon::Trigger:
-			onering_publish(qPrintable(channel+"click"), "null");
+			publishEvent("SystemTrayIcon", icon, "click");
 			break;
 		case QSystemTrayIcon::Context:
-			onering_publish(qPrintable(channel+"rightclick"), "null");
+			publishEvent("SystemTrayIcon", icon, "rightclick");
 			break;
 		case QSystemTrayIcon::DoubleClick:
-			onering_publish(qPrintable(channel+"doubleclick"), "null");
+			publishEvent("SystemTrayIcon", icon, "doubleclick");
 			break;
 		default:
 			;

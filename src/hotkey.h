@@ -6,6 +6,8 @@
 
 class HotKeyApp : public App
 {
+	Q_OBJECT
+
 public:
 	HotKeyApp(const QString& appname, QObject *parent=0);
 

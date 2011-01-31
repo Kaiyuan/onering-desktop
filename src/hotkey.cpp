@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "hotkey.h"
 
 static HotKeyApp* g_app = 0;
@@ -16,11 +17,23 @@ QByteArray HotKeyApp::processCall(const QString& command, const QVariantMap& par
 				this, SLOT(activated()));
 		return QString("{\"type\":\"HotKey\",\"id\":\"%1\"}").arg(getId(shortcut)).toLatin1();
 	}
+
+	shortcut = static_cast<QxtGlobalShortcut *>(getInstance(param["id"].toString()));
+	if (!shortcut) {
+		return "{\"err\":\"invalid id\"}";
+	}
+
+	if (command == "destroy") {
+		delete shortcut;
+		return "null";
+	}
 	return "{\"err\":\"invalid command\"}";
 }
 
 void HotKeyApp::activated()
 {
+	qDebug() << "activated";
+	publishEvent("HotKey", sender(), "activated");
 }
 
 static onering_response_handle_t app(const char* appname, const char* method, 

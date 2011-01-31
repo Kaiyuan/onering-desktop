@@ -35,7 +35,6 @@ public slots:
 	QVariant test(QVariant param);
 
 	void log(const QString &s);
-	void exit(void);
 	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
 	QString getCurrentWindowId();
 

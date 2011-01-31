@@ -85,11 +85,6 @@ void JsApi::log(const QString &s)
 	qDebug() << "JsApi::log" << s;
 }
 
-void JsApi::exit()
-{
-	qApp->quit();
-}
-
 QString JsApi::call(const QString &method, const QString &url, const QString &body) const
 {
 	qDebug() << "JsApi::call" << method << url << body;

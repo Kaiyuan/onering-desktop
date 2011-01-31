@@ -67,7 +67,10 @@ ONERING.Application.prototype = (new ONERING.Base()).extend({
 		type: "Application",
 		setQuitOnLastWindowClosed: function(quit) {
 			return this._call("Application.setQuitOnLastWindowClosed", {quit: quit}),
-		}
+		},
+		exit: function() {
+			this._call("Application.exit");
+		},
 	});
 
 ONERING.getApplication = function() {
@@ -335,7 +338,7 @@ ONERING.callback = function(name, para) {
 };
 
 ONERING.exit = function() {
-	_OneRing.exit();
+	ONERING.getApplication().exit();
 };
 
 ONERING.ajax = function(settings) {

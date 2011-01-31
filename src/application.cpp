@@ -104,7 +104,7 @@ int Application::load(const char* appname)
 	initurl.setPath("/init");
 	QByteArray response = call_app_body("GET", initurl);
 
-	QVariantMap props = Json::parse(QString::fromUtf8(response)).toMap();
+	QVariantMap props = Json::parse(QString::fromLocal8Bit(response)).toMap();
 
 	QString s;
 	QUrl url;

@@ -32,6 +32,7 @@ protected:
 	QString getId(QObject* obj);
 	QString getId(void* obj);
 	void* getInstance(const QString& id);
+	void publishEvent(const char* type, void* sender, const char* event);
 
 private:
 	virtual QByteArray processCall(const QString& command, const QVariantMap& param) = 0;

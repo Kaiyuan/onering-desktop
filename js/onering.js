@@ -32,6 +32,9 @@ ONERING.Base.prototype = {
 				callback(e);
 			});
 	},
+	unbind: function(event) {
+		ONERING.unsubscribe(this.appname+"."+this.type+"."+this.id+"."+event);
+	},
 	extend: function(d) {
 		for (var k in d) {
 			this[k] = d[k];
@@ -233,10 +236,35 @@ ONERING.HotKey = function() {
 ONERING.HotKey.prototype = (new ONERING.Base()).extend({
 		appname: "hotkey",
 		type: "HotKey",
+		destroy: function() {
+			return this._call("destroy");
+		},
 	});
-
-ONERING.setHotKey = function(shortcut, func) {
+ONERING.HotKey.instances = {};
+ONERING.HotKey.create = function(shortcut) {
+	var hotkey = new ONERING.HotKey();
+	hotkey.id = (hotkey._create("create", {shortcut: shortcut})).id;
+	ONERING.HotKey.instances[shortcut] = hotkey;
+	return hotkey;
 };
+ONERING.HotKey.set = function(shortcut, callback) {
+	var hotkey = new ONERING.HotKey.create(shortcut);
+	hotkey.bind("activated", callback);
+};
+ONERING.HotKey.clear = function(shortcut) {
+	var hotkey = ONERING.HotKey.instances[shortcut];
+	if (hotkey !== undefined) {
+		hotkey.destroy();
+	}
+};
+ONERING.setHotKey = ONERING.HotKey.set;
+ONERING.clearHotKey = ONERING.HotKey.clear;
+
+window.addEventListener('unload', function() {
+		for (var shortcut in ONERING.HotKey.instances) {
+			ONERING.HotKey.clear(shortcut);
+		}
+	});
 
 // }}}
 
@@ -245,24 +273,6 @@ ONERING.setHotKey = function(shortcut, func) {
 
 ONERING.log = function(o) {
 	return _OneRing.log(o);
-};
-
-ONERING._hotkeys = {};
-ONERING.setHotKey = function(shortcut, func) {
-	var hotkey = ONERING._hotkeys[shortcut];
-	if (hotkey === undefined) {
-		var hotkey = _OneRing.HotKey_new(shortcut);
-		ONERING._hotkeys[shortcut] = hotkey;
-	}
-	ONERING.connect(hotkey.activated, func);
-};
-ONERING.clearHotKey = function(shortcut) {
-	var hotkey = ONERING._hotkeys[shortcut];
-	if (hotkey !== undefined) {
-		hotkey.enabled = false;
-		hotkey.deleteLater();
-		delete ONERING._hotkeys[shortcut];
-	}
 };
 
 ONERING.callback = function(name, para) {
@@ -351,33 +361,50 @@ ONERING.call_app = function(appname, command, param) {
 	return r;
 };
 
+// subscribe/unsubscribe {{{
+
+ONERING.subscriptions = {};
+ONERING.hub = _OneRing.getPubSubHub().published;
+
 ONERING.subscribe = function(channel, callback) {
-	ONERING.connect(_OneRing.getPubSubHub().published, function(ch, msg) {
-			if (ch == channel) {
-				var data = JSON.parse(msg);
-				callback(data);
-			}
-		});
+	var ss = ONERING.subscriptions[channel] = ONERING.subscriptions[channel] || {};
+	var f = ss[callback] = ss[callback] || function(ch, msg) {
+		if (ch === channel) {
+			callback(JSON.parse(msg));
+		}
+	};
+	ONERING.hub.connect(f);
 };
 
-ONERING._connections = [];
-
-ONERING.connect = function(signal, slot) {
-	ONERING._connections.push([signal, slot]);
-	signal.connect(slot);
-}
+ONERING.unsubscribe = function(channel, callback) {
+	if (channel === undefined) {
+		for (channel in ONERING.subscriptions) {
+			ONERING.unsubscribe(channel);
+		}
+	} else {
+		var ss = ONERING.subscriptions[channel];
+		if (ss) {
+			if (callback === undefined) {
+				for (callback in ss) {
+					ONERING.hub.disconnect(ss[callback]);
+				}
+				delete ONERING.subscriptions[channel];
+			} else {
+				var f = ss[callback];
+				if (f) {
+					ONERING.hub.disconnect(f);
+					delete ss[callback];
+				}
+			}
+		}
+	}
+};
 
 window.addEventListener('unload', function() {
-		var signal, slot;
-		ONERING._connections.forEach(function(connection){
-				signal = connection[0];
-				slot = connection[1];
-				try {
-					signal.disconnect(slot);
-				} catch (e) {
-				}
-			});
+		ONERING.unsubscribe();
 	});
+
+// }}}
 
 ONERING.resolve = function(url) {
 	return _OneRing.resolve(url);

@@ -140,3 +140,9 @@ void App::instanceDestroyed(QObject* obj)
 	_instances.remove(obj);
 }
 
+void App::publishEvent(const char* type, void* sender, const char* event)
+{
+	onering_publish(qPrintable(QString("%1.%2.%3.%4")
+				.arg(appname, type, getId(sender), event)),
+			"null");
+}

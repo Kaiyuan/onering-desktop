@@ -7,27 +7,23 @@
 #include <assert.h>
 #include "menu.h"
 
-static MenuManager* g_manager = 0;
+static MenuApp* g_manager = 0;
 
-MenuManager::MenuManager(QObject* parent)
-	: QObject(parent)
+MenuApp::MenuApp(const QString& appname, QObject* parent)
+	: App(appname, parent)
 {
 }
 
-MenuManager::~MenuManager()
-{
-}
-
-QByteArray MenuManager::processCall(const QString& command, const QVariantMap& param)
+QByteArray MenuApp::processCall(const QString& command, const QVariantMap& param)
 {
 	if (command == "Menu.create") {
 		return createMenu();
 	} else if (command.startsWith("Menu.")) {
 		QString id = param.value("id").toString();
-		if (id.isEmpty()) {
+		QMenu* menu = static_cast<QMenu *>(getInstance(id));
+		if (!menu) {
 			return "{\"err\":\"invalid id\"}";
 		}
-		QMenu* menu = static_cast<QMenu *>(getInstance(id));
 		if (command == "Menu.destroy") {
 			return destroyMenu(menu);
 		} else if (command == "Menu.addSeparator") {
@@ -39,10 +35,10 @@ QByteArray MenuManager::processCall(const QString& command, const QVariantMap& p
 		}
 	} else if (command.startsWith("MenuItem.")) {
 		QString id = param.value("id").toString();
-		if (id.isEmpty()) {
+		QAction* item = static_cast<QAction *>(getInstance(id));
+		if (!item) {
 			return "{\"err\":\"invalid id\"}";
 		}
-		QAction* item = static_cast<QAction *>(getInstance(id));
 		if (command == "MenuItem.setProperties") {
 			return setMenuItemProperties(item, param);
 		} else if (command == "MenuItem.setText") {
@@ -53,57 +49,25 @@ QByteArray MenuManager::processCall(const QString& command, const QVariantMap& p
 	return "{\"err\":\"invalid command\"}";
 }
 
-onering_response_handle_t MenuManager::processRequest(const char* appname,
-		const char* method, const QString& path, const QByteArray& body,
-	       	const char** response, int* response_len)
-{
-	Q_UNUSED(appname);
-	Q_UNUSED(method);
-
-	assert(path.startsWith("/"));
-
-	QByteArray* res = new QByteArray();
-	QByteArray bbody(body);
-
-	QUrl url = QUrl::fromEncoded("?"+bbody.replace('+', ' '));
-	QList<QPair<QString, QString> > queries = url.queryItems();
-	QVariantMap param;
-	for (int i=0; i<queries.size(); ++i) {
-		param[queries[i].first] = queries[i].second;
-	}
-	*res = processCall(path.mid(1), param);
-
-	*response = res->constData();
-	*response_len = res->size();
-	return reinterpret_cast<onering_response_handle_t>(res);
-}
-
-void MenuManager::freeResponse(const char* appname, onering_response_handle_t handle)
-{
-	Q_UNUSED(appname);
-
-	delete reinterpret_cast<QByteArray *>(handle);
-}
-
-QByteArray MenuManager::createMenu()
+QByteArray MenuApp::createMenu()
 {
 	QMenu* menu = new QMenu();
 	return QString("{\"type\":\"Menu\",\"id\":\"%1\"}").arg(getId(menu)).toLatin1();
 }
 
-QByteArray MenuManager::destroyMenu(QMenu* menu)
+QByteArray MenuApp::destroyMenu(QMenu* menu)
 {
 	delete menu;
 	return "null";
 }
 
-QByteArray MenuManager::addSeparator(QMenu* menu)
+QByteArray MenuApp::addSeparator(QMenu* menu)
 {
 	menu->addSeparator();
 	return "null";
 }
 
-QByteArray MenuManager::addMenuItem(QMenu* menu, const QString& text)
+QByteArray MenuApp::addMenuItem(QMenu* menu, const QString& text)
 {
 	QAction* action = menu->addAction(text);
 	connect(action, SIGNAL(triggered(bool)),
@@ -111,7 +75,7 @@ QByteArray MenuManager::addMenuItem(QMenu* menu, const QString& text)
 	return QString("{\"type\":\"MenuItem\",\"id\":\"%1\"}").arg(getId(action)).toLatin1();
 }
 
-QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
+QByteArray MenuApp::getMenuItem(QMenu* menu, int index)
 {
 	QList<QAction *> actions = menu->actions();
 	if (index < 0 || index >= actions.size()) {
@@ -121,7 +85,7 @@ QByteArray MenuManager::getMenuItem(QMenu* menu, int index)
 	return QString("{\"type\":\"MenuItem\",\"id\":\"%1\"}").arg(getId(action)).toLatin1();
 }
 
-QByteArray MenuManager::setMenuItemProperties(QAction* item, const QVariantMap& props)
+QByteArray MenuApp::setMenuItemProperties(QAction* item, const QVariantMap& props)
 {
 	if (props.contains("shortcut")) {
 		QString shortcut = props.value("shortcut").toString();
@@ -137,28 +101,17 @@ QByteArray MenuManager::setMenuItemProperties(QAction* item, const QVariantMap& 
 	return "null";
 }
 
-QByteArray MenuManager::setMenuItemText(QAction* item, const QString& text)
+QByteArray MenuApp::setMenuItemText(QAction* item, const QString& text)
 {
 	item->setText(text);
 	return "null";
 }
 
-void MenuManager::menuItemTriggered(bool checked)
+void MenuApp::menuItemTriggered(bool checked)
 {
 	QAction* action = static_cast<QAction *>(sender());
-	onering_publish(qPrintable(QString("MenuItem.%1.triggered").arg(getId(action))),
-		       	qPrintable(QString("%1").arg(checked?"true":"false")));
-}
-
-QString MenuManager::getId(QObject* obj)
-{
-	return QString::number(reinterpret_cast<long>(obj), 16);
-}
-
-QObject* MenuManager::getInstance(const QString& id)
-{
-	bool ok;
-	return reinterpret_cast<QObject *>(id.toLong(&ok, 16));
+	onering_publish(qPrintable(QString("menu.MenuItem.%1.triggered").arg(getId(action))),
+		       	qPrintable(QString("{\"checked\":%1}").arg(checked?"true":"false")));
 }
 
 static onering_response_handle_t menu_app(const char* appname, const char* method, 
@@ -166,7 +119,7 @@ static onering_response_handle_t menu_app(const char* appname, const char* metho
 		const char** response, int* response_len)
 {
 	if (!g_manager) {
-		g_manager = new MenuManager();
+		g_manager = new MenuApp(appname);
 	}
 
 	return g_manager->processRequest(appname, method, path, body, response, response_len);

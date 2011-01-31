@@ -4,19 +4,15 @@
 #include <onering.h>
 #include <QSet>
 #include <QMenu>
-#include <QScriptEngine>
 #include <QVariantMap>
+#include "app.h"
 
-class MenuManager : public QObject
+class MenuApp : public App
 {
 Q_OBJECT
 
 public:
-	MenuManager(QObject* parent=0);
-	~MenuManager();
-
-	onering_response_handle_t processRequest(const char* appname, const char* method, const QString& path, const QByteArray& body, const char** response, int* response_len);
-	void freeResponse(const char* appname, onering_response_handle_t response_handle);
+	MenuApp(const QString& appname, QObject* parent=0);
 
 private:
 	QByteArray createMenu();
@@ -33,8 +29,6 @@ private slots:
 
 private:
 	QByteArray processCall(const QString& command, const QVariantMap& param);
-	QString getId(QObject* obj);
-	QObject* getInstance(const QString& id);
 };
 
 void register_menu_app(const char* appname);

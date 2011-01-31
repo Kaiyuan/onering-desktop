@@ -5,6 +5,8 @@
 #include <QUrl>
 #include <string.h>
 #include <onering.h>
+#include "app.h"
+#include "json.h"
 
 QHash<QString, QPair<onering_app_func_t, onering_free_response_func_t> > g_apps;
 
@@ -25,7 +27,7 @@ int is_appname_registered(const QString &appname)
 	return g_apps.contains(appname);
 }
 
-QByteArray call_app(const char* method, const QUrl &url, const char* body=NULL)
+QByteArray call_app(const char* method, const QUrl &url, const char* body)
 {
 	QString appname = url.host();
 	const char * response;
@@ -49,7 +51,7 @@ QByteArray call_app(const char* method, const QUrl &url, const char* body=NULL)
 	return retval;
 }
 
-QByteArray call_app_body(const char* method, const QUrl &url, const char* body=NULL)
+QByteArray call_app_body(const char* method, const QUrl &url, const char* body)
 {
 	QByteArray response = call_app(method, url, body);
 	
@@ -73,3 +75,74 @@ QByteArray call_app_body(const char* method, const QUrl &url, const char* body=N
 	return response;
 }
 
+App::App(const QString& appname, QObject* parent)
+	: QObject(parent),
+	  appname(appname)
+{
+}
+
+onering_response_handle_t App::processRequest(const char* appname,
+		const char* method, const QString& path, const QByteArray& body,
+	       	const char** response, int* response_len)
+{
+	Q_UNUSED(appname);
+	Q_UNUSED(method);
+
+	assert(path.startsWith("/"));
+
+	QByteArray* res = new QByteArray();
+	
+	QVariantMap param = Json::parse(QString::fromUtf8(body)).toMap();
+	*res = processCall(path.mid(1), param);
+
+	*response = res->constData();
+	*response_len = res->size();
+	return reinterpret_cast<onering_response_handle_t>(res);
+}
+
+void App::freeResponse(const char* appname, onering_response_handle_t handle)
+{
+	Q_UNUSED(appname);
+
+	delete reinterpret_cast<QByteArray *>(handle);
+}
+
+QString App::generateObjectId(void* obj)
+{
+	return QString::number(reinterpret_cast<unsigned long>(obj), 16);
+}
+
+
+QString App::getId(QObject* obj)
+{
+	if (!(_instances.contains(obj))) {
+		_instances.insert(obj);
+		connect(obj, SIGNAL(destroyed(QObject*)),
+				this, SLOT(instanceDestroyed(QObject*)));
+	}
+	return generateObjectId(obj);
+}
+
+QString App::getId(void* obj)
+{
+	return generateObjectId(obj);
+}
+
+void* App::getInstance(const QString& id)
+{
+	bool ok;
+	return reinterpret_cast<void *>(id.toULong(&ok, 16));
+}
+
+void App::instanceDestroyed(QObject* obj)
+{
+	qDebug() << obj << "deleted";
+	_instances.remove(obj);
+}
+
+void App::publishEvent(const char* type, void* sender, const char* event)
+{
+	onering_publish(qPrintable(QString("%1.%2.%3.%4")
+				.arg(appname, type, getId(sender), event)),
+			"null");
+}

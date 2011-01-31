@@ -6,7 +6,7 @@ TEMPLATE = lib
 TARGET = OneRing
 DEPENDPATH += . include src
 INCLUDEPATH += . include
-QT += script webkit network
+QT += webkit network
 RESOURCES = onering.qrc
 CONFIG += shared
 DEFINES += ONERING_LIBRARY
@@ -39,9 +39,9 @@ HEADERS += include/onering.h \
 	   src/dataloader.h \
 	   src/application.h \
 	   src/debugger.h \
-	   src/event.h \
 	   src/pubsubhub.h \
-	   src/publishevent.h
+	   src/publishevent.h \
+	   src/json.h
 SOURCES += src/onering.cpp \
 	   src/oneringview.cpp \
 	   src/networkaccessmanager.cpp \
@@ -55,9 +55,9 @@ SOURCES += src/onering.cpp \
 	   src/dataloader.cpp \
            src/application.cpp \
 	   src/debugger.cpp \
-  	   src/event.cpp \
 	   src/pubsubhub.cpp \
-	   src/publishevent.cpp
+	   src/publishevent.cpp \
+	   src/json.cpp
 
 # global shourtcut
 HEADERS += src/hotkey.h \

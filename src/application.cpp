@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QWebSettings>
 #include <QWebSecurityOrigin>
-#include <QScriptEngine>
 #include <QVariantMap>
 #include <QDesktopServices>
 #include <QApplication>
@@ -14,7 +13,12 @@
 #include "oneringview.h"
 #include "dataloader.h"
 #include "debugger.h"
+#include "json.h"
+
+// plugins
 #include "menu.h"
+#include "systemtrayicon.h"
+#include "hotkey.h"
 
 static QUrl getAbsUrl(const QString &url, const QString &appname)
 {
@@ -31,6 +35,8 @@ static QUrl getAbsUrl(const QString &url, const QString &appname)
 static OSStatus appleEventProcessor(const AppleEvent *ae, AppleEvent *event,
 		long handlerRefCon)
 {
+	Q_UNUSED(event);
+
 	qDebug() << "xxx";
 	Application *app = (Application *) handlerRefCon;
 
@@ -85,12 +91,12 @@ int Application::load(const char* appname)
 
 	QWebSecurityOrigin::addLocalScheme("onering");
 
-	if (onering_app_init())
-		return -1;
-	onering_register_app("onering", &onering_app, &onering_app_free_response);
+	register_onering_app("onering");
 
 	// register plugin apps
 	register_menu_app("menu");
+	register_systray_app("systray");
+	register_hotkey_app("hotkey");
 
 	QUrl initurl;
 	initurl.setScheme("onering");
@@ -98,8 +104,7 @@ int Application::load(const char* appname)
 	initurl.setPath("/init");
 	QByteArray response = call_app_body("GET", initurl);
 
-	QScriptEngine engine;
-	QVariantMap props = engine.evaluate("("+response+")").toVariant().toMap();
+	QVariantMap props = Json::parse(QString::fromUtf8(response)).toMap();
 
 	QString s;
 	QUrl url;
@@ -127,15 +132,14 @@ int Application::load(const char* appname)
 		dataloader->load(url);
 	}
 
-	int width = props["width"].toInt();
-	int height = props["height"].toInt();
 	s = props["url"].toString();
 	if (s.isEmpty()) {
 		s = "/";
 	}
-	url = getAbsUrl(s, appname);
+	props["url"] = getAbsUrl(s, appname);
 
-	OneRingView *window = new OneRingView(url, width, height, props);
+	OneRingView* window = OneRingApp::createWindow(props);
+
 #ifdef Q_WS_MAC
 	// Install Reopen Application Event (Dock Clicked)
 	qDebug() << "install";

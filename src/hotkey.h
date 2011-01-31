@@ -2,11 +2,22 @@
 #define HOTKEY_H
 
 #include "qxtglobalshortcut.h"
+#include "app.h"
 
-class HotKey : public QxtGlobalShortcut
+class HotKeyApp : public App
 {
+	Q_OBJECT
+
 public:
-	HotKey(const QKeySequence & shortcut, QObject *parent=0);
+	HotKeyApp(const QString& appname, QObject *parent=0);
+
+private slots:
+	void activated();
+
+private:
+	QByteArray processCall(const QString& command, const QVariantMap& param);
 };
+
+void register_hotkey_app(const char* appname);
 
 #endif

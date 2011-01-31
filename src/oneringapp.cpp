@@ -62,6 +62,9 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 		if (command == "Application.setQuitOnLastWindowClosed") {
 			qApp->setQuitOnLastWindowClosed(param["quit"].toBool());
 			return "null";
+		} else if (command == "Application.exit") {
+			qApp->quit();
+			return "null";
 		}
 	} else if (command == "Event.preventDefault") {
 		QString id = param.value("id").toString();

@@ -12,7 +12,7 @@ class MenuApp : public App
 Q_OBJECT
 
 public:
-	MenuApp(QObject* parent=0);
+	MenuApp(const QString& appname, QObject* parent=0);
 
 private:
 	QByteArray createMenu();

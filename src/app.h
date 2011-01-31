@@ -18,7 +18,7 @@ class App : public QObject
 	Q_OBJECT
 
 public:
-	App(QObject *parent=0);
+	App(const QString& appname, QObject *parent=0);
 
 	onering_response_handle_t processRequest(const char* appname, const char* method, const QString& path, const QByteArray& body, const char** response, int* response_len);
 	void freeResponse(const char* appname, onering_response_handle_t response_handle);
@@ -36,6 +36,7 @@ protected:
 private:
 	virtual QByteArray processCall(const QString& command, const QVariantMap& param) = 0;
 
+	QString appname;
 	QSet<QObject *> _instances;
 
 };

@@ -9,8 +9,8 @@
 
 static MenuApp* g_manager = 0;
 
-MenuApp::MenuApp(QObject* parent)
-	: App(parent)
+MenuApp::MenuApp(const QString& appname, QObject* parent)
+	: App(appname, parent)
 {
 }
 
@@ -119,7 +119,7 @@ static onering_response_handle_t menu_app(const char* appname, const char* metho
 		const char** response, int* response_len)
 {
 	if (!g_manager) {
-		g_manager = new MenuApp();
+		g_manager = new MenuApp(appname);
 	}
 
 	return g_manager->processRequest(appname, method, path, body, response, response_len);

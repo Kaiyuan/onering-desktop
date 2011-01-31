@@ -75,8 +75,9 @@ QByteArray call_app_body(const char* method, const QUrl &url, const char* body)
 	return response;
 }
 
-App::App(QObject* parent)
-	: QObject(parent)
+App::App(const QString& appname, QObject* parent)
+	: QObject(parent),
+	  appname(appname)
 {
 }
 

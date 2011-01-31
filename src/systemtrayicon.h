@@ -10,7 +10,7 @@ class SystemTrayIconApp : public App
 Q_OBJECT
 
 public:
-	SystemTrayIconApp(QObject* parent=0);
+	SystemTrayIconApp(const QString& appname, QObject* parent=0);
 
 private:
 	QByteArray processCall(const QString& command, const QVariantMap& param);

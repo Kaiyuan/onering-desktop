@@ -11,7 +11,7 @@ class OneRingApp : public App
 	Q_OBJECT
 
 public:
-	OneRingApp(QObject* parent=0);
+	OneRingApp(const QString& appname, QObject* parent=0);
 
 	static OneRingView* createWindow(const QVariantMap& props);
 

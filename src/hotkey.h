@@ -7,7 +7,10 @@
 class HotKeyApp : public App
 {
 public:
-	HotKeyApp(QObject *parent=0);
+	HotKeyApp(const QString& appname, QObject *parent=0);
+
+private slots:
+	void activated();
 
 private:
 	QByteArray processCall(const QString& command, const QVariantMap& param);

@@ -8,8 +8,8 @@
 
 static SystemTrayIconApp* g_app = 0;
 
-SystemTrayIconApp::SystemTrayIconApp(QObject *parent)
-	: App(parent)
+SystemTrayIconApp::SystemTrayIconApp(const QString& appname, QObject *parent)
+	: App(appname, parent)
 {
 }
 
@@ -92,7 +92,7 @@ static onering_response_handle_t app(const char* appname, const char* method,
 		const char** response, int* response_len)
 {
 	if (!g_app) {
-		g_app = new SystemTrayIconApp();
+		g_app = new SystemTrayIconApp(appname);
 	}
 
 	return g_app->processRequest(appname, method, path, body, response, response_len);

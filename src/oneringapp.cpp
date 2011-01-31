@@ -8,8 +8,8 @@
 
 static OneRingApp* g_app = 0;
 
-OneRingApp::OneRingApp(QObject *parent)
-	: App(parent)
+OneRingApp::OneRingApp(const QString& appname, QObject *parent)
+	: App(appname, parent)
 {
 	QFile file(":/js/onering.js");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -79,7 +79,7 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 OneRingView* OneRingApp::createWindow(const QVariantMap& props)
 {
 	if (!g_app) {
-		g_app = new OneRingApp();
+		g_app = new OneRingApp("onering");
 	}
 
 	OneRingView* window = new OneRingView(props);
@@ -100,7 +100,7 @@ void OneRingApp::windowEventOccurred(QEvent* e, const QString& type)
 static onering_response_handle_t app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)
 {
 	if (!g_app) {
-		g_app = new OneRingApp();
+		g_app = new OneRingApp(appname);
 	}
 
 	return g_app->processRequest(appname, method, path, body, response, response_len);

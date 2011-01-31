@@ -226,6 +226,20 @@ ONERING.MenuItem.prototype = (new ONERING.Base()).extend({
 
 // }}}
 
+// HotKey {{{
+
+ONERING.HotKey = function() {
+};
+ONERING.HotKey.prototype = (new ONERING.Base()).extend({
+		appname: "hotkey",
+		type: "HotKey",
+	});
+
+ONERING.setHotKey = function(shortcut, func) {
+};
+
+// }}}
+
 // functions {{{
 
 

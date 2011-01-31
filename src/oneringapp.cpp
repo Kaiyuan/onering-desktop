@@ -93,11 +93,7 @@ OneRingView* OneRingApp::createWindow(const QVariantMap& props)
 
 void OneRingApp::windowEventOccurred(QEvent* e, const QString& type)
 {
-	OneRingView* window = static_cast<OneRingView *>(sender());
-	onering_publish(qPrintable(QString("onering.Window.%1.%2")
-				.arg(getId(window), type)),
-			qPrintable(QString("{\"event_id\":\"%1\"}")
-				.arg(getId(e))));
+	publishEvent("Window", sender(), type, e);
 }
 
 static onering_response_handle_t app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)

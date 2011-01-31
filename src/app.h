@@ -6,6 +6,7 @@
 #include <QUrl>
 #include <QByteArray>
 #include <QVariantMap>
+#include <QEvent>
 #include <QSet>
 
 int is_appname_registered(const QString &appname);
@@ -32,7 +33,9 @@ protected:
 	QString getId(QObject* obj);
 	QString getId(void* obj);
 	void* getInstance(const QString& id);
-	void publishEvent(const char* type, void* sender, const char* event);
+	void publishEvent(const QString& type, void* sender, const QString& event);
+	void publishEvent(const QString& type, void* sender, const QString& event, QEvent* e);
+	void publishEvent(const QString& type, void* sender, const QString& event, const QString& data);
 
 private:
 	virtual QByteArray processCall(const QString& command, const QVariantMap& param) = 0;

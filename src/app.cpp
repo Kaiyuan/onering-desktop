@@ -141,9 +141,21 @@ void App::instanceDestroyed(QObject* obj)
 	_instances.remove(obj);
 }
 
-void App::publishEvent(const char* type, void* sender, const char* event)
+void App::publishEvent(const QString& type, void* sender, const QString& event)
+{
+	publishEvent(type, sender, event, "null");
+}
+
+void App::publishEvent(const QString& type, void* sender, const QString& event, QEvent* e)
+{
+	QString data = QString("{\"event_id\":\"%1\"}").arg(getId(e));
+	publishEvent(type, sender, event, data);
+}
+
+
+void App::publishEvent(const QString& type, void* sender, const QString& event, const QString& data)
 {
 	onering_publish(qPrintable(QString("%1.%2.%3.%4")
 				.arg(appname, type, getId(sender), event)),
-			"null");
+			qPrintable(data));
 }

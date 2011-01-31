@@ -93,7 +93,7 @@ QString JsApi::call(const QString &method, const QString &url, const QString &bo
 	if (response.isEmpty()) {
 		return "null";
 	} else {
-		qDebug() << "JsApi::call returns" << response;
+		qDebug() << "JsApi::call" << url << "returns" << response;
 		return response;
 	}
 }

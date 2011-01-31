@@ -5,7 +5,7 @@
 #include <QWebInspector>
 #include <QHash>
 #include <QList>
-#include <QScriptEngine>
+#include <QVariantMap>
 
 class QWebView;
 class QWebFrame;
@@ -33,18 +33,10 @@ public:
 
 public slots:
 	QVariant test(QVariant param);
-	QObject* createWindow(const QString &url, int width, int height, const QVariantMap &props);
 
 	void log(const QString &s);
-	void showInspector(void);
-	void exit(void);
 	void ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async);
-	bool checkAlive(QObject* o=0);
-	QObject* getCurrentWindow();
-	QObject* getApplication();
-
-	QObject* SystemTrayIcon_new(void);
-	QObject* HotKey_new(const QString &keyseq);
+	QString getCurrentWindowId();
 
 private slots:
 	void attachObject();
@@ -52,12 +44,9 @@ private slots:
 private:
 	QWidget *window;
 	QWebFrame *frame;
-	QWebInspector *inspector;
 	QHash< EventSource, QList<QString> > callbacks;
-	QScriptEngine engine;
 
 	void registerCallback(QObject *sender, const QString &event, const QString &callback_funcname);
-	QScriptValue parseJSON(const QString &json);
 };
 
 #endif

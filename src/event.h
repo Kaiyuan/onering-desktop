@@ -1,5 +1,5 @@
-#ifndef EVENT_H
-#define EVENT_H
+#ifndef ONERING_EVENT_H
+#define ONERING_EVENT_H
 
 #include <QObject>
 #include <QEvent>

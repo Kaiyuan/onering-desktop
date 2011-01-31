@@ -2,14 +2,13 @@
 #define PUBSUBHUB_H
 
 #include <QObject>
-#include <QEvent>
 
 class PubSubHub : public QObject
 {
 Q_OBJECT
 
 public:
-	bool event(QEvent *e);
+	void publish(const QString &channel, const QString &message);
 
 signals:
 	void published(const QString &channel, const QString &message);

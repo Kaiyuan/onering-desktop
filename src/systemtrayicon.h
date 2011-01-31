@@ -3,28 +3,23 @@
 
 #include <QSystemTrayIcon>
 #include <QByteArray>
-#include "jsapi.h"
-#include "menu.h"
+#include "app.h"
 
-class SystemTrayIcon : public QSystemTrayIcon
+class SystemTrayIconApp : public App
 {
-	Q_OBJECT
+Q_OBJECT
 
 public:
-	SystemTrayIcon(QObject *parent=0);
+	SystemTrayIconApp(const QString& appname, QObject* parent=0);
 
-	Q_INVOKABLE void load(const QString &url);
-	Q_INVOKABLE QVariantMap getGeometry(void);
-	Q_INVOKABLE void setContextMenu(const QString& menu_id);
-
-signals:
-	void click();
-	void doubleclick();
-	void rightclick();
+private:
+	QByteArray processCall(const QString& command, const QVariantMap& param);
 
 private slots:
 	void iconFetched(QByteArray &data);
-	void emitActivatedEvent(QSystemTrayIcon::ActivationReason reason);
+	void notifyClicked(QSystemTrayIcon::ActivationReason reason);
 };
+
+void register_systray_app(const char* appname);
 
 #endif

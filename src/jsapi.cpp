@@ -24,16 +24,12 @@
 // public methods {{{
 
 JsApi::JsApi(QObject *parent)
-	: QObject(parent),
-	  inspector(0)
+	: QObject(parent)
 {
 }
 
 JsApi::~JsApi()
 {
-	if (inspector) {
-		delete inspector;
-	}
 }
 
 void JsApi::setWebView(QWebView *view)
@@ -74,22 +70,9 @@ void JsApi::invokeCallback(const QString &funcname, const QString &param)
 			.arg(funcname, jsparam));
 }
 
-
-QObject* JsApi::createWindow(const QString &url, int width, int height, const QVariantMap &props)
-{
-	qDebug() << "JsApi::createWindow" << url << width << height << props;
-	OneRingView *window = new OneRingView(frame->baseUrl().resolved(url),
-			width, height, props);
-	Debugger::traceObj(window);
-	window->show();
-	return window;
-}
-
 // }}}
 
 // javascript api {{{
-
-// module level {{{
 
 QVariant JsApi::test(QVariant param)
 {
@@ -100,25 +83,6 @@ QVariant JsApi::test(QVariant param)
 void JsApi::log(const QString &s)
 {
 	qDebug() << "JsApi::log" << s;
-}
-
-void JsApi::showInspector()
-{
-	qDebug() << "JsApi::showInspector";
-	if (!inspector) {
-		inspector = new QWebInspector();
-	}
-	if (!inspector->page()) {
-		inspector->setPage(frame->page());
-	}
-	inspector->resize(800, 600);
-	inspector->show();
-	inspector->activateWindow();  // put inspector at the top most
-}
-
-void JsApi::exit()
-{
-	qApp->quit();
 }
 
 QString JsApi::call(const QString &method, const QString &url, const QString &body) const
@@ -136,26 +100,17 @@ QString JsApi::call(const QString &method, const QString &url, const QString &bo
 
 void JsApi::ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async)
 {
+	Q_UNUSED(async);
+
 	qDebug() << "JsApi::ajax" << type << url << body << callback;
 	QUrl absurl = frame->baseUrl().resolved(url);
 	QByteArray response = call_app_body(qPrintable(type), absurl, qPrintable(body));
 	invokeCallback(callback, response);
 }
 
-bool JsApi::checkAlive(QObject* o)
+QString JsApi::getCurrentWindowId()
 {
-	qDebug() << "JsApi::checkAlive" << o;
-	return o != 0;
-}
-
-QObject* JsApi::getCurrentWindow()
-{
-	return window;
-}
-
-QObject* JsApi::getApplication()
-{
-	return qApp;
+	return App::generateObjectId(window);
 }
 
 QObject* JsApi::getPubSubHub()
@@ -166,25 +121,6 @@ QObject* JsApi::getPubSubHub()
 QString JsApi::resolve(const QString &relative)
 {
 	return frame->baseUrl().resolved(relative).toString();
-}
-
-// }}}
-
-QObject* JsApi::SystemTrayIcon_new()
-{
-	qDebug() << "JsApi::systemTrayIcon_new";
-
-	SystemTrayIcon *icon = new SystemTrayIcon(qApp);
-	Debugger::traceObj(icon);
-	return icon;
-}
-
-QObject* JsApi::HotKey_new(const QString &keyseq)
-{
-	qDebug() << "JsApi::HotKey_new" << keyseq;
-	HotKey *hotkey = new HotKey(QKeySequence(keyseq));
-	Debugger::traceObj(hotkey);
-	return hotkey;
 }
 
 // }}}

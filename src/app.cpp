@@ -93,7 +93,7 @@ onering_response_handle_t App::processRequest(const char* appname,
 
 	QByteArray* res = new QByteArray();
 	
-	QVariantMap param = Json::parse(QString::fromUtf8(body)).toMap();
+	QVariantMap param = Json::parse(QString::fromLocal8Bit(body)).toMap();
 	*res = processCall(path.mid(1), param);
 
 	*response = res->constData();

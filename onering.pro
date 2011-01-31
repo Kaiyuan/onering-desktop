@@ -27,37 +27,35 @@ macx {
 
 # Input
 HEADERS += include/onering.h \
-	   src/oneringview.h \
-	   src/networkaccessmanager.h \
            src/app.h \
-	   src/appreply.h \
-	   src/jsapi.h \
-	   src/oneringapp.h \
-	   src/systemtrayicon.h \
-	   src/menu.h \
-	   src/menuitem.h \
-	   src/dataloader.h \
 	   src/application.h \
+	   src/appreply.h \
+	   src/dataloader.h \
 	   src/debugger.h \
-	   src/pubsubhub.h \
+	   src/jsapi.h \
+	   src/json.h \
+	   src/menu.h \
+	   src/networkaccessmanager.h \
+	   src/oneringapp.h \
+	   src/oneringview.h \
 	   src/publishevent.h \
-	   src/json.h
-SOURCES += src/onering.cpp \
-	   src/oneringview.cpp \
-	   src/networkaccessmanager.cpp \
-	   src/app.cpp \
-	   src/appreply.cpp \
-	   src/jsapi.cpp \
-	   src/oneringapp.cpp \
-	   src/systemtrayicon.cpp \
-	   src/menu.cpp \
-           src/menuitem.cpp \
-	   src/dataloader.cpp \
+	   src/pubsubhub.h \
+	   src/systemtrayicon.h
+SOURCES += src/app.cpp \
            src/application.cpp \
+	   src/appreply.cpp \
+	   src/dataloader.cpp \
 	   src/debugger.cpp \
-	   src/pubsubhub.cpp \
+	   src/jsapi.cpp \
+	   src/json.cpp \
+	   src/menu.cpp \
+	   src/networkaccessmanager.cpp \
+           src/onering.cpp \
+	   src/oneringapp.cpp \
+	   src/oneringview.cpp \
 	   src/publishevent.cpp \
-	   src/json.cpp
+	   src/pubsubhub.cpp \
+	   src/systemtrayicon.cpp
 
 # global shourtcut
 HEADERS += src/hotkey.h \

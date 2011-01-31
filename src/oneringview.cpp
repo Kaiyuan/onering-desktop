@@ -6,7 +6,6 @@
 #include "networkaccessmanager.h"
 #include "jsapi.h"
 #include "debugger.h"
-#include "event.h"
 
 OneRingView::OneRingView(const QVariantMap &props)
 	: QWebView(),

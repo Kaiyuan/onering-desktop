@@ -255,13 +255,14 @@ ONERING.HotKey.create = function(shortcut) {
 	return hotkey;
 };
 ONERING.HotKey.set = function(shortcut, callback) {
-	var hotkey = new ONERING.HotKey.create(shortcut);
+	var hotkey = ONERING.HotKey.instances[shortcut] || new ONERING.HotKey.create(shortcut);
 	hotkey.bind("activated", callback);
 };
 ONERING.HotKey.clear = function(shortcut) {
 	var hotkey = ONERING.HotKey.instances[shortcut];
 	if (hotkey !== undefined) {
 		hotkey.destroy();
+		delete ONERING.HotKey.instances[shortcut];
 	}
 };
 ONERING.setHotKey = ONERING.HotKey.set;

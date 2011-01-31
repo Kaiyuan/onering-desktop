@@ -145,12 +145,14 @@ class pubsub_scan:
 class static:
     def GET(self, filename):
         content = open('static/%s' % filename, 'rb').read()
-        if filename.endswith('.js'):
-            web.header('Content-Type', 'text/javascript')
-        elif filename.endswith('.ico'):
-            web.header('Content-Type', 'image/x-icon')
-        else:
-            web.header('Content-Type', 'application/octet-stream')
+	content_types = {
+		'.js': 'text/javascript',
+		'.css': 'text/css',
+		'.ico': 'image/x-icon',
+	}
+	ext = os.path.splitext(filename)[1]
+	content_type = content_types.get(ext, 'application/octet-stream')
+	web.header('Content-Type', content_type)
         web.header('Content-Length', len(content))
         return content
 

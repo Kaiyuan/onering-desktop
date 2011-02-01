@@ -139,15 +139,6 @@ ONERING.createWindow = function(url, width, height, props) {
 
 // }}}
 
-// Audio {{{
-
-ONERING.Audio = Audio;
-ONERING.Audio.prototype.bind = function(event, callback) {
-	return this.addEventListener(event, callback);
-};
-
-// }}}
-
 // System Tray Icon {{{
 
 ONERING.SystemTrayIcon = function(url) {

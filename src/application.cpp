@@ -31,34 +31,6 @@ static QUrl getAbsUrl(const QString &url, const QString &appname)
 	return u;
 }
 
-#ifdef Q_WS_MAC
-static OSStatus appleEventProcessor(const AppleEvent *ae, AppleEvent *event,
-		long handlerRefCon)
-{
-	Q_UNUSED(event);
-
-	qDebug() << "xxx";
-	Application *app = (Application *) handlerRefCon;
-
-	OSType aeID = typeWildCard;
-	OSType aeClass = typeWildCard;
-
-	AEGetAttributePtr(ae, keyEventClassAttr, typeType, 0,
-			&aeClass, sizeof(aeClass), 0);
-	AEGetAttributePtr(ae, keyEventIDAttr, typeType, 0,
-			&aeID, sizeof(aeID), 0);
-
-	if (aeClass == kCoreEventClass) {
-		if (aeID == kAEReopenApplication) {
-			app->emitReopen();
-		}
-		return noErr;
-	}
-
-	return eventNotHandledErr;
-}
-#endif
-
 Application::Application(int &argc, char **argv)
 	: QApplication(argc, argv),
 	  quiting(false)
@@ -140,14 +112,6 @@ int Application::load(const char* appname)
 
 	OneRingView* window = OneRingApp::createWindow(props);
 
-#ifdef Q_WS_MAC
-	// Install Reopen Application Event (Dock Clicked)
-	qDebug() << "install";
-	m_appleEventProcessorUPP = AEEventHandlerUPP(appleEventProcessor);
-	AEInstallEventHandler(kCoreEventClass, kAEReopenApplication,
-			m_appleEventProcessorUPP, (SRefCon)this, true);
-#endif
-	Debugger::traceObj(window);
 	window->show();
 	return 0;
 }
@@ -160,21 +124,3 @@ void Application::setWindowIconByData(QByteArray &data)
 	setWindowIcon(QIcon(pixmap));
 }
 
-#ifdef Q_WS_MAC
-void Application::emitReopen()
-{
-	emit dockClicked();
-}
-
-bool Application::macEventFilter(EventHandlerCallRef caller, EventRef event)
-{
-    UInt32 eKind = GetEventKind(event);
-    UInt32 eClass = GetEventClass(event);
-    qDebug() << "xxxxxxxxxxxx";
-    if (eClass == kEventClassApplication && eKind == kEventAppActivated) {
-    	qDebug() << "!!!!!!!!!!!!!";
-    }
-
-    return(QApplication::macEventFilter(caller, event));
-}
-#endif

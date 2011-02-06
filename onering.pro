@@ -26,44 +26,51 @@ macx {
 }
 
 # Input
-HEADERS += include/onering.h \
-           src/app.h \
-	   src/application.h \
-	   src/appreply.h \
-	   src/dataloader.h \
-	   src/debugger.h \
-	   src/jsapi.h \
-	   src/json.h \
-	   src/menu.h \
-	   src/networkaccessmanager.h \
-	   src/oneringapp.h \
-	   src/oneringview.h \
-	   src/publishevent.h \
-	   src/pubsubhub.h \
-	   src/systemtrayicon.h
-SOURCES += src/app.cpp \
-           src/application.cpp \
-	   src/appreply.cpp \
-	   src/dataloader.cpp \
-	   src/debugger.cpp \
-	   src/jsapi.cpp \
-	   src/json.cpp \
-	   src/menu.cpp \
-	   src/networkaccessmanager.cpp \
-           src/onering.cpp \
-	   src/oneringapp.cpp \
-	   src/oneringview.cpp \
-	   src/publishevent.cpp \
-	   src/pubsubhub.cpp \
-	   src/systemtrayicon.cpp
+HEADERS += \
+	include/onering.h \
+	src/app.h \
+	src/application.h \
+	src/appreply.h \
+	src/dataloader.h \
+	src/debugger.h \
+	src/jsapi.h \
+	src/json.h \
+	src/menu.h \
+	src/networkaccessmanager.h \
+	src/oneringapp.h \
+	src/oneringview.h \
+	src/publishevent.h \
+	src/pubsubhub.h \
+	src/systemtrayicon.h
+
+SOURCES += \
+	src/app.cpp \
+	src/application.cpp \
+	src/appreply.cpp \
+	src/dataloader.cpp \
+	src/debugger.cpp \
+	src/jsapi.cpp \
+	src/json.cpp \
+	src/menu.cpp \
+	src/networkaccessmanager.cpp \
+	src/onering.cpp \
+	src/oneringapp.cpp \
+	src/oneringview.cpp \
+	src/publishevent.cpp \
+	src/pubsubhub.cpp \
+	src/systemtrayicon.cpp
 
 # global shourtcut
-HEADERS += src/hotkey.h \
-	   src/qxtglobalshortcut.h \
-	   src/qxtglobal.h \
-	   src/qxtglobalshortcut_p.h
-SOURCES += src/hotkey.cpp \
-	   src/qxtglobalshortcut.cpp
+HEADERS += \
+	src/hotkey.h \
+	src/qxtglobalshortcut.h \
+	src/qxtglobal.h \
+	src/qxtglobalshortcut_p.h
+
+SOURCES += \
+	src/hotkey.cpp \
+	src/qxtglobalshortcut.cpp
+
 macx:SOURCES += src/qxtglobalshortcut_mac.cpp
 win32:SOURCES += src/qxtglobalshortcut_win.cpp
 unix:!macx:SOURCES += src/qxtglobalshortcut_x11.cpp
@@ -72,4 +79,18 @@ win32 {
 	win32-g++:LIBS += -l user32
 	!win32-g++:LIBS += user32.lib
 }
+# end of global shortcut
 
+# dock icon click
+macx {
+	HEADERS += \
+		src/cocoainit.h \
+		src/dockiconclick.h
+
+	OBJECTIVE_SOURCES += \
+		src/cocoainit.mm \
+		src/dockiconclick.mm
+
+	LIBS += -framework AppKit
+}
+# end dock icon click

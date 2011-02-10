@@ -61,6 +61,7 @@ ONERING.Event.prototype = (new ONERING.Base()).extend({
 // Application {{{
 
 ONERING.Application = function() {
+	this.id = 0;
 };
 ONERING.Application.prototype = (new ONERING.Base()).extend({
 		appname: "onering",
@@ -73,8 +74,9 @@ ONERING.Application.prototype = (new ONERING.Base()).extend({
 		},
 	});
 
+ONERING.application = new ONERING.Application();
 ONERING.getApplication = function() {
-	return new ONERING.Application();
+	return ONERING.application;
 };
 
 // }}}

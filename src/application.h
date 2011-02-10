@@ -4,6 +4,11 @@
 #include <QApplication>
 #include <QObject>
 #include "pubsubhub.h"
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
+#include "dockiconclick.h"
+#endif
+#endif
 
 class Application : public QApplication
 {
@@ -19,6 +24,21 @@ public:
 
 public slots:
 	void setWindowIconByData(QByteArray &data);
+
+signals:
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
+	void dockIconClicked();
+#endif
+#endif
+
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
+private:
+	DockIconClickMonitor _dockIconClickMonitor;
+#endif
+#endif
+	
 };
 
 #endif

@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QFile>
 #include <onering.h>
+#include "application.h"
 #include "oneringapp.h"
 #include "oneringview.h"
 #include "debugger.h"
@@ -18,6 +19,13 @@ OneRingApp::OneRingApp(const QString& appname, QObject *parent)
 	_js = file.readAll();
 	file.close();
 	_js.prepend("HTTP/1.1 200 OK\r\nContent-Type: application/javascript\r\n\r\n");
+
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
+	connect(static_cast<Application *>(qApp), SIGNAL(dockIconClicked()),
+			this, SLOT(dockIconClicked()));
+#endif
+#endif
 }
 
 QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& param)
@@ -95,6 +103,15 @@ void OneRingApp::windowEventOccurred(QEvent* e, const QString& type)
 {
 	publishEvent("Window", sender(), type, e);
 }
+
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
+void OneRingApp::dockIconClicked()
+{
+	publishEvent("Application", 0, "dockIconClicked");
+}
+#endif
+#endif
 
 static onering_response_handle_t app(const char *appname, const char* method, const char* path, const char* body, const char **response, int *response_len)
 {

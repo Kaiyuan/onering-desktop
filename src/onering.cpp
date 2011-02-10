@@ -14,7 +14,6 @@
 #include "application.h"
 #include "publishevent.h"
 #include "cocoainit.h"
-#include "dockiconclick.h"
 
 int onering_loop(const char* appname)
 {
@@ -25,8 +24,11 @@ int onering_loop(const char* appname)
 	strncpy(name, appname, ONERING_MAX_APPNAME_LEN);
 	name[ONERING_MAX_APPNAME_LEN] = '\0';
 
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
 	CocoaInitializer cocoaInitializer;
-	DockIconClickMonitor dockIconClickMonitor;
+#endif
+#endif
 	Application app(argc, argv);
 	int retval = app.load(appname);
 	if (retval)

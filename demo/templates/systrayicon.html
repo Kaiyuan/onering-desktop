@@ -28,13 +28,15 @@ Click the icon in the system tray to show the menu.
         ["&Quit", ONERING.exit, {shortcut: "Ctrl+Q"}],
     ]);
     icon.setContextMenu(menu);
-    icon.bind('click', function(){
+		var raiseWindow = function(){
         if (w.isMinimized()) {
             w.showNormal();
         }
         w.activateWindow();
         w.show();
-    });
+    };
+		icon.bind('click', raiseWindow);
+		ONERING.getApplication().bind('dockIconClicked', raiseWindow);
 
     w.bind('windowStateChange', function(e){
         if (w.isMinimized()) {

@@ -14,6 +14,7 @@
 #include "dataloader.h"
 #include "debugger.h"
 #include "json.h"
+#include "dockiconclick.h"
 
 // plugins
 #include "menu.h"
@@ -35,6 +36,12 @@ Application::Application(int &argc, char **argv)
 	: QApplication(argc, argv),
 	  quiting(false)
 {
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
+	connect(&_dockIconClickMonitor, SIGNAL(dockIconClicked()),
+			this, SIGNAL(dockIconClicked()));
+#endif
+#endif
 }
 
 Application::~Application()

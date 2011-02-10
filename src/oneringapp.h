@@ -17,6 +17,11 @@ public:
 
 private slots:
 	void windowEventOccurred(QEvent* e, const QString& type);
+#ifdef Q_WS_MAC
+#ifdef QT_MAC_USE_COCOA
+	void dockIconClicked();
+#endif
+#endif
 
 private:
        	QByteArray processCall(const QString& command, const QVariantMap& param);

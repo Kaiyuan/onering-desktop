@@ -34,6 +34,9 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 		return _js;
 	} else if (command == "Window.create") {
 		OneRingView* window = createWindow(param);
+		_windows.insert(window);
+		connect(window, SIGNAL(destroyed(QObject *)),
+				this, SLOT(windowDestroyed(QObject *)));
 		window->show();
 		return QString("{\"type\":\"Window\",\"id\":\"%1\"}")
 			.arg(getId(window)).toLatin1();
@@ -42,7 +45,7 @@ QByteArray OneRingApp::processCall(const QString& command, const QVariantMap& pa
 		OneRingView* window = static_cast<OneRingView *>(getInstance(id));
 
 		if (command == "Window.isAlive") {
-			return window ? "true" : "false";
+			return _windows.contains(window) ? "true" : "false";
 		} else if (!window) {
 			return "{\"err\":\"invalid id\"}";
 		} else if (command == "Window.showInspector") {
@@ -102,6 +105,11 @@ OneRingView* OneRingApp::createWindow(const QVariantMap& props)
 void OneRingApp::windowEventOccurred(QEvent* e, const QString& type)
 {
 	publishEvent("Window", sender(), type, e);
+}
+
+void OneRingApp::windowDestroyed(QObject *obj)
+{
+	_windows.remove(static_cast<OneRingView *>(obj));
 }
 
 #ifdef Q_WS_MAC

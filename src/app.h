@@ -41,8 +41,6 @@ private:
 	virtual QByteArray processCall(const QString& command, const QVariantMap& param) = 0;
 
 	QString appname;
-	QSet<QObject *> _instances;
-
 };
 
 #endif

@@ -3,6 +3,9 @@
 
 #include <onering.h>
 #include <QVariantMap>
+#include <QSet>
+#include <QByteArray>
+#include <QEvent>
 #include "oneringview.h"
 #include "app.h"
 
@@ -17,6 +20,7 @@ public:
 
 private slots:
 	void windowEventOccurred(QEvent* e, const QString& type);
+	void windowDestroyed(QObject *);
 #ifdef Q_WS_MAC
 #ifdef QT_MAC_USE_COCOA
 	void dockIconClicked();
@@ -26,6 +30,7 @@ private slots:
 private:
        	QByteArray processCall(const QString& command, const QVariantMap& param);
 	QByteArray _js;
+	QSet<OneRingView *> _windows;
 };
 
 void register_onering_app(const char* appname);

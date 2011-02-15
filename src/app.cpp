@@ -116,11 +116,9 @@ QString App::generateObjectId(void* obj)
 
 QString App::getId(QObject* obj)
 {
-	if (!(_instances.contains(obj))) {
-		_instances.insert(obj);
-		connect(obj, SIGNAL(destroyed(QObject*)),
-				this, SLOT(instanceDestroyed(QObject*)));
-	}
+	connect(obj, SIGNAL(destroyed(QObject*)),
+			this, SLOT(instanceDestroyed(QObject*)),
+			Qt::UniqueConnection);
 	return generateObjectId(obj);
 }
 
@@ -138,7 +136,6 @@ void* App::getInstance(const QString& id)
 void App::instanceDestroyed(QObject* obj)
 {
 	qDebug() << obj << "deleted";
-	_instances.remove(obj);
 }
 
 void App::publishEvent(const QString& type, void* sender, const QString& event)

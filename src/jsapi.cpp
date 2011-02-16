@@ -91,11 +91,10 @@ QString JsApi::call(const QString &method, const QString &url, const QString &bo
 	QUrl absurl = frame->baseUrl().resolved(url);
 	QString response = call_app_body(qPrintable(method), absurl, qPrintable(body));
 	if (response.isEmpty()) {
-		return "null";
-	} else {
-		qDebug() << "JsApi::call" << url << "returns" << response;
-		return response;
+		response = "null";
 	}
+	qDebug() << "JsApi::call" << url << "returns" << response;
+	return response;
 }
 
 void JsApi::ajax(const QString &type, const QString &url, const QString &body, const QString &callback, bool async)

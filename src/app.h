@@ -11,8 +11,8 @@
 
 int is_appname_registered(const QString &appname);
 
-QByteArray call_app(const char* method, const QUrl &url, const char* body=NULL);
-QByteArray call_app_body(const char* method, const QUrl &url, const char* body=NULL);
+QByteArray call_app(const QString& method, const QUrl &url, const QString &body);
+QByteArray call_app_body(const QString &method, const QUrl &url, const QString &body);
 
 class App : public QObject
 {

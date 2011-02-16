@@ -89,7 +89,7 @@ QString JsApi::call(const QString &method, const QString &url, const QString &bo
 {
 	qDebug() << "JsApi::call" << method << url << body;
 	QUrl absurl = frame->baseUrl().resolved(url);
-	QString response = call_app_body(qPrintable(method), absurl, qPrintable(body));
+	QString response = call_app_body(method, absurl, body);
 	if (response.isEmpty()) {
 		response = "null";
 	}
@@ -103,7 +103,7 @@ void JsApi::ajax(const QString &type, const QString &url, const QString &body, c
 
 	qDebug() << "JsApi::ajax" << type << url << body << callback;
 	QUrl absurl = frame->baseUrl().resolved(url);
-	QByteArray response = call_app_body(qPrintable(type), absurl, qPrintable(body));
+	QByteArray response = call_app_body(type, absurl, body);
 	invokeCallback(callback, response);
 }
 

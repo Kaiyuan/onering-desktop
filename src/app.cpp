@@ -28,7 +28,7 @@ int is_appname_registered(const QString &appname)
 	return g_apps.contains(appname);
 }
 
-QByteArray call_app(const char* method, const QUrl &url, const char* body)
+QByteArray call_app(const QString &method, const QUrl &url, const QString &body)
 {
 	QString appname = url.host();
 	const char * response;
@@ -43,7 +43,7 @@ QByteArray call_app(const char* method, const QUrl &url, const char* body)
 			path_query += surl.mid(surl.indexOf('?'));
 		}
 
-		response_handle = g_apps[appname].first(qPrintable(appname), method, path_query, body, &response, &response_len);
+		response_handle = g_apps[appname].first(qPrintable(appname), qPrintable(method), path_query, body.toUtf8().constData(), &response, &response_len);
 		retval.append(response, response_len);
 		// free response
 		g_apps[appname].second(qPrintable(appname), response_handle);
@@ -52,7 +52,7 @@ QByteArray call_app(const char* method, const QUrl &url, const char* body)
 	return retval;
 }
 
-QByteArray call_app_body(const char* method, const QUrl &url, const char* body)
+QByteArray call_app_body(const QString &method, const QUrl &url, const QString &body)
 {
 	QByteArray response = call_app(method, url, body);
 	
@@ -93,7 +93,7 @@ onering_response_handle_t App::processRequest(const char* appname,
 
 	QByteArray* res = new QByteArray();
 	
-	QVariantMap param = Json::parse(QString::fromLocal8Bit(body)).toMap();
+	QVariantMap param = Json::parse(QString::fromUtf8(body)).toMap();
 	*res = processCall(path.mid(1), param);
 
 	*response = res->constData();

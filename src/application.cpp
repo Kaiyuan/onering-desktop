@@ -81,7 +81,7 @@ int Application::load(const char* appname)
 	initurl.setScheme("onering");
 	initurl.setHost(appname);
 	initurl.setPath("/init");
-	QByteArray response = call_app_body("GET", initurl);
+	QByteArray response = call_app_body("GET", initurl, "");
 
 	QVariantMap props = Json::parse(QString::fromLocal8Bit(response)).toMap();
 

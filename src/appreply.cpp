@@ -41,7 +41,7 @@ void AppReply::readBody()
 
 void AppReply::parseResponse()
 {
-	content = call_app(method.toUtf8().constData(), url, body);
+	content = call_app(method, url, body);
 	offset = 0;
 
 	open(ReadOnly | Unbuffered);

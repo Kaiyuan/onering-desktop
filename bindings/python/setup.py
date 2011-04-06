@@ -9,7 +9,7 @@ if sys.platform == 'darwin':
 else:
     include_dirs = [os.path.join('..', '..', 'include')]
     library_dirs = [os.path.join('..', '..', 'release'),
-		    os.path.join('..', '..', 'debug')]
+                    os.path.join('..', '..', 'debug')]
     libraries = ['OneRing1']
     extra_link_args = []
 

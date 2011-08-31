@@ -7,9 +7,10 @@ syntax: regexp
 .*\.egg-info$
 build
 dist
-^Makefile(\.(Debug|Release))?$
-^OneRing.framework/
-^((release|debug)/)?moc_.*.cpp$
-^((release|debug)/)?qrc_onering.cpp$
+Makefile(\.(Debug|Release))?$
+.*OneRing.framework
+moc_.*.cpp$
+qrc_onering.cpp$
 .*\.(so|a|dll|rc)$
 object_script\.OneRing\.
+.*\.bundle$

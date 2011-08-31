@@ -4,8 +4,8 @@
 
 TEMPLATE = lib
 TARGET = OneRing
-DEPENDPATH += . include src
-INCLUDEPATH += . include
+DEPENDPATH += . ../include src
+INCLUDEPATH += . ../include
 QT += webkit network
 RESOURCES = onering.qrc
 CONFIG += shared
@@ -14,7 +14,7 @@ VERSION = 1
 macx {
 	CONFIG += lib_bundle
 	FRAMEWORK_HEADERS.version = Versions
-	FRAMEWORK_HEADERS.files = include/onering.h
+	FRAMEWORK_HEADERS.files = ../include/onering.h
 	FRAMEWORK_HEADERS.path = Headers
 	QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS
 	QMAKE_FRAMEWORK_BUNDLE_NAME = OneRing
@@ -27,7 +27,7 @@ macx {
 
 # Input
 HEADERS += \
-	include/onering.h \
+	../include/onering.h \
 	src/app.h \
 	src/application.h \
 	src/appreply.h \

@@ -14,6 +14,7 @@
 #include "application.h"
 #include "publishevent.h"
 #include "cocoainit.h"
+#include "pluginloader.h"
 
 // Implementations of APIs in oneirng.h:
 //
@@ -46,7 +47,10 @@ const char* onering_version()
 	return "OneRingQtCore 1.0.0";
 }
 
-// onering_load_plugins() implemented in pluginloader.cpp
+int onering_load_plugins(const char* dir)
+{
+	return PluginLoader::loadDir(QDir(dir));
+}
 
 onering_response_handle_t onering_call_app(const char* appname, const char* method, const char* body, int body_len, char** response, int* response_len)
 {

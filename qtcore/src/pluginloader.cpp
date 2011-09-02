@@ -4,16 +4,14 @@
 #include <onering.h>
 #include "pluginloader.h"
 
-int onering_load_plugins(const char* dir)
+int PluginLoader::loadDir(const QDir& dir)
 {
 	int n_loaded_plugins = 0;
-	QDir qdir(dir);
-	QStringList entries = qdir.entryList();
+	QStringList entries = dir.entryList();
 
 	for (int i = 0; i < entries.size(); ++i) {
-		QString path = qdir.filePath(entries[i]);
-		QLibrary lib(path);
-		if (lib.load()) {
+		QString path = dir.filePath(entries[i]);
+		if (loadPlugin(path)) {
 			n_loaded_plugins += 1;
 		} else {
 			qDebug() << "load plugin" << path << "failed";
@@ -23,3 +21,8 @@ int onering_load_plugins(const char* dir)
 	return n_loaded_plugins;
 }
 
+bool PluginLoader::loadPlugin(const QString& path)
+{
+	QLibrary lib(path);
+	return lib.load();
+}

@@ -41,7 +41,8 @@ HEADERS += \
 	src/oneringview.h \
 	src/publishevent.h \
 	src/pubsubhub.h \
-	src/systemtrayicon.h
+	src/systemtrayicon.h \
+	src/pluginloader.h
 
 SOURCES += \
 	src/app.cpp \
@@ -58,7 +59,8 @@ SOURCES += \
 	src/oneringview.cpp \
 	src/publishevent.cpp \
 	src/pubsubhub.cpp \
-	src/systemtrayicon.cpp
+	src/systemtrayicon.cpp \
+	src/pluginloader.cpp
 
 # global shourtcut
 HEADERS += \

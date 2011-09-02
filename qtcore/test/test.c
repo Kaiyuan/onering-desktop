@@ -19,9 +19,8 @@ void free_response(const char* appname, onering_response_handle_t response_handl
 
 int main()
 {
-	printf("%s\n", onering_version());
-	onering_register_app("test", &test_app, &free_response);
 	printf("load %d plugins\n", onering_load_plugins("plugins"));
+	onering_register_app("test", &test_app, &free_response);
 /*        onering_loop("test");*/
 	return 0;
 }

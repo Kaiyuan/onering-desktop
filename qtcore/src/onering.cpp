@@ -46,10 +46,7 @@ const char* onering_version()
 	return "OneRingQtCore 1.0.0";
 }
 
-int onering_load_plugins(const char* dir)
-{
-	return 0;
-}
+// onering_load_plugins() implemented in pluginloader.cpp
 
 onering_response_handle_t onering_call_app(const char* appname, const char* method, const char* body, int body_len, char** response, int* response_len)
 {

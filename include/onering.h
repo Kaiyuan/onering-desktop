@@ -28,6 +28,11 @@ typedef void (*onering_free_response_func_t) (
 		const char* appname,
 		onering_response_handle_t response_handle);
 
+/* Functions should be exported from plugins */
+typedef const char* (*require_onering_version_func_t) ();
+typedef const char* (*get_onering_appname_func_t) ();
+typedef int (*register_onering_plugin_func_t) (const char* appname);
+
 /* Register a app with the name appname.
  * Register Return -1 means strlen(appname) > MAX_APPNAME_LEN */
 ONERING_EXPORT int onering_register_app(

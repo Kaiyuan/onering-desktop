@@ -16,7 +16,6 @@
 #include "networkaccessmanager.h"
 #include "systemtrayicon.h"
 #include "menu.h"
-#include "hotkey.h"
 #include "debugger.h"
 #include "application.h"
 // }}}

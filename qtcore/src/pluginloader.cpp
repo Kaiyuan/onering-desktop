@@ -46,7 +46,7 @@ bool PluginLoader::loadPlugin(const QString& path)
 		return false;
 	}
 
-	if (!register_onering_plugin(get_onering_appname())) {
+	if (register_onering_plugin(get_onering_appname())) {
 		qDebug() << path << "register failed";
 		lib.unload();
 		return false;

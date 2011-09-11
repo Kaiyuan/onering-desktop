@@ -62,27 +62,6 @@ SOURCES += \
 	src/systemtrayicon.cpp \
 	src/pluginloader.cpp
 
-# global shourtcut
-HEADERS += \
-	src/hotkey.h \
-	src/qxtglobalshortcut.h \
-	src/qxtglobal.h \
-	src/qxtglobalshortcut_p.h
-
-SOURCES += \
-	src/hotkey.cpp \
-	src/qxtglobalshortcut.cpp
-
-macx:SOURCES += src/qxtglobalshortcut_mac.cpp
-win32:SOURCES += src/qxtglobalshortcut_win.cpp
-unix:!macx:SOURCES += src/qxtglobalshortcut_x11.cpp
-macx:LIBS += -framework Carbon
-win32 {
-	win32-g++:LIBS += -l user32
-	!win32-g++:LIBS += user32.lib
-}
-# end of global shortcut
-
 # dock icon click
 macx {
 	HEADERS += \

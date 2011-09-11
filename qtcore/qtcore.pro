@@ -3,11 +3,11 @@
 ######################################################################
 
 TEMPLATE = lib
-TARGET = OneRing
+TARGET = OneRingQtCore
 DEPENDPATH += . ../include src
 INCLUDEPATH += . ../include
 QT += webkit network
-RESOURCES = onering.qrc
+RESOURCES = qtcore.qrc
 CONFIG += shared
 DEFINES += ONERING_LIBRARY
 VERSION = 1
@@ -17,7 +17,7 @@ macx {
 	FRAMEWORK_HEADERS.files = ../include/onering.h
 	FRAMEWORK_HEADERS.path = Headers
 	QMAKE_BUNDLE_DATA += FRAMEWORK_HEADERS
-	QMAKE_FRAMEWORK_BUNDLE_NAME = OneRing
+	QMAKE_FRAMEWORK_BUNDLE_NAME = OneRingQtCore
 	QMAKE_FRAMEWORK_VERSION = $$VERSION
 }
 
@@ -54,7 +54,7 @@ SOURCES += \
 	src/json.cpp \
 	src/menu.cpp \
 	src/networkaccessmanager.cpp \
-	src/onering.cpp \
+	src/qtcore.cpp \
 	src/oneringapp.cpp \
 	src/oneringview.cpp \
 	src/publishevent.cpp \

@@ -44,7 +44,7 @@ int onering_loop(const char* appname)
 
 const char* onering_version()
 {
-	return "OneRingQtCore 1.0.0";
+	return "QtCore 1.0.0";
 }
 
 int onering_load_plugins(const char* dir)

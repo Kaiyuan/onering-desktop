@@ -8,9 +8,9 @@ syntax: regexp
 build
 dist
 Makefile(\.(Debug|Release))?$
-.*OneRing.framework
+.*\.framework
 moc_.*.cpp$
-qrc_onering.cpp$
+qrc_.*.cpp$
 .*\.(so|a|dll|rc)$
 object_script\.OneRing\.
 .*\.bundle$

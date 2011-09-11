@@ -33,7 +33,7 @@ QByteArray call_app(const QString &method, const QUrl &url, const QString &body)
 	QString appname = url.host();
 	const char * response;
 	int response_len;
-	void* response_handle;
+	onering_response_handle_t response_handle;
 	QByteArray retval;
 
 	if (is_appname_registered(appname)) {
@@ -43,8 +43,7 @@ QByteArray call_app(const QString &method, const QUrl &url, const QString &body)
 			path_query += surl.mid(surl.indexOf('?'));
 		}
 
-		QByteArray qbody = body.toUtf8();
-		response_handle = g_apps[appname].first(qPrintable(appname), qPrintable(method), path_query, qbody.constData(), qbody.size(), &response, &response_len);
+		response_handle = g_apps[appname].first(qPrintable(appname), qPrintable(method), path_query, body.toUtf8().constData(), &response, &response_len);
 		retval.append(response, response_len);
 		// free response
 		g_apps[appname].second(qPrintable(appname), response_handle);
@@ -83,7 +82,7 @@ App::App(const QString& appname, QObject* parent)
 {
 }
 
-void* App::processRequest(const char* appname,
+onering_response_handle_t App::processRequest(const char* appname,
 		const char* method, const QString& path, const QByteArray& body,
 	       	const char** response, int* response_len)
 {
@@ -99,14 +98,14 @@ void* App::processRequest(const char* appname,
 
 	*response = res->constData();
 	*response_len = res->size();
-	return res;
+	return reinterpret_cast<onering_response_handle_t>(res);
 }
 
-void App::freeResponse(const char* appname, void* handle)
+void App::freeResponse(const char* appname, onering_response_handle_t handle)
 {
 	Q_UNUSED(appname);
 
-	delete static_cast<QByteArray*>(handle);
+	delete reinterpret_cast<QByteArray *>(handle);
 }
 
 QString App::generateObjectId(void* obj)

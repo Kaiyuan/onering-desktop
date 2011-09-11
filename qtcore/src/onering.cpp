@@ -52,12 +52,12 @@ int onering_load_plugins(const char* dir)
 	return PluginLoader::loadDir(QDir(dir));
 }
 
-onering_response_handle_t onering_call_app(const char* appname, const char* method, const char* body, int body_len, char** response, int* response_len)
+void* onering_call_app(const char* appname, const char* method, const char* body, int body_len, char** response, int* response_len)
 {
-	return (onering_response_handle_t)0;
+	return 0;
 }
 
-void onering_free_response(const char* appname, onering_response_handle_t response_handle)
+void onering_free_response(const char* appname, void* response_handle)
 {
 }
 

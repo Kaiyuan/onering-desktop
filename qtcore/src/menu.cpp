@@ -113,19 +113,19 @@ void MenuApp::menuItemTriggered(bool checked)
 			QString("{\"checked\":%1}").arg(checked ? "true" : "false"));
 }
 
-static onering_response_handle_t menu_app(const char* appname, const char* method, 
-		const char* path, const char* body,
+static void* menu_app(const char* appname, const char* method, 
+		const char* path, const char* body, int body_len,
 		const char** response, int* response_len)
 {
 	if (!g_manager) {
 		g_manager = new MenuApp(appname);
 	}
 
-	return g_manager->processRequest(appname, method, path, body, response, response_len);
+	return g_manager->processRequest(appname, method, path, QByteArray(body, body_len), response, response_len);
 }
 
 
-static void menu_app_free_response(const char* appname, onering_response_handle_t response_handle)
+static void menu_app_free_response(const char* appname, void* response_handle)
 {
 	g_manager->freeResponse(appname, response_handle);
 }

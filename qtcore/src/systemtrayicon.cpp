@@ -87,19 +87,19 @@ void SystemTrayIconApp::notifyClicked(QSystemTrayIcon::ActivationReason reason)
 	}
 }
 
-static onering_response_handle_t app(const char* appname, const char* method, 
-		const char* path, const char* body,
+static void* app(const char* appname, const char* method, 
+		const char* path, const char* body, int body_len,
 		const char** response, int* response_len)
 {
 	if (!g_app) {
 		g_app = new SystemTrayIconApp(appname);
 	}
 
-	return g_app->processRequest(appname, method, path, body, response, response_len);
+	return g_app->processRequest(appname, method, path, QByteArray(body, body_len), response, response_len);
 }
 
 
-static void app_free_response(const char* appname, onering_response_handle_t response_handle)
+static void app_free_response(const char* appname, void* response_handle)
 {
 	g_app->freeResponse(appname, response_handle);
 }

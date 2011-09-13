@@ -53,7 +53,7 @@ ONERING_EXPORT void onering_free_response(
 		void* response_handle);
 
 /* Register a app with the name appname.
- * Register Return -1 means strlen(appname) > MAX_APPNAME_LEN */
+ * Returns non-zero if registration failed. */
 typedef int (*onering_register_app_func_t) (
 		const char* appname,
 		onering_app_func_t app_func,
@@ -110,7 +110,7 @@ typedef struct {
 typedef const char* (*require_onering_version_func_t) ();
 /* const char* get_onering_appname() */
 typedef const char* (*get_onering_appname_func_t) ();
-/* const int register_onering_plugin(const char* appname) */
+/* int register_onering_plugin(const char* appname) */
 typedef int (*register_onering_plugin_func_t) (const char* appname);
 /* void set_onering_helpers(onering_helpers_t* helpers) */
 typedef void (*set_onering_helpers_func_t) (onering_helpers_t* helpers);

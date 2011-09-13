@@ -21,8 +21,8 @@ class App : public QObject
 public:
 	App(const QString& appname, QObject *parent=0);
 
-	onering_response_handle_t processRequest(const char* appname, const char* method, const QString& path, const QByteArray& body, const char** response, int* response_len);
-	void freeResponse(const char* appname, onering_response_handle_t response_handle);
+	void* processRequest(const char* appname, const char* method, const QString& path, const QByteArray& body, const char** response, int* response_len);
+	void freeResponse(const char* appname, void* response_handle);
 
 	static QString generateObjectId(void* obj);
 

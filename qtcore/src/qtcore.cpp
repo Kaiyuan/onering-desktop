@@ -52,13 +52,30 @@ int onering_load_plugins(const char* dir)
 	return PluginLoader::loadDir(QDir(dir));
 }
 
-void* onering_call_app(const char* appname, const char* method, const char* body, int body_len, char** response, int* response_len)
+void* onering_call_app(const char* appname, const char* method, const char* path, const char* body, int body_len, const char** response, int* response_len)
 {
-	return 0;
+	onering_app_func_t app;
+	onering_free_response_func_t free_response;
+
+	if (get_app(appname, &app, &free_response)) {
+		*response = "404 Not Found";
+		*response_len = strlen(*response);
+		return NULL;
+	}
+
+	return app(appname, method, path, body, body_len, response, response_len);
 }
 
 void onering_free_response(const char* appname, void* response_handle)
 {
+	onering_app_func_t app;
+	onering_free_response_func_t free_response;
+
+	if (get_app(appname, &app, &free_response)) {
+		return;
+	}
+
+	free_response(appname, response_handle);
 }
 
 void onering_subscribe(const char* channel, const char* callback_appname, const char* callback_method)

@@ -28,6 +28,17 @@ int is_appname_registered(const QString &appname)
 	return g_apps.contains(appname);
 }
 
+int get_app(const char* appname, onering_app_func_t* app, onering_free_response_func_t* free_respnose)
+{
+	if (!is_appname_registered(appname)) {
+		return -1;
+	}
+
+	*app = g_apps[appname].first;
+	*free_respnose = g_apps[appname].second;
+	return 0;
+}
+
 QByteArray call_app(const QString &method, const QUrl &url, const QString &body)
 {
 	QString appname = url.host();

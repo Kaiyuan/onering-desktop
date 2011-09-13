@@ -10,6 +10,7 @@
 #include <QSet>
 
 int is_appname_registered(const QString &appname);
+int get_app(const char* appname, onering_app_func_t* app, onering_free_response_func_t* free_respnose);
 
 QByteArray call_app(const QString& method, const QUrl &url, const QString &body);
 QByteArray call_app_body(const QString &method, const QUrl &url, const QString &body);

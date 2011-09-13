@@ -21,6 +21,20 @@ int main()
 {
 	printf("load %d plugins\n", onering_load_plugins("plugins"));
 	onering_register_app("test", &test_app, &free_response);
-	//onering_loop("test");
+
+	const char* response;
+	int response_len;
+	void* handler;
+
+	printf("GET onering://testplugin/ ->\n");
+	onering_call_app("testplugin", "GET", "/", NULL, 0, &response, &response_len);
+	printf("%s\n", response);
+	onering_free_response("testplugin", handler);
+
+	printf("GET onering://testplugin2/ ->\n");
+	handler = onering_call_app("testplugin2", "GET", "/", NULL, 0, &response, &response_len);
+	printf("%s\n", response);
+	onering_free_response("testplugin2", handler);
+	
 	return 0;
 }

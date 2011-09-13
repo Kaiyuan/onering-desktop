@@ -32,8 +32,9 @@ bool PluginLoader::loadPlugin(const QString& path)
 	require_onering_version_func_t require_onering_version = (require_onering_version_func_t) lib.resolve("require_onering_version");
 	get_onering_appname_func_t get_onering_appname = (get_onering_appname_func_t) lib.resolve("get_onering_appname");
 	register_onering_plugin_func_t register_onering_plugin = (register_onering_plugin_func_t) lib.resolve("register_onering_plugin");
+	set_onering_helpers_func_t set_onering_helpers = (set_onering_helpers_func_t) lib.resolve("set_onering_helpers");
 
-	if (!require_onering_version || !get_onering_appname || !register_onering_plugin) {
+	if (!require_onering_version || !get_onering_appname || !register_onering_plugin || !set_onering_helpers) {
 		qDebug() << path << "is not an onering plugin";
 		lib.unload();
 		return false;
@@ -46,8 +47,18 @@ bool PluginLoader::loadPlugin(const QString& path)
 		return false;
 	}
 
-	if (register_onering_plugin(get_onering_appname())) {
-		qDebug() << path << "register failed";
+	static onering_helpers_t helpers = {
+		onering_call_app,
+		onering_free_response,
+		onering_register_app,
+		onering_subscribe,
+		onering_unsubscribe,
+		onering_publish,
+	};
+	set_onering_helpers(&helpers);
+
+	if (int ret = register_onering_plugin(get_onering_appname())) {
+		qDebug() << path << "register failed:" << ret;
 		lib.unload();
 		return false;
 	}

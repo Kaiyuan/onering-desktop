@@ -14,7 +14,7 @@ QHash<QString, QPair<onering_app_func_t, onering_free_response_func_t> > g_apps;
 int onering_register_app(const char* appname, onering_app_func_t app_func, onering_free_response_func_t free_response_func)
 {
 	if (strlen(appname) > ONERING_MAX_APPNAME_LEN) {
-		return -1;
+		return ONERING_ERR_INVALID_APPNAME;
 	}
 
 	qDebug() << "register app:" << appname;

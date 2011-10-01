@@ -28,12 +28,12 @@ int is_appname_registered(const QString &appname)
 	return g_apps.contains(appname);
 }
 
-QByteArray call_app(const QString &method, const QUrl &url, const QString &body)
+QByteArray call_app(const QString &method, const QUrl &url, const QByteArray &body)
 {
 	QString appname = url.host();
 	const char * response;
 	int response_len;
-	onering_response_handle_t response_handle;
+	void* response_handle;
 	QByteArray retval;
 
 	if (is_appname_registered(appname)) {
@@ -43,7 +43,7 @@ QByteArray call_app(const QString &method, const QUrl &url, const QString &body)
 			path_query += surl.mid(surl.indexOf('?'));
 		}
 
-		response_handle = g_apps[appname].first(qPrintable(appname), qPrintable(method), path_query, body.toUtf8().constData(), &response, &response_len);
+		response_handle = g_apps[appname].first(qPrintable(appname), qPrintable(method), path_query, body.constData(), body.size(), &response, &response_len);
 		retval.append(response, response_len);
 		// free response
 		g_apps[appname].second(qPrintable(appname), response_handle);
@@ -52,7 +52,7 @@ QByteArray call_app(const QString &method, const QUrl &url, const QString &body)
 	return retval;
 }
 
-QByteArray call_app_body(const QString &method, const QUrl &url, const QString &body)
+QByteArray call_app_body(const QString &method, const QUrl &url, const QByteArray &body)
 {
 	QByteArray response = call_app(method, url, body);
 	
@@ -82,7 +82,9 @@ App::App(const QString& appname, QObject* parent)
 {
 }
 
-onering_response_handle_t App::processRequest(const char* appname,
+onering_helpers_t* App::helpers = 0;
+
+void* App::processRequest(const char* appname,
 		const char* method, const QString& path, const QByteArray& body,
 	       	const char** response, int* response_len)
 {
@@ -98,14 +100,14 @@ onering_response_handle_t App::processRequest(const char* appname,
 
 	*response = res->constData();
 	*response_len = res->size();
-	return reinterpret_cast<onering_response_handle_t>(res);
+	return res;
 }
 
-void App::freeResponse(const char* appname, onering_response_handle_t handle)
+void App::freeResponse(const char* appname, void* handle)
 {
 	Q_UNUSED(appname);
 
-	delete reinterpret_cast<QByteArray *>(handle);
+	delete static_cast<QByteArray*>(handle);
 }
 
 QString App::generateObjectId(void* obj)
@@ -152,7 +154,17 @@ void App::publishEvent(const QString& type, void* sender, const QString& event, 
 
 void App::publishEvent(const QString& type, void* sender, const QString& event, const QString& data)
 {
-	onering_publish(qPrintable(QString("%1.%2.%3.%4")
+	helpers->publish(qPrintable(QString("%1.%2.%3.%4")
 				.arg(appname, type, getId(sender), event)),
 			qPrintable(data));
+}
+
+void App::setHelpers(onering_helpers_t* helpers)
+{
+	App::helpers = helpers;
+}
+
+onering_helpers_t* App::getHelpers()
+{
+	return App::helpers;
 }

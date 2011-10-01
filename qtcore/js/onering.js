@@ -229,46 +229,6 @@ ONERING.MenuItem.prototype = (new ONERING.Base()).extend({
 
 // }}}
 
-// HotKey {{{
-
-ONERING.HotKey = function() {
-};
-ONERING.HotKey.prototype = (new ONERING.Base()).extend({
-		appname: "hotkey",
-		type: "HotKey",
-		destroy: function() {
-			return this._call("destroy");
-		},
-	});
-ONERING.HotKey.instances = {};
-ONERING.HotKey.create = function(shortcut) {
-	var hotkey = new ONERING.HotKey();
-	hotkey.id = (hotkey._create("create", {shortcut: shortcut})).id;
-	ONERING.HotKey.instances[shortcut] = hotkey;
-	return hotkey;
-};
-ONERING.HotKey.set = function(shortcut, callback) {
-	var hotkey = ONERING.HotKey.instances[shortcut] || new ONERING.HotKey.create(shortcut);
-	hotkey.bind("activated", callback);
-};
-ONERING.HotKey.clear = function(shortcut) {
-	var hotkey = ONERING.HotKey.instances[shortcut];
-	if (hotkey !== undefined) {
-		hotkey.destroy();
-		delete ONERING.HotKey.instances[shortcut];
-	}
-};
-ONERING.setHotKey = ONERING.HotKey.set;
-ONERING.clearHotKey = ONERING.HotKey.clear;
-
-window.addEventListener('unload', function() {
-		for (var shortcut in ONERING.HotKey.instances) {
-			ONERING.HotKey.clear(shortcut);
-		}
-	});
-
-// }}}
-
 // subscribe/unsubscribe {{{
 
 ONERING.subscriptions = {};

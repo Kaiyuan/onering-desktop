@@ -75,3 +75,5 @@ macx {
 	LIBS += -framework AppKit
 }
 # end dock icon click
+
+macx:LIBS += -framework Carbon

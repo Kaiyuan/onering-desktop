@@ -11,8 +11,8 @@
 
 int is_appname_registered(const QString &appname);
 
-QByteArray call_app(const QString& method, const QUrl &url, const QString &body);
-QByteArray call_app_body(const QString &method, const QUrl &url, const QString &body);
+QByteArray call_app(const QString& method, const QUrl &url, const QByteArray &body);
+QByteArray call_app_body(const QString &method, const QUrl &url, const QByteArray &body);
 
 class App : public QObject
 {
@@ -25,6 +25,8 @@ public:
 	void freeResponse(const char* appname, void* response_handle);
 
 	static QString generateObjectId(void* obj);
+	static void setHelpers(onering_helpers_t* helpers);
+	static onering_helpers_t* getHelpers();
 
 private slots:
 	void instanceDestroyed(QObject* obj);
@@ -41,6 +43,7 @@ private:
 	virtual QByteArray processCall(const QString& command, const QVariantMap& param) = 0;
 
 	QString appname;
+	static onering_helpers_t* helpers;
 };
 
 #endif

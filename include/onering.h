@@ -13,6 +13,10 @@ extern "C" {
 #  define ONERING_EXPORT
 #endif
 
+#define ONERING_OK 0
+#define ONERING_ERR_INVALID_APPNAME -1
+#define ONERING_ERR_NO_HELPER_FUNCTION -2
+
 /* Return the version number of the core.
  * e.g. "OneRingQtCore 1.0.0" */
 ONERING_EXPORT const char* onering_version();

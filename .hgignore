@@ -14,4 +14,5 @@ qrc_.*.cpp$
 .*\.(so|a|dll|rc)$
 object_script\.OneRing\.
 .*\.bundle$
-qtcore/test/test$
+.*\.dylib$
+.*/test/test$

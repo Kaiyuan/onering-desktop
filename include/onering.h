@@ -19,7 +19,7 @@ extern "C" {
 
 /* Return the version number of the core.
  * e.g. "OneRingQtCore 1.0.0" */
-ONERING_EXPORT const char* onering_version();
+ONERING_EXPORT const char* onering_version(void);
 
 /* Load all OneRingPlugins under dir.
  * Returns number of loaded plugins. */

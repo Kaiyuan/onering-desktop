@@ -7,6 +7,7 @@
 //
 
 #import "OneRingTests.h"
+#include <onering.h>
 
 @implementation OneRingTests
 
@@ -24,9 +25,10 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testVersion
 {
-    STFail(@"Unit tests are not implemented yet in OneRingTests");
+    const char* version = onering_version();
+    STAssertEquals(strcmp(version, "WebKitCore 1.0.0"), 0, @"version number mismatch");
 }
 
 @end

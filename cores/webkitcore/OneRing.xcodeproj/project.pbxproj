@@ -1,0 +1,434 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EA45678B1479421A00830199 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA45678A1479421A00830199 /* Cocoa.framework */; };
+		EA4567951479421A00830199 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EA4567931479421A00830199 /* InfoPlist.strings */; };
+		EA4567991479421A00830199 /* OneRing.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4567981479421A00830199 /* OneRing.m */; };
+		EA4567A11479421A00830199 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4567A01479421A00830199 /* SenTestingKit.framework */; };
+		EA4567A21479421A00830199 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA45678A1479421A00830199 /* Cocoa.framework */; };
+		EA4567A51479421A00830199 /* OneRing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4567871479421A00830199 /* OneRing.framework */; };
+		EA4567AB1479421A00830199 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EA4567A91479421A00830199 /* InfoPlist.strings */; };
+		EA4567AD1479421A00830199 /* OneRingTests.h in Resources */ = {isa = PBXBuildFile; fileRef = EA4567AC1479421A00830199 /* OneRingTests.h */; };
+		EA4567AF1479421A00830199 /* OneRingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4567AE1479421A00830199 /* OneRingTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EA4567A31479421A00830199 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA45677D1479421A00830199 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EA4567861479421A00830199;
+			remoteInfo = OneRing;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		EA4567871479421A00830199 /* OneRing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OneRing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA45678A1479421A00830199 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		EA45678D1479421A00830199 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		EA45678E1479421A00830199 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		EA45678F1479421A00830199 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		EA4567921479421A00830199 /* OneRing-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneRing-Info.plist"; sourceTree = "<group>"; };
+		EA4567941479421A00830199 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EA4567961479421A00830199 /* OneRing-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OneRing-Prefix.pch"; sourceTree = "<group>"; };
+		EA4567971479421A00830199 /* OneRing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OneRing.h; sourceTree = "<group>"; };
+		EA4567981479421A00830199 /* OneRing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OneRing.m; sourceTree = "<group>"; };
+		EA45679F1479421A00830199 /* OneRingTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneRingTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA4567A01479421A00830199 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		EA4567A81479421A00830199 /* OneRingTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneRingTests-Info.plist"; sourceTree = "<group>"; };
+		EA4567AA1479421A00830199 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EA4567AC1479421A00830199 /* OneRingTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OneRingTests.h; sourceTree = "<group>"; };
+		EA4567AE1479421A00830199 /* OneRingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OneRingTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EA4567831479421A00830199 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA45678B1479421A00830199 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA45679B1479421A00830199 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA4567A11479421A00830199 /* SenTestingKit.framework in Frameworks */,
+				EA4567A21479421A00830199 /* Cocoa.framework in Frameworks */,
+				EA4567A51479421A00830199 /* OneRing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EA45677B1479421A00830199 = {
+			isa = PBXGroup;
+			children = (
+				EA4567901479421A00830199 /* OneRing */,
+				EA4567A61479421A00830199 /* OneRingTests */,
+				EA4567891479421A00830199 /* Frameworks */,
+				EA4567881479421A00830199 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EA4567881479421A00830199 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA4567871479421A00830199 /* OneRing.framework */,
+				EA45679F1479421A00830199 /* OneRingTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EA4567891479421A00830199 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA45678A1479421A00830199 /* Cocoa.framework */,
+				EA4567A01479421A00830199 /* SenTestingKit.framework */,
+				EA45678C1479421A00830199 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EA45678C1479421A00830199 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA45678D1479421A00830199 /* AppKit.framework */,
+				EA45678E1479421A00830199 /* CoreData.framework */,
+				EA45678F1479421A00830199 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		EA4567901479421A00830199 /* OneRing */ = {
+			isa = PBXGroup;
+			children = (
+				EA4567971479421A00830199 /* OneRing.h */,
+				EA4567981479421A00830199 /* OneRing.m */,
+				EA4567911479421A00830199 /* Supporting Files */,
+			);
+			path = OneRing;
+			sourceTree = "<group>";
+		};
+		EA4567911479421A00830199 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EA4567921479421A00830199 /* OneRing-Info.plist */,
+				EA4567931479421A00830199 /* InfoPlist.strings */,
+				EA4567961479421A00830199 /* OneRing-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EA4567A61479421A00830199 /* OneRingTests */ = {
+			isa = PBXGroup;
+			children = (
+				EA4567AC1479421A00830199 /* OneRingTests.h */,
+				EA4567AE1479421A00830199 /* OneRingTests.m */,
+				EA4567A71479421A00830199 /* Supporting Files */,
+			);
+			path = OneRingTests;
+			sourceTree = "<group>";
+		};
+		EA4567A71479421A00830199 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EA4567A81479421A00830199 /* OneRingTests-Info.plist */,
+				EA4567A91479421A00830199 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		EA4567841479421A00830199 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		EA4567861479421A00830199 /* OneRing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA4567B21479421A00830199 /* Build configuration list for PBXNativeTarget "OneRing" */;
+			buildPhases = (
+				EA4567821479421A00830199 /* Sources */,
+				EA4567831479421A00830199 /* Frameworks */,
+				EA4567841479421A00830199 /* Headers */,
+				EA4567851479421A00830199 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneRing;
+			productName = OneRing;
+			productReference = EA4567871479421A00830199 /* OneRing.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		EA45679E1479421A00830199 /* OneRingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA4567B51479421A00830199 /* Build configuration list for PBXNativeTarget "OneRingTests" */;
+			buildPhases = (
+				EA45679A1479421A00830199 /* Sources */,
+				EA45679B1479421A00830199 /* Frameworks */,
+				EA45679C1479421A00830199 /* Resources */,
+				EA45679D1479421A00830199 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EA4567A41479421A00830199 /* PBXTargetDependency */,
+			);
+			name = OneRingTests;
+			productName = OneRingTests;
+			productReference = EA45679F1479421A00830199 /* OneRingTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EA45677D1479421A00830199 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = EA4567801479421A00830199 /* Build configuration list for PBXProject "OneRing" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = EA45677B1479421A00830199;
+			productRefGroup = EA4567881479421A00830199 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EA4567861479421A00830199 /* OneRing */,
+				EA45679E1479421A00830199 /* OneRingTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EA4567851479421A00830199 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA4567951479421A00830199 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA45679C1479421A00830199 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA4567AB1479421A00830199 /* InfoPlist.strings in Resources */,
+				EA4567AD1479421A00830199 /* OneRingTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		EA45679D1479421A00830199 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EA4567821479421A00830199 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA4567991479421A00830199 /* OneRing.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA45679A1479421A00830199 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EA4567AF1479421A00830199 /* OneRingTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EA4567A41479421A00830199 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EA4567861479421A00830199 /* OneRing */;
+			targetProxy = EA4567A31479421A00830199 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		EA4567931479421A00830199 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EA4567941479421A00830199 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		EA4567A91479421A00830199 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EA4567AA1479421A00830199 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		EA4567B01479421A00830199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		EA4567B11479421A00830199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		EA4567B31479421A00830199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				INFOPLIST_FILE = "OneRing/OneRing-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		EA4567B41479421A00830199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				INFOPLIST_FILE = "OneRing/OneRing-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		EA4567B61479421A00830199 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				INFOPLIST_FILE = "OneRingTests/OneRingTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		EA4567B71479421A00830199 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				INFOPLIST_FILE = "OneRingTests/OneRingTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EA4567801479421A00830199 /* Build configuration list for PBXProject "OneRing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA4567B01479421A00830199 /* Debug */,
+				EA4567B11479421A00830199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA4567B21479421A00830199 /* Build configuration list for PBXNativeTarget "OneRing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA4567B31479421A00830199 /* Debug */,
+				EA4567B41479421A00830199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		EA4567B51479421A00830199 /* Build configuration list for PBXNativeTarget "OneRingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA4567B61479421A00830199 /* Debug */,
+				EA4567B71479421A00830199 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EA45677D1479421A00830199 /* Project object */;
+}

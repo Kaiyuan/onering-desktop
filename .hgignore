@@ -16,3 +16,5 @@ object_script\.OneRing\.
 .*\.bundle$
 .*\.dylib$
 .*/test/test$
+.*project\.xcworkspace/
+.*xcuserdata/

@@ -20,6 +20,8 @@
 		EA4567BF147942E000830199 /* Window.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4567BE147942E000830199 /* Window.xib */; };
 		EA4567C21479431700830199 /* OneRingWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = EA4567C01479431700830199 /* OneRingWindowController.h */; };
 		EA4567C31479431700830199 /* OneRingWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4567C11479431700830199 /* OneRingWindowController.m */; };
+		EA4567C71479477C00830199 /* onering.h in Headers */ = {isa = PBXBuildFile; fileRef = EA4567C61479477C00830199 /* onering.h */; };
+		EA4567C91479498600830199 /* core.c in Sources */ = {isa = PBXBuildFile; fileRef = EA4567C81479498600830199 /* core.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		EA4567BE147942E000830199 /* Window.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Window.xib; sourceTree = "<group>"; };
 		EA4567C01479431700830199 /* OneRingWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneRingWindowController.h; sourceTree = "<group>"; };
 		EA4567C11479431700830199 /* OneRingWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneRingWindowController.m; sourceTree = "<group>"; };
+		EA4567C61479477C00830199 /* onering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = onering.h; path = ../../../include/onering.h; sourceTree = "<group>"; };
+		EA4567C81479498600830199 /* core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = core.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,12 +125,13 @@
 		EA4567901479421A00830199 /* OneRing */ = {
 			isa = PBXGroup;
 			children = (
+				EA4567C81479498600830199 /* core.c */,
 				EA4567971479421A00830199 /* OneRing.h */,
 				EA4567981479421A00830199 /* OneRing.m */,
-				EA4567911479421A00830199 /* Supporting Files */,
 				EA4567BE147942E000830199 /* Window.xib */,
 				EA4567C01479431700830199 /* OneRingWindowController.h */,
 				EA4567C11479431700830199 /* OneRingWindowController.m */,
+				EA4567911479421A00830199 /* Supporting Files */,
 			);
 			path = OneRing;
 			sourceTree = "<group>";
@@ -134,6 +139,7 @@
 		EA4567911479421A00830199 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EA4567C61479477C00830199 /* onering.h */,
 				EA4567921479421A00830199 /* OneRing-Info.plist */,
 				EA4567931479421A00830199 /* InfoPlist.strings */,
 				EA4567961479421A00830199 /* OneRing-Prefix.pch */,
@@ -168,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA4567C21479431700830199 /* OneRingWindowController.h in Headers */,
+				EA4567C71479477C00830199 /* onering.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +285,7 @@
 			files = (
 				EA4567991479421A00830199 /* OneRing.m in Sources */,
 				EA4567C31479431700830199 /* OneRingWindowController.m in Sources */,
+				EA4567C91479498600830199 /* core.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,7 +347,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -359,7 +367,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -372,6 +380,7 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				HEADER_SEARCH_PATHS = ../../include;
 				INFOPLIST_FILE = "OneRing/OneRing-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -386,6 +395,7 @@
 				FRAMEWORK_VERSION = A;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				HEADER_SEARCH_PATHS = ../../include;
 				INFOPLIST_FILE = "OneRing/OneRing-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -398,6 +408,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				HEADER_SEARCH_PATHS = ../../include;
 				INFOPLIST_FILE = "OneRingTests/OneRingTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
@@ -410,6 +421,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OneRing/OneRing-Prefix.pch";
+				HEADER_SEARCH_PATHS = ../../include;
 				INFOPLIST_FILE = "OneRingTests/OneRingTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;

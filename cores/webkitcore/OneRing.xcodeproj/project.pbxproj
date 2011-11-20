@@ -16,6 +16,10 @@
 		EA4567AB1479421A00830199 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EA4567A91479421A00830199 /* InfoPlist.strings */; };
 		EA4567AD1479421A00830199 /* OneRingTests.h in Resources */ = {isa = PBXBuildFile; fileRef = EA4567AC1479421A00830199 /* OneRingTests.h */; };
 		EA4567AF1479421A00830199 /* OneRingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4567AE1479421A00830199 /* OneRingTests.m */; };
+		EA4567BC147942C100830199 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4567BB147942C100830199 /* WebKit.framework */; };
+		EA4567BF147942E000830199 /* Window.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4567BE147942E000830199 /* Window.xib */; };
+		EA4567C21479431700830199 /* OneRingWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = EA4567C01479431700830199 /* OneRingWindowController.h */; };
+		EA4567C31479431700830199 /* OneRingWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4567C11479431700830199 /* OneRingWindowController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +49,10 @@
 		EA4567AA1479421A00830199 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EA4567AC1479421A00830199 /* OneRingTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OneRingTests.h; sourceTree = "<group>"; };
 		EA4567AE1479421A00830199 /* OneRingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OneRingTests.m; sourceTree = "<group>"; };
+		EA4567BB147942C100830199 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = ../../../../../../../System/Library/Frameworks/WebKit.framework; sourceTree = "<group>"; };
+		EA4567BE147942E000830199 /* Window.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Window.xib; sourceTree = "<group>"; };
+		EA4567C01479431700830199 /* OneRingWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneRingWindowController.h; sourceTree = "<group>"; };
+		EA4567C11479431700830199 /* OneRingWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneRingWindowController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA45678B1479421A00830199 /* Cocoa.framework in Frameworks */,
+				EA4567BC147942C100830199 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +100,7 @@
 		EA4567891479421A00830199 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA4567BB147942C100830199 /* WebKit.framework */,
 				EA45678A1479421A00830199 /* Cocoa.framework */,
 				EA4567A01479421A00830199 /* SenTestingKit.framework */,
 				EA45678C1479421A00830199 /* Other Frameworks */,
@@ -114,6 +124,9 @@
 				EA4567971479421A00830199 /* OneRing.h */,
 				EA4567981479421A00830199 /* OneRing.m */,
 				EA4567911479421A00830199 /* Supporting Files */,
+				EA4567BE147942E000830199 /* Window.xib */,
+				EA4567C01479431700830199 /* OneRingWindowController.h */,
+				EA4567C11479431700830199 /* OneRingWindowController.m */,
 			);
 			path = OneRing;
 			sourceTree = "<group>";
@@ -154,6 +167,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA4567C21479431700830199 /* OneRingWindowController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA4567951479421A00830199 /* InfoPlist.strings in Resources */,
+				EA4567BF147942E000830199 /* Window.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA4567991479421A00830199 /* OneRing.m in Sources */,
+				EA4567C31479431700830199 /* OneRingWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +435,7 @@
 				EA4567B41479421A00830199 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EA4567B51479421A00830199 /* Build configuration list for PBXNativeTarget "OneRingTests" */ = {
 			isa = XCConfigurationList;
@@ -427,6 +444,7 @@
 				EA4567B71479421A00830199 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -1,3 +1,4 @@
+import sys
 import logging
 from cStringIO import StringIO
 try:
@@ -24,7 +25,15 @@ def register_wsgi_app(appname, app):
             'SCRIPT_NAME': '',
             'PATH_INFO': path,
             'QUERY_STRING': query,
+            'SERVER_NAME': appname,
+            'SERVER_PORT': '80',
             'HTTP_HOST': appname,
+            'wsgi.version': (1, 0),
+            'wsgi.url_scheme': 'onering',
+            'wsgi.errors': sys.stderr,
+            'wsgi.multithread': True,
+            'wsgi.multiprocess': False,
+            'wsgi.run_once': False,
         }
         if body is not None:
             environ['wsgi.input'] = StringIO(body)

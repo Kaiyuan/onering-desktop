@@ -16,6 +16,7 @@ extern "C" {
 #define ONERING_OK 0
 #define ONERING_ERR_INVALID_APPNAME -1
 #define ONERING_ERR_NO_HELPER_FUNCTION -2
+#define ONERING_ERR_GENERIC -100
 
 /* Return the version number of the core.
  * e.g. "OneRingQtCore 1.0.0" */

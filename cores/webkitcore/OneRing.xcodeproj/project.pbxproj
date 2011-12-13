@@ -22,6 +22,7 @@
 		EA4567C31479431700830199 /* OneRingWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4567C11479431700830199 /* OneRingWindowController.m */; };
 		EA4567C71479477C00830199 /* onering.h in Headers */ = {isa = PBXBuildFile; fileRef = EA4567C61479477C00830199 /* onering.h */; };
 		EA4567C91479498600830199 /* core.c in Sources */ = {isa = PBXBuildFile; fileRef = EA4567C81479498600830199 /* core.c */; };
+		EA4567CB14794E6E00830199 /* pluginloader.c in Sources */ = {isa = PBXBuildFile; fileRef = EA4567CA14794E6E00830199 /* pluginloader.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		EA4567C11479431700830199 /* OneRingWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneRingWindowController.m; sourceTree = "<group>"; };
 		EA4567C61479477C00830199 /* onering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = onering.h; path = ../../../include/onering.h; sourceTree = "<group>"; };
 		EA4567C81479498600830199 /* core.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = core.c; sourceTree = "<group>"; };
+		EA4567CA14794E6E00830199 /* pluginloader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pluginloader.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				EA4567C01479431700830199 /* OneRingWindowController.h */,
 				EA4567C11479431700830199 /* OneRingWindowController.m */,
 				EA4567911479421A00830199 /* Supporting Files */,
+				EA4567CA14794E6E00830199 /* pluginloader.c */,
 			);
 			path = OneRing;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				EA4567991479421A00830199 /* OneRing.m in Sources */,
 				EA4567C31479431700830199 /* OneRingWindowController.m in Sources */,
 				EA4567C91479498600830199 /* core.c in Sources */,
+				EA4567CB14794E6E00830199 /* pluginloader.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 #include <onering.h>
+#include <dirent.h>
 
 const char* onering_version()
 {

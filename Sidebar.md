@@ -1,0 +1,6 @@
+
+---
+
+
+  * Drafts
+    * PluginBasedArchitecture
